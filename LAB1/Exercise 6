@@ -19,7 +19,7 @@
 let otherdata = [ {name:'test',  val:1, color:"red"},  
                    {name:'other', val:2, color:"brown"}, 
                   {name:'b',     val:3, color:"purple"} ]; 
-//print color variable on console 
+//print color variable in text method
 let paragraph = d3.select("body") 
                 .selectAll("div") 
                 .data(otherdata) 
