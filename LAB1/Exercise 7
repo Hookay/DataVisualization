@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <script src='https://d3js.org/d3.v7.min.js'></script> 
+
+</head> 
+
+
+<body>  
+
+<div></div> 
+<div></div> 
+<div></div>  
+<div></div> 
+
+<script> 
+
+
+let num = [10, 50, 100, 200]; 
+ 
+let paragraph = d3.select("body") 
+                .selectAll("div") 
+                .data(num) 
+                .text(function (d, i) { 
+                    return 'cont:' + d; // return value is used to set the 'text' 
+                }) 
+                .style("color", function(d, i) { 
+                		//change the bounds d is between 50 and 100
+                    if ( 50 <= d & d<=100) { 
+                        return "red"; 
+                    } else { 
+                        return "yellow"; 
+                    } 
+                    return 'blue'; 
+                }); 
+  
+</script> 
+</body> 
+</html> 
