@@ -1,0 +1,35 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <script src='https://d3js.org/d3.v7.min.js'></script> 
+
+</head> 
+
+
+<body>  
+
+
+
+<script> 
+
+
+var myData = ['a', 4, 1, 'b', 6, 2, 8, 9, 'z' ];  
+      
+var span = d3.select("body") //This statement selects the HTML Body. 
+					//At this point, there are no paragraph elements in the body. 					So this will return an empty array. 
+          .selectAll("span") 
+          //You provide your data array to the data() function. Since yo					ur array has nine elements, the code after this will run nine 					times for every element in the array. 
+          .data(myData)
+          //The enter() function checks for <p> elements corresponding 						to your elements. Since it does not find any, it will call 							this for each ‘p’ that needs to be created (i.e., each of the 					array elements).
+          .enter()
+ 					//And this will append above to the body element. 
+					.append('span').style('color','blue') 
+          //And finally our text function adds each of the values from 						the data array as text to each of our paragraph selections and 					 prints them onto the screen! 
+          .text(function (d, i) { 
+                     return d; 
+            })
+           ; 
+  
+</script> 
+</body> 
+</html> 
