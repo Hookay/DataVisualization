@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+  </head>
+
+
+
+  <style>
+    .paint {
+      color: red
+    }
+
+  </style>
+
+  <p><label>red</label><input type="checkbox" /></p>
+  <p><label>yellow</label><input type="checkbox" /></p>
+  <p id="col"><label>green</label><input type="checkbox" /></p>
+
+  <body>
+    <script>
+      // EX 3 give ten div 
+      for (let i = 1; i <= 10; i++) {
+        let newspan = d3.select("body").append("div");
+
+        if (i < 6) {
+          newspan.text(i).attr("class", "paint");
+          //apply class atribute to DOM element
+          //d3.select("body").append("div").text(i).attr("class","paint")
+        } else {
+          //add a font colour green to the divison text selected
+          newspan.text(i).style("color", "green")
+          //d3.select("body").append("div").text(i).style("color", "green")       // give a separate ID in order to be able to manipulate the 
+          //check box 
+          d3.select("#col").select("input").property("checked", true);
+        }
+        var gfg = d3.count(newspan, d => d);
+        console.log(gfg);
+      }
+      //apply attribute with property for checked properties 
+      d3.select("input").property("checked", true);
+
+    </script>
+  </body>
+
+</html>
