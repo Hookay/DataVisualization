@@ -1,0 +1,32 @@
+<script src='https://d3js.org/d3.v7.min.js'></script>
+
+<script>
+  /*Exercise 12: Build an SVG scene which is created from an external file.   You need to create a csv with the 
+information about the shapes.  You should include columns in your csv file for the type of shape (circle, rectangle, 
+ellipse, line), its dimensions and position, and color.  Your program reads the data and creates and displays the 
+shapes to the screen.  */
+
+
+  //Create SVG element 
+  var svg = d3.select("body")
+    .append("svg")
+    .attr("width", 400)
+    .attr("height", 400)
+    .style("border", '1px solid green');
+
+  let rectangle = '/Users/Hookay/Documents/readIn.csv';
+  console.log(rectangle)
+  d3.csv(rectangle, function(data) {
+    console.log(data)
+  });
+
+
+  var svg = d3.select("body")
+    .selectAll("svg")
+    .data(rectangle)
+    .enter()
+    .append('svg')
+    .exit()
+    .remove();
+
+</script>
