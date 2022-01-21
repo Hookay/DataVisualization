@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+  </head>
+
+  <body>
+
+    <span>Test</span>
+
+    <style>
+      .CSSClass {
+        color: 'green'
+
+      }
+
+    </style>
+
+
+    <p>TAG</p>
+    <p class="test">All Class</p>
+    <p>PLAIN</p>
+    <p id="test2">Try it with ID</p>
+    <p class="CSSClass">CSS ClASS</p>
+    <p class="test">ALL CLASS</p>
+    <p class="CSSClass">All define class</p>
+
+
+
+
+    <script>
+      //b) DOcument Object Model (DOM)  - EX 2
+      //select element by TAGNAME /first/, change font family
+      d3.select("p").style("color", "red").style('font-family', 'cursive');
+      //select all CLASSNAME test to be orange need dot in front
+      d3.selectAll(".test").style('color', 'orange')
+      //select specific element by ID need hastag in front,center it, line height
+      d3.select("#test2").style('color', 'gold').style("text-align", "center").style("line-height", "70px")
+      //select element by CSS CLASS defined upront, enlarge font
+      d3.selectAll(".CSSClass").style('color', 'purple').style("font-size", "20px")
+      //if one once to override it all call on common tagname
+      //d3.selectAll("p").style("color", "green");
+
+
+
+      //c) Appending DOM
+      //add capability to object
+      let newspan = d3.select("body").append('span');
+      newspan.text("Ahoj");
+      //METHOD CHAINING
+      d3.select("body").append('span').text(" Pip").style('font-family', 'cursive');
+
+    </script>
+  </body>
+
+</html>
