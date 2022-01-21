@@ -2,15 +2,12 @@
 <html lang="en"> 
 <head> 
     <script src='https://d3js.org/d3.v7.min.js'></script> 
-    
+
 </head> 
 
-
 <body>  
+<script>    
 
-
-
-<script> 
 
 
 let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv'; 
@@ -21,15 +18,21 @@ PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 894,2,"Myles, Mr. Thomas Francis",male,62,0,0,240276,9.6875,,Q 
 895,3,"Wirz, Mr. Albert",male,27,0,0,315154,8.6625,,S 
 */ 
-i=0;
-d3.csv(titaniccsv, function(data) { 
-    i++;
-    //console.log( data.Name ; 
-    //console.log( data.Sex);
-    console.log(i);
-   
+ 
+d3.csv(titaniccsv, function(data,i) { 
+			
+      // male 417 , female 414
+			if (data.Sex==="female"){
+      		console.log( data.Name, i );
+      //console.log( data.PassengerId ,i );
+          
+      }else{
+      	console.log( data.Name, i );
+      }
+ 
 }); 
  
+       
 </script> 
 </body> 
 </html> 
