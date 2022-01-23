@@ -13,7 +13,7 @@
       //Exercise 18:Extend the example, so the ‘bar chart’ data is displayed from an external file (e.g., csv).  
 
 
-      let dataM = 'https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB1/nu.csv'
+      let dataM = 'https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB1/CSV/nu.csv'
 
 
       //const data = [50, 400, 300, 900, 250, 1000]
