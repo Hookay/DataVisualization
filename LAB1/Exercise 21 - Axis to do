@@ -1,0 +1,84 @@
+<html>
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+  </head>
+
+
+  <body>
+
+
+
+    <script>
+      /* 
+Exercise 21: Add an ‘axis’ to the bar chart example (bottom and left axis for the bar chart).  */
+
+
+
+
+      const width = 400;
+      const height = 300;
+      const barHeight = 20;
+      const margin    = 1;
+      
+      var data = [50, 400, 300, 900, 250, 1000];
+
+
+      var scale = d3.scaleLinear()
+        .domain([d3.min(data), d3.max(data)])
+        .range([50, 350]);
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", barHeight * data.length);
+      var g = svg.selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", function(d, i) {
+          //move bar on x
+          return "translate(30," + i * barHeight + ")";
+        });
+
+      g.append("rect")
+        .attr("width", function(d) {
+          return scale(d);
+        })
+        .attr('fill', 'blue')
+        .attr("height", barHeight - margin)
+        
+ 
+      //axis
+      var xscale = d3.scaleLinear()
+        .domain([50, d3.max(data)])
+        .range([50, width -50]);
+
+      var yscale = d3.scaleLinear()
+        .domain([0, data.length])
+        .range([119, 0]);
+
+      var x_axis = d3.axisTop()
+        .scale(xscale);
+      var xAxisTranslate = 120;
+
+      svg.append("g")
+        .attr("transform", "translate(30, " + xAxisTranslate + ")")
+        .style("color", "red")
+        .attr("stroke", "white")
+        .call(x_axis)   
+      
+      svg.append("g")
+         .call(d3.axisLeft(yscale).tickFormat(function(d,i){
+             return "pip" + i;
+         }).ticks(6))
+         .attr("transform", "translate(30, "+ 0 +")")
+        .style("color", "red")
+        .attr("stroke", "red")
+        
+
+
+
+    </script>
+  </body>
+
+</html>
