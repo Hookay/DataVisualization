@@ -8,6 +8,12 @@
 
   <body>
     <script>
+      /* Exercise 9: For the example above, to count how many of the names include ‘Mr.’ and ‘Mrs’ (or other).  Also print 
+out other details using other column header information, such as, how many passengers are ‘male’ and how many 
+‘female’. */
+
+
+
       let titaniccsv = 'https://raw.githubusercontent.com/dsindy/kaggle-titanic/master/data/test.csv';
       /* 
       PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked 
@@ -17,19 +23,45 @@
       895,3,"Wirz, Mr. Albert",male,27,0,0,315154,8.6625,,S 
       */
 
-      d3.csv(titaniccsv, function(data, i) {
-
-        // male 417 , female 414
-        if (data.Sex === "female") {
-          console.log(data.Name, i);
-          //console.log( data.PassengerId ,i );
-
-        } else {
-          console.log(data.Name, i);
-        }
-
-      });
-
+      //counter variables to find information
+      var Mr = 0
+      var Mrs = 0
+      var m = 0
+      var w = 0
+      
+      
+      
+      //in order to search for everything in the same time
+      async function main() { 
+      
+        await d3.csv(titaniccsv, function(data, i) {
+          //look for females and count them else counts men
+          if (data.Sex == "female") { 
+            w++;
+          } else {
+            m++; 
+          }
+          //look for Mr in names
+          if (data.Name.includes("Mr")) { 
+            Mr++;
+          }
+          //look for Mrs in names
+          if (data.Name.includes("Mrs")) { 
+            Mrs++;
+          }
+        })
+        
+        
+        //print the desired information to the console
+        console.log("Mr: " + Mr) 
+        console.log("Mrs: " + Mrs)
+        console.log("Men on the boat : " +m) 
+        console.log("Women on the boat : " + w);
+      
+      }
+      
+      main(); 
+      
     </script>
   </body>
 
