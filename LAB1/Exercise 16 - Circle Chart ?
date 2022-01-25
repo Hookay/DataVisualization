@@ -1,0 +1,131 @@
+<html>
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+  </head>
+
+
+  <body>
+
+
+
+    <script>
+      /*Exercise 16: Add additional shapes to the concept (draws both circles and squares based on the data). */
+
+
+      const width = 500;
+      const height = 500;
+
+      const data = [10, 15, 20, 25, 30];
+
+
+
+      // Note different valid ways of specifying color 
+      const colors = ['#ffffcc', 'red', 'rgb(0,255,0)', '#31a354', '#006837'];
+      const colors2 = ['#ffafaf', 'red', 'rgb(0,255,0)', '#31a354', '#006837'];
+
+
+      //create svg
+      const svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      const g = svg.selectAll("g")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", function(d, i) {
+          return "translate(0,0)";
+        })
+
+      g.append("circle")
+        .attr("cx", function(d, i) {
+          return i * 100 + 50;
+        })
+        .attr("cy", function(d, i) {
+          return 100;
+        })
+        .attr("r", function(d) {
+          return d * 1.5;
+        })
+        .attr("fill", function(d, i) {
+          return colors[i];
+        })
+
+      g.append("text")
+        .attr("x", function(d, i) {
+          return i * 100 + 40;
+        })
+        .attr("y", 105)
+        .attr("stroke", "teal")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .text(function(d) {
+          return d;
+        });
+
+
+      for (q = 0; q < data.length; q++) {
+        if (data[q] % 2 === 0) {
+          //console.log(q)
+          g.append("circle")
+            .attr("cx", function(d, i) {
+              return q * 100 + 50;
+            })
+            .attr("cy", function(d, i) {
+              return 202;
+            })
+            .attr("r", function(d) {
+              //use index to overcome repetition
+              return data[q] * 1.5;
+
+            })
+            .attr("fill", function(d, i) {
+              return colors2[q];
+            })
+         
+
+        } else {
+          //Create and append rectangle element 
+          g.append("rect")
+            // streches along x the point 
+            .attr("x", function(d, i) {
+              return q * 100 + 24;
+            })
+            // moves along y the point    
+            .attr("y", function(d, i) {
+              return 175
+            })
+            //gives the with from the x,y
+            .attr("width", function(d, i) {
+              return data[q] * 2.5;
+            })
+            //gives the height from the x,y
+            .attr("height", function(d, i) {
+              return data[q] * 2.5;
+            })
+
+            .attr("fill", function(d, i) {
+              return colors2[q];
+            })
+        }
+        // display text here with data and index value to get it on the last layer
+         g.append("text")
+            .attr("x", function(d, i) {
+              return q * 100 + 42;
+            })
+            .attr("y", 204)
+            .attr("stroke", "white")
+            .attr("font-size", "12px")
+            .attr("font-family", "sans-serif")
+            .text(function(d) {
+              return data[q];
+            });
+      }
+
+
+    </script>
+  </body>
+
+</html>
