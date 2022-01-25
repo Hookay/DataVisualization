@@ -21,6 +21,7 @@ value out in the ‘text’ method. */
       let otherdata = [{
           name: 'test',
           val: 1,
+          //place color variable
           color: "red"
         },
         {
@@ -41,11 +42,12 @@ value out in the ‘text’ method. */
         .text(function(d, i) {
           console.log("d.name: " + d.name);
           console.log("d.val:  " + d.val);
+          //add new log
           console.log("d.color:  " + d.color);
           console.log("i: " + i);
           console.log("this: " + this);
 
-          return 'color: ' + d.color; // return value is used to set the 'text' 
+          return 'name: '+d.name+' ,color: ' + d.color; // return value is used to set the 'text' 
         });
 
     </script>
