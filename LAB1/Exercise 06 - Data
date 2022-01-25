@@ -14,6 +14,9 @@
     <div></div>
 
     <script>
+    /*Exercise 6: Modify the example below so the ‘otherdata’ contains an additional variable called color (print this color 
+value out in the ‘text’ method. */
+    
       // add color variable                
       let otherdata = [{
           name: 'test',
@@ -42,7 +45,7 @@
           console.log("i: " + i);
           console.log("this: " + this);
 
-          return 'cont:' + d.name; // return value is used to set the 'text' 
+          return 'color: ' + d.color; // return value is used to set the 'text' 
         });
 
     </script>
