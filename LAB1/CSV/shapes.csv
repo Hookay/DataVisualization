@@ -1,5 +1,0 @@
-shape,x,x2,y,y2,width,height,cx,cy,r,rx,ry,color
-circle,,,,,,,100,100,20,,,orange
-rect,100,,100,,50,35,,,,,,yellow
-ellipse,,,,,,,300,350,,50,100,pink
-line,1,100,150,150,,,,,,,,purple
