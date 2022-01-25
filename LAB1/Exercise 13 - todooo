@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+  </head>
+
+  <body>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <script>
+      /*Exercise 13: Extend the example to include the ‘enter’ and ‘exit’ concepts.  So that the svg elements are updated, 
+created or removed based on the csv data from your csv file.   */
+
+
+
+      let rectangle = 'https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB1/CSV/shapes.csv';
+
+
+
+      //Create SVG element 
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 400)
+        .attr("height", 400)
+        .style("border", '1px solid yellow');
+
+
+
+      d3.csv(rectangle, function(data) {
+
+        var p = svg.selectAll("shape")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx",300)
+          .attr("cy", 300)
+          .attr("r", 10)
+          .exit()
+          .remove();
+
+        //console.log(data)
+        //display the circle
+        if (data.shape == "circle") {
+          svg.append(data.shape)
+            .attr("cx", parseInt(data.cx))
+            .attr("cy", parseInt(data.cy))
+            .attr("r", parseInt(data.r))
+            .attr("fill", data.color)
+          //display rectangle
+        } else if (data.shape == "rect") {
+          svg.append(data.shape)
+            .attr("x", parseInt(data.x))
+            .attr("y", parseInt(data.y))
+            .attr("width", parseInt(data.width))
+            .attr("height", parseInt(data.height))
+            .attr("fill", data.color)
+          //display ellipse
+        } else if (data.shape == "ellipse") {
+          svg.append(data.shape)
+            .attr("rx", parseInt(data.rx))
+            .attr("ry", parseInt(data.ry))
+            .attr("width", parseInt(data.width))
+            .attr("height", parseInt(data.height))
+            .attr("fill", data.color)
+          //display line   
+        } else if (data.shape == "line") {
+          svg.append(data.shape)
+            .attr("x", parseInt(data.x))
+            .attr("y", parseInt(data.y))
+            .attr("x2", parseInt(data.x2))
+            .attr("y2", parseInt(data.y2))
+            .attr("stroke", data.color)
+        }
+
+      })
+
+    </script>
+  </body>
+
+</html>
