@@ -46,6 +46,7 @@
           .attr("width", function(d) {
             return scale(d);
           })
+          //introduce boundaries to fill 
           .attr('fill',function(d,i) {
           if ( d< 100) {
           return 'green';}
