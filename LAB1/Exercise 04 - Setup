@@ -11,11 +11,17 @@
 
 
     <script>
+    /*Exercise 4:  ‘selecting’ and modifying your ‘div’ elements after you’ve created and added them (e.g., select the first div element and make its content text equal to ‘start’ – also change its color to ‘purple’. */
+    
       for (let i = 1; i <= 10; i++) {
-        d3.select("body").append('div', 'i').text(i);
+      let newspan = d3.select("body").append('div').text(i);
+      //give a division id with index which can be called upon
+      newspan.attr("id","div"+i);
       }
       //modify the first element 
-      d3.select("div").text("start").style("color", "purple");
+      d3.select("#div1").text('start').style("color", "purple");
+      //extra at any index content can be manypulated
+      d3.select("#div10").style("color", "pink");
 
     </script>
   </body>
