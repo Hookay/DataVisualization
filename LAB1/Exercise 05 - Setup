@@ -11,6 +11,10 @@
 
 
     <script>
+    /*Exercise 5: Exercise: Add to the ‘chain syntax’ version for the ‘hello world’ example above – so it also sets the ‘color’ 
+of the text to green.*/
+    
+    
       var bodyElement = d3.select("body");
       var div = bodyElement.append("div");
       div.text("Hello World!");
