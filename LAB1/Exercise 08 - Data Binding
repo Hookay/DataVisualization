@@ -12,6 +12,11 @@
 
 
     <script>
+    /*Exercise 8: Modify the above code, use the following data:  
+var myData = [‘a’, 4, 1, ‘b’, 6, 2, 8, 9, ‘z’ ]; 
+Instead of a paragraph ‘p’ use a ‘span’.  If the data element is a ‘character’ display it as ‘blue’, if it’s a number ‘display 
+it as green’ (note you’ll need to ‘chain’ a ‘.style’ method after you’ve appended the new elements). */
+    
       var myData = ['a', 4, 1, 'b', 6, 2, 8, 9, 'z'];
 
       var span = d3.select("body") //This statement selects the HTML Body. 
