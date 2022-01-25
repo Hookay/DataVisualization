@@ -48,7 +48,7 @@ sections. */
             fail[3]+= 1
           }
         }
-
+         //needs to be separate in order for the cumulation of data
       }).then(function(data) { 
         // bind it to DOM  and display it as text
         var span = d3.select("body")
