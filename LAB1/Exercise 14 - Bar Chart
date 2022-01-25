@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+  </head>
+
+  <body>
+
+
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <style>
+      svg rect {
+        fill: purple;
+      }
+
+      svg text {
+        fill: white;
+        font: 10px sans-serif;
+        text-anchor: end;
+      }
+
+    </style>
+
+
+
+    <script>
+      /*Exercise 14: Extend the simple bar chart example to display the heart failure data you processed in Part 5 (Part 5 - 
+Loading Data) from the csv file. (i.e., age ranges for people with heart failure). */
+
+      let heartfailurecsv = 'https://raw.githubusercontent.com/akmand/datasets/master/heart_failure.csv';
+      /* 
+      age,anaemia,creatinine_phosphokinase,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatini
+      ne,serum_sodium,sex,smoking,time,DEATH_EVENT 
+      75,0,582,0,20,1,265000,1.9,130,1,0,4,1 
+      55,0,7861,0,38,0,263358.03,1.1,136,1,0,6,1 
+      65,0,146,0,20,0,162000,1.3,129,1,1,7,1 
+      50,1,111,0,20,0,210000,1.9,137,1,0,7,1 
+      */
+
+      //array to store data
+      var fail = [0, 0, 0, 0]
+      //array for display
+      //var fromTill = ["1 till 30", "31 till 40", "41 till 60", "61 till 100"] 
+
+
+      d3.csv(heartfailurecsv, function(data) {
+        //look at age in the data
+        age = parseInt(data.age)
+
+        // if death occured 
+        if (data.DEATH_EVENT == 1) {
+          //record in the appropriate index depending on age 
+          if (age <= 30) {
+            fail[0] += 1
+          } else if (age <= 41) {
+            fail[1] += 1
+          } else if (age <= 60) {
+            fail[2] += 1
+          } else if (age <= 100) {
+            fail[3] += 1
+          }
+        }
+        //needs to be separate in order for the cumulation of data
+      }).then(function(data) {
+
+        
+        //console.log(fail)
+        //change with to accomondate new data
+        var width = 600;
+        var scaleFactor = 10;
+        var barHeight = 20;
+
+        var graph = d3.select("body")
+          .append("svg")
+          .attr("width", width)
+          //use data array here
+          .attr("height", barHeight * fail.length);
+
+        var bar = graph.selectAll("g")
+        //use data array here
+          .data(fail)
+          .enter()
+          .append("g")
+          .attr("transform", function(d, i) {
+            return "translate(0," + i * barHeight + ")";
+          });
+
+        bar.append("rect")
+          .attr("width", function(d) {
+            return d * scaleFactor;
+          })
+          .attr("height", barHeight - 1);
+
+        bar.append("text")
+          .attr("x", function(d) {
+            return (d * scaleFactor);
+          })
+          .attr("y", barHeight / 2)
+          .attr("dy", ".35em")
+          .text(function(d) {
+            return d;
+          });
+
+      })
+
+    </script>
+
+  </body>
+
+</html>
