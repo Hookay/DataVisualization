@@ -8,10 +8,12 @@
   <body>
 
     <script>
-      // displays the d3 version witch is "7.3.0"
+    /*Exercise 1: What version number is displayed in the console output window? */
+      
 
       console.log('d3.version:', d3.version);
-
+      // displays the d3 version witch is "7.3.0" on the console
+      
     </script>
   </body>
 
