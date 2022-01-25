@@ -21,23 +21,33 @@
 
   <body>
     <script>
-      // EX 3 give ten div 
+    
+    /*Exercise 3: Write a loop which adds 10 ‘div’ elements and sets the contents to the count value (i.e., 1, 2, 3, ...).  Also 
+the color of the first 5 elements are red and the last 5 elements are green (lookup the attr(), property() and style() 
+methods). */
+    
+    
+    
+      // give ten div 
       for (let i = 1; i <= 10; i++) {
-        let newspan = d3.select("body").append("div");
-
+      
+        let newspan = d3.select("body").append("div").text(i);
+				
         if (i < 6) {
-          newspan.text(i).attr("class", "paint");
-          //apply class atribute to DOM element
-          //d3.select("body").append("div").text(i).attr("class","paint")
+          //ATTRIBUTE
+          //up to 5 red  
+          newspan.attr("class", "paint");
+          
         } else {
+          //STYLE
           //add a font colour green to the divison text selected
-          newspan.text(i).style("color", "green")
-          //d3.select("body").append("div").text(i).style("color", "green")       // give a separate ID in order to be able to manipulate the 
+          newspan.style("color", "green")
+          //PROPERTY
+          // give a separate ID in order to be able to manipulate the 
           //check box 
           d3.select("#col").select("input").property("checked", true);
         }
-        var gfg = d3.count(newspan, d => d);
-        console.log(gfg);
+    
       }
       //apply attribute with property for checked properties 
       d3.select("input").property("checked", true);
