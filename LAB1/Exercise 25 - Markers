@@ -83,7 +83,7 @@ Exercise 25: Add a ‘circle point’ to the line graph, so that each data point
         .call(d3.axisRight(y));
 
 
-
+        // circle is added to data
         const kor = svg.selectAll("dot")
           .data(data)
           .enter()
