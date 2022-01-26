@@ -23,14 +23,17 @@ Exercise 21: Add an ‘axis’ to the bar chart example (bottom and left axis fo
       
       var data = [50, 400, 300, 900, 250, 1000];
 
-
+       
       var scale = d3.scaleLinear()
         .domain([d3.min(data), d3.max(data)])
         .range([50, 350]);
+       //create canvas 
       var svg = d3.select("body")
         .append("svg")
         .attr("width", width)
-        .attr("height", barHeight * data.length);
+        .attr("height", height )
+         
+      //prepare data   
       var g = svg.selectAll("g")
         .data(data)
         .enter()
@@ -39,16 +42,17 @@ Exercise 21: Add an ‘axis’ to the bar chart example (bottom and left axis fo
           //move bar on x
           return "translate(30," + i * barHeight + ")";
         });
-
+      //create rectangle svg on canvas
       g.append("rect")
         .attr("width", function(d) {
           return scale(d);
         })
-        .attr('fill', 'blue')
+        .attr('fill', 'orange')
         .attr("height", barHeight - margin)
         
  
       //axis
+      // daomain and ranges start x axis from50
       var xscale = d3.scaleLinear()
         .domain([50, d3.max(data)])
         .range([50, width -50]);
@@ -56,23 +60,26 @@ Exercise 21: Add an ‘axis’ to the bar chart example (bottom and left axis fo
       var yscale = d3.scaleLinear()
         .domain([0, data.length])
         .range([119, 0]);
-
-      var x_axis = d3.axisTop()
+      
+      //FROM BOTTOM
+      var x_axis = d3.axisBottom()
         .scale(xscale);
       var xAxisTranslate = 120;
 
       svg.append("g")
         .attr("transform", "translate(30, " + xAxisTranslate + ")")
-        .style("color", "red")
-        .attr("stroke", "white")
-        .call(x_axis)   
-      
+        .style("color", "green")
+        .attr("stroke", "purple")
+        .call(x_axis)  
+        
+      //FROM LEFT
       svg.append("g")
          .call(d3.axisLeft(yscale).tickFormat(function(d,i){
-             return "pip" + i;
+         if (i!=0){
+             return "pip" + i;}else{return 0;}
          }).ticks(6))
-         .attr("transform", "translate(30, "+ 0 +")")
-        .style("color", "red")
+         .attr("transform", "translate(30, "+ 10 +")")
+        .style("color", "green")
         .attr("stroke", "red")
         
 
