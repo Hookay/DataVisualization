@@ -1,5 +1,5 @@
-<html>
 
+  <html>
   <head>
     <script src='https://d3js.org/d3.v7.min.js'></script>
   </head>
@@ -32,6 +32,7 @@ the other green.  */
           y: Math.sin(6.2 * i / 100)
         });
       }
+      //create cosine data
       const cosi = [];
       for (let i = 0; i < numPoints; i++) {
         cosi.push({
@@ -57,7 +58,7 @@ the other green.  */
         .append("g")
         .attr("transform", "translate(" + margin + "," + margin + ")");
         
-        
+        //call the draw function and add colour
       drawFunction(cosi,"steelblue");
       drawFunction(data,"green");
         
@@ -97,6 +98,7 @@ the other green.  */
       svg.append("path")
         .datum(data)
         .attr("fill", "none")
+        //change to variable the colour
         .attr("stroke", paint)
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
