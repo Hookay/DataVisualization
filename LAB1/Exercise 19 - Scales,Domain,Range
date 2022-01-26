@@ -10,27 +10,47 @@
 
 
     <script>
-      //Exercise 18:Extend the example, so the ‘bar chart’ data is displayed from an external file (e.g., csv).  
+      /*Exercise 19: Put the code in a ‘function’ so the bar chart is only displayed when the function is called.  Also if the 
+function is called twice, then it will show the bar chart twice on screen.  Extend this function so it takes a ‘csv’ file 
+name as the input argument.  Call it twice and it displays two different bar charts using different data on screen.   */
 
 
       let dataM = 'https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB1/CSV/nu.csv'
-
+      let dataN = 'https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB1/CSV/num2.csv'
 
       //const data = [50, 400, 300, 900, 250, 1000]
       const u = []
-      d3.csv(dataM, function(data, i) {
+      const t=[]
       
+      //call it first time
+      d3.csv(dataM, function(data, i) {
+
         //make data numerical
-        data.nu=+data.nu
-        
+        data.nu = +data.nu
+
         //push it into an array
         u.push(data.nu)
-      
+
       }).then(function(data) {
-      		
-          	doSomething(u)
+
+        doSomething(u)
+
       });
 
+      //call it second time with different dataset
+      d3.csv(dataN, function(data, i) {
+
+        //make data numerical
+        data.num = +data.num
+
+        //push it into an array
+        t.push(data.num)
+
+      }).then(function(data) {
+
+        doSomething(t)
+
+      });
 
 
 
