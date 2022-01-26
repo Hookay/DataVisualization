@@ -1,0 +1,60 @@
+<html>
+
+  <head>
+    <script type='text/javascript' src='https://d3js.org/d3.v7.min.js'></script>
+  </head>
+
+
+  <body>
+
+
+    <script>
+    /*Exercise 30: Add more data values (e.g., 12 different numbers) */
+    
+      //added more data values here
+      var data = [3, 4, 8, 12, 5, 7, 3, 4, 8, 12, 5, 7];
+
+      const xSize = 400;
+      const ySize = 400;
+      const margin = 40;
+      const xMax = xSize - margin * 2;
+      const yMax = ySize - margin * 2;
+
+      // Append SVG Object to the Page 
+      const svg = d3.select("body")
+        .append("svg")
+        .attr('width', xSize)
+        .attr('height', ySize)
+        .append("g")
+        .attr("transform", "translate(" + xSize / 2 + "," + ySize / 2 + ")");
+
+      const radius = Math.min(xSize, ySize) / 2;
+
+      var color = d3.scaleOrdinal(['#4daf4a', '#377eb8', '#ff7f00', '#984ea3', '#e41a1c']);
+
+      //  This will generate the pie values like startAngle and endAngle 
+      var pie = d3.pie();
+
+      /* Generate the arcs, define the arc with an inner radius of 0 and outer radius. This will be used to give paths to the pie wedges. */
+      var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+      /*Generate groups, create group elements for each of the data values. The group element will hold the individual paths or wedges. */
+      var arcs = svg.selectAll("arc")
+        .data(pie(data))
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+
+      /*Draw arc paths,add a path element for each of the wedges.It provides the arc generated earlier and fill it with a color from your color scale.*/
+      arcs.append("path")
+        .attr("fill", function(d, i) {
+          return color(i);
+        })
+        .attr("d", arc);
+
+    </script>
+  </body>
+
+</html>
