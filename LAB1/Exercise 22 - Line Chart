@@ -31,8 +31,12 @@ Exercise 22: Modify the code so it’s contained within a function (pass the dat
           y: Math.sin(6.2 * i / 100)
         });
       }
-      
+      //call function
       drawFunction(data);
+      
+      
+      
+      //Make it a function
       
       function drawFunction(data){
       // Get the 'limits' of the data - the full extent (mins and max) 
