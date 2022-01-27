@@ -30,14 +30,15 @@ created or removed based on the csv data from your csv file.   */
 
 
       d3.csv(rectangle, function(data) {
-
+        //update data with the enter
         var p = svg.selectAll("shape")
-          .data(data)
+          .data(data.shape)
           .enter()
           .append("circle")
           .attr("cx",300)
           .attr("cy", 300)
           .attr("r", 10)
+          .attr("fill", data.color)
           .exit()
           .remove();
 
