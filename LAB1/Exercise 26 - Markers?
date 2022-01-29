@@ -85,19 +85,24 @@ the second line. */
         .attr("transform", `translate(${yMax},0)`)
         .call(d3.axisRight(y));
 
-     
+
 
       plotdot(data, svg, "pink");
       plottriangle(data2, svg, "purple");
 
+
+
+
+
       function plotdot(data, svg, col) {
 
-
+        //plot it with dots
         svg.selectAll("dot")
           .data(data)
           .enter()
           .append("circle")
           .attr("cx", function(d) {
+
             return x(d.x)
           })
           .attr("cy", function(d) {
@@ -105,22 +110,51 @@ the second line. */
           })
           .attr("r", 5)
           .style("fill", col);
+       //plot it with line too
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) {
+              return x(d.x)
+            })
+            .y(function(d) {
+              return y(d.y)
+            })
+          );
       }
 
+
+
       function plottriangle(data, svg, col) {
-      svg.selectAll("dot")
+        
+        //plot it with triangles
+        svg.selectAll("dot")
           .data(data)
           .enter()
-          .append("circle")
-          .attr("cx", function(d) {
-            return x(d.x)
+          .append("polygon")
+          .attr("points", function(d) {
+            return String((-(600 * (d.x))) + 510) + "," + String((600 * (d.y)) + 258) + " " + String((-(600 * (d.x) - 5)) + 510) + "," + String((600 * (d.y) + 10) + 258) + " " + String((-(600 * (d.x) + 5)) + 510) + "," + String((600 * (d.y) + 10) + 258);
           })
-          .attr("cy", function(d) {
-            return y(d.y)
-          })
-          .attr("r", 5)
           .style("fill", col);
-      
+
+        //plot it with lines
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "limegreen")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) {
+              return x(d.x)
+            })
+            .y(function(d) {
+              return y(d.y)
+            })
+          );
+
       }
 
     </script>
