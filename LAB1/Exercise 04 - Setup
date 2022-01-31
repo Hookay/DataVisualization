@@ -16,10 +16,10 @@
       for (let i = 1; i <= 10; i++) {
       let newspan = d3.select("body").append('div').text(i);
       //give a division id with index which can be called upon
-      newspan.attr("id","div"+i);
+      newspan.attr("id","d"+i);
       }
       //modify the first element 
-      d3.select("#div1").text('start').style("color", "purple");
+      d3.select("#d1").text('start').style("color", "purple");
       //extra at any index content can be manypulated
       d3.select("#div10").style("color", "pink");
 
