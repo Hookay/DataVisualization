@@ -31,7 +31,7 @@
           if (50 <= d & d <= 100) {
             return "red";
           } else {
-            return "yellow";
+            return "purple";
           }
           return 'blue';
         });
