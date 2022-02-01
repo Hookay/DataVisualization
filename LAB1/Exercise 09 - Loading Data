@@ -29,6 +29,7 @@ out other details using other column header information, such as, how many passe
       var Mrs = 0
       var m = 0
       var w = 0
+      //array to store these values
       var observe = [0, 0, 0, 0] 
 
 
@@ -55,18 +56,20 @@ out other details using other column header information, such as, how many passe
         console.log("Mrs: " + Mrs)
         console.log("Men on the boat : " + m)
         console.log("Women on the boat : " + w);
-        
+       
+        //fill array
         observe[0]=Mr;
         observe[1]=Mrs;
         observe[2]=m;
         observe[3]=w;
-        
+        //append to body and text to display
          var span = d3.select("body")
           .selectAll("span")
           .data(observe) 
           .enter()
           .append("p") 
           .text(function(d, i) { 
+          //make sure it only prints it once since there is 4 object in an array it would repeat
           if (i==3){
            return ( " Mr: " + observe[0]+ ", Mrs: " + observe[1]+ ", men: " +observe[2]+", woman: " + observe[3])}
           }).style("color","purple")
