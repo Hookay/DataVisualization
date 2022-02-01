@@ -6,6 +6,7 @@
 
   </head>
 
+
   <body>
     <script>
       /* Exercise 9: For the example above, to count how many of the names include ‘Mr.’ and ‘Mrs’ (or other).  Also print 
@@ -28,34 +29,51 @@ out other details using other column header information, such as, how many passe
       var Mrs = 0
       var m = 0
       var w = 0
+      var observe = [0, 0, 0, 0] 
+
+
+      d3.csv(titaniccsv, function(data, i) {
+        //look for females and count them else counts men
+        if (data.Sex == "female") {
+          w++;
+        } else {
+          m++;
+        }
+        //look for Mr in names
+        if (data.Name.includes("Mr")) {
+          Mr++;
+        }
+        //look for Mrs in names
+        if (data.Name.includes("Mrs")) {
+          Mrs++;
+        }
+        
       
-      
-      
-d3.csv(titaniccsv, function(data, i) {
-          //look for females and count them else counts men
-          if (data.Sex == "female") { 
-            w++;
-          } else {
-            m++; 
-          }
-          //look for Mr in names
-          if (data.Name.includes("Mr")) { 
-            Mr++;
-          }
-          //look for Mrs in names
-          if (data.Name.includes("Mrs")) { 
-            Mrs++;
-          }
-        }).then(function(data) {   //print the desired information to the console
-        console.log("Mr: " + Mr) 
+      }).then(function(data) {
+        //print the desired information to the console
+        console.log("Mr: " + Mr)
         console.log("Mrs: " + Mrs)
-        console.log("Men on the boat : " +m) 
+        console.log("Men on the boat : " + m)
         console.log("Women on the boat : " + w);
-      
+        
+        observe[0]=Mr;
+        observe[1]=Mrs;
+        observe[2]=m;
+        observe[3]=w;
+        
+         var span = d3.select("body")
+          .selectAll("span")
+          .data(observe) 
+          .enter()
+          .append("p") 
+          .text(function(d, i) { 
+          if (i==3){
+           return ( " Mr: " + observe[0]+ ", Mrs: " + observe[1]+ ", men: " +observe[2]+", woman: " + observe[3])}
+          }).style("color","purple")
+
       });
-      
-     
-      
+    
+
     </script>
   </body>
 
