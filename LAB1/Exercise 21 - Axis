@@ -76,9 +76,12 @@ Exercise 21: Add an ‘axis’ to the bar chart example (bottom and left axis fo
       svg.append("g")
          .call(d3.axisLeft(yscale).tickFormat(function(d,i){
          if (i!=0){
+         		//name the bars
              return "pip" + i;}else{return 0;}
-         }).ticks(6))
+         }).ticks(6))//how many values are displayed
+         //position
          .attr("transform", "translate(30, "+ 10 +")")
+         //colour
         .style("color", "green")
         .attr("stroke", "red")
         
