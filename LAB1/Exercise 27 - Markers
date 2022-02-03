@@ -116,69 +116,16 @@ data value).  Limit the text information to only a few points so it doesn’t ge
           .enter()
           .append("text")
           .attr('x', function(d, i) {
-           
-            if (i % 9 == 0) {
-              return x(d.x);
-            }
+              return x(d.x);     
           })
           .attr('y', function(d, i) {
-
-            if (i % 9 == 0) {
-              return y(d.y)
-            }
+              return y(d.y)      
           })
-          .text(function(d) {
-            return "x:" + String(d.x) + ", y:" + String(d.y);
+          .text(function(d,i) {
+          //make sure for readability not every data point shows
+          if (i % 9 == 0 ) {
+            return "x:" + String(d.x) + ", y:" + String(d.y);}
           });
-
-        //draw line
-        svg.append("path")
-          .datum(data)
-          .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 1.5)
-          .attr("d", d3.line()
-            .x(function(d) {
-              return x(d.x)
-            })
-            .y(function(d) {
-              return y(d.y)
-            })
-          );
-
-
-      }
-
-
-
-      function plottriangle(data, svg, col) {
-        // create data
-
-        svg.selectAll("dot")
-          .data(data)
-          .enter()
-          .append("polygon")
-          .attr("points", function(d) {
-
-            return String((-(600 * (d.x))) + 510) + "," + String((600 * (d.y)) + 258) + " " + String((-(600 * (d.x) - 5)) + 510) + "," + String((600 * (d.y) + 10) + 258) + " " + String((-(600 * (d.x) + 5)) + 510) + "," + String((600 * (d.y) + 10) + 258);
-
-          })
-          .style("fill", col);
-
-
-        svg.append("path")
-          .datum(data)
-          .attr("fill", "none")
-          .attr("stroke", "limegreen")
-          .attr("stroke-width", 1.5)
-          .attr("d", d3.line()
-            .x(function(d) {
-              return x(d.x)
-            })
-            .y(function(d) {
-              return y(d.y)
-            })
-          );
 
       }
 
