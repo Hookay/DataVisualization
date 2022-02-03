@@ -22,17 +22,34 @@
     </style>
 
     <script>
+    
+    /*Exercise 32: Add a graphical image (e.g., png/jpg) to the background of one of the graphs (e.g., bar chart or line plot).  
+Scale the image to fit the size of the svg bounds (covers background)*/
       var data = [5, 10, 12, 6];
 
-      var width = 200;
+      var width =550;
       var scaleFactor = 10;
-      var barHeight = 20;
-
+      var barHeight = 70;
+      
       var graph = d3.select("body")
         .append("svg")
         .attr("width", width)
         .attr("height", barHeight * data.length)
         .style("border", '1px solid yellow');
+
+
+      //graphical image added to graph
+      graph.append("image")
+        .attr("xlink:href", "https://icatcare.org/app/uploads/2018/07/Helping-your-new-cat-or-kitten-settle-in-1.png")
+        //scale the image to the svg bounds
+        .attr("width", width)
+        .attr("height", barHeight * data.length)
+        //aline it to the corner
+        .attr("x", 0)
+        .attr("y", 0);
+        
+        
+        
       var bar = graph.selectAll("g")
         .data(data)
         .enter()
@@ -57,20 +74,8 @@
           return d;
         });
 
-   
-   
-    graph.selectAll("g")
-        .data(data)
-        .enter()
-        
-    .append("svg:image")
-    .attr("xlink:href", "https://github.com/Hookay/DataVisualization/blob/main/LAB1/Images/2413144.jpg")
-    .attr("width", 40)
-    .attr("height", 40)
-    .attr("x", 228)
-    .attr("y",53);
-
     </script>
   </body>
 
 </html>
+
