@@ -38,7 +38,7 @@
         .attr("transform", function(d, i) {
           return "translate(0,0)";
         })
-
+      //create normal circle chart
       g.append("circle")
         .attr("cx", function(d, i) {
           return i * 100 + 50;
@@ -65,7 +65,7 @@
           return d;
         });
 
-
+      // create mixed chart
       for (q = 0; q < data.length; q++) {
         if (data[q] % 2 === 0) {
           //console.log(q)
