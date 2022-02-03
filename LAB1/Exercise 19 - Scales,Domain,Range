@@ -33,7 +33,8 @@ name as the input argument.  Call it twice and it displays two different bar cha
 
       }).then(function(data) {
 
-        doSomething(u)
+          doSomething(u)
+          doSomething(u)
 
       });
 
@@ -47,6 +48,7 @@ name as the input argument.  Call it twice and it displays two different bar cha
         t.push(data.num)
 
       }).then(function(data) {
+
 
         doSomething(t)
 
