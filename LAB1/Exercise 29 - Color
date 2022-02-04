@@ -100,8 +100,9 @@ Exercise 29: Take one of the d3 color methods and apply it to the line chart exa
             return y(d.y)
           })
           .attr("r", 5)
+          //adjust colour to data
           .style("fill", function(d,i){      
-           return cols[0](i);
+           return cols[0]((i/10));
           });
 
 
@@ -111,3 +112,5 @@ Exercise 29: Take one of the d3 color methods and apply it to the line chart exa
   </body>
 
 </html>
+
+  
