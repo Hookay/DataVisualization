@@ -101,7 +101,8 @@ Exercise 29: Take one of the d3 color methods and apply it to the line chart exa
           })
           .attr("r", 5)
           //adjust colour to data
-          .style("fill", function(d,i){      
+          .style("fill", function(d,i){  
+          // divide by 10 to get a better colour distribution
            return cols[0]((i/10));
           });
 
