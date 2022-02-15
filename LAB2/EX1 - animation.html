@@ -1,0 +1,309 @@
+<!--Exercise 1: Using the keyframes animation concept from the example above, write a  simple D3 program that draws a ‘line-graph’  For each of the points on the graph, draw a small ‘svg’ circle.  Set an animated keyframe style on each graph point, so when the mouse cursor moves over the point, it ‘pulses’. 
+
+Author:Reka Hegedus  
+
+The information in the pulse section has to repeat to make sure evry kind of browser can use it
+-->
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <style>
+      body {
+        margin: 0;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #171717
+      }
+
+
+      svg {
+        width: 100%;
+        height: 100%
+      }
+
+      .pulse {
+        /* Giving Animation Function */
+        -webkit-animation: pulse 2s linear infinite;
+
+
+      }
+
+      .pulse:hover {
+        -webkit-animation-name: pulsar;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-direction: alternate;
+        animation-name: pulsar;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+
+      }
+
+      @-webkit-keyframes pulsar {
+        0% {
+          -webkit-transform: scale(0.5);
+          opacity: 1;
+        }
+
+        100% {
+          -webkit-transform: scale(1);
+          opacity: 0;
+        }
+
+        from {
+          fill: pink;
+        }
+
+        to {
+          fill: red;
+
+          -webkit-transform: scale(6, 6);
+          transform: scale(6, 6);
+        }
+
+    </style>
+
+  </head>
+
+
+  <body>
+
+    <script>
+      <!-- colour array
+      -->
+      var
+
+      myColor0
+
+      =
+
+      d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
+
+
+    <!--Set Dimensions-->
+    const xSize = 600;
+    const ySize = 600;
+    const margin = 40;
+    const xMax = xSize - margin * 2;
+    const yMax = ySize - margin * 2;
+    <!--Create Random Points-->
+    const numPoints = 100;
+    <!--create empty array-->
+    const data = [];
+    <!--fill array-->
+    for (let i = 0; i < numPoints; i++) { data.push({ x: i / 100, y: Math.sin(6.2 * i / 100) }); } <!--call function-->
+      drawFunction(data);
+
+
+
+      <!--======Make it a function-======================================->
+      function drawFunction(data) {
+
+
+<!--Get the 'limits' of the data - the full extent (mins and max) so the plotted data fits perfectl--y>  
+
+        const xExtent = d3.extent(data, d => {
+          return d.x
+        });
+        const yExtent = d3.extent(data, d => {
+          return d.y
+        });
+
+        <!--Append SVG Object to the Page-->
+      const svg = d3.select("body")
+      .append("svg")
+      .append("g")
+      .attr("transform", "translate(" + margin + "," + margin + ")");
+
+
+
+      //graphical image added to graph
+      svg.append("image")
+      .attr("xlink:href", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVjtiZ-Xl2qKaSliPK-zjPjtLVMQjsCzhSkQ&usqp=CAU")
+      //scale the image to the svg bounds
+      .attr("width", xMax)
+      .attr("height",yMax)
+      //aline it to the corner
+      .attr("x", 0)
+      .attr("y", 0);
+      
+      
+      <!---------AXES--------------------------------------------------->
+      <!--X Axis------------------------------------------->
+      const x = d3.scaleLinear()
+      .domain([xExtent[0], xExtent[1]])
+      .range([0, xMax]);
+
+      <!--x-bottom-->
+      svg.append("g")
+      <!--sets the position-->
+      .attr("transform", "translate(0," + xMax + ")")
+      <!--sets the numbers looking down-->
+      .call(d3.axisBottom(x))
+      .attr('color', 'green');
+      <!--colour axis-->
+
+      <!--x-top-->
+      svg.append("g")
+      <!--sets the numbers looking up-->
+      .call(d3.axisTop(x))
+      .attr('color', 'steelblue');
+      <!--colour axis-->
+
+      <!--Y Axis------------------------------------------->
+      const y = d3.scaleLinear()
+      <!--complete set of values->
+          .domain([yExtent[0], yExtent[1]])
+          <!--specified array of values -->
+      .range([yMax, 0]);
+
+      <!--left y axis-->
+      svg.append("g")
+      <!--sets the numbers looking left-->
+      .call(d3.axisLeft(y))
+      .attr('color', 'purple');
+      <!-- colour axis-->
+      <!--right y axis-->
+      svg.append("g")
+      <!--sets the position-->
+      .attr("transform", `translate(${yMax},0)`)
+      <!--sets the numbers looking right-->
+      .call(d3.axisRight(y))
+      .attr('color', '#cccc00');
+      <!-- colour axis-->
+
+
+
+      <!-----------------------------Create line-------------------------->
+
+      <!--Add the line-->
+      svg.append("path")
+      <!--get data-->
+      .datum(data)
+      <!--in-between line no colour-->
+      .attr("fill", "none")
+      <!--colour the lines stoke-->
+      .attr("stroke", "pink")
+      <!--tell how thick the line is-->
+      .attr("stroke-width", 3)
+      <!--draw the line with given parameters-->
+      .attr("d", d3.line()
+      .x(function(d) {
+      return x(d.x)
+      })
+      .y(function(d, i) {
+      return y(d.y)
+      })
+      );
+
+
+      <!--------------------------Create pulse dots----------------------->
+
+      <!--pulsating dotts-->
+      svg.selectAll("dott")
+      <!-- use data to work with function values-->
+      .data(data)
+      <!--create dott values-->
+      .enter()
+      <!-- create circle at each spott-->
+      .append("circle")
+      <!--use cx function to create nodes with the function data in order to be able append several svg circles-->
+      .attr("cx", function(d, i) {
+      <!--display it occasionaly so data can be read properly
+       	if (i % 11 == 0) {
+<!--get data from 0,0 for top and left by conforming the data to the axis x(), y()-->
+      let b = x(d.x) - 10
+      let a = y(d.y) - 10
+      <!--create nodes by appending divisions-->
+      var node = d3.select("body")
+      .append("div")
+      .classed("node", true)
+      <!--get data from 0,0 for top and left-->
+      .style("top", a.toString() + "px")
+      .style("left", b.toString() + "px")
+      <!--computed position value is absolute or fixed-->
+      .style("position", "absolute")
+      <!--division is moveable-->
+      .append("div").attr("draggable", true)
+      <!--create empty svg-->
+      .append("svg").style("height", "0px")
+      .style("width", "0px")
+      .style("padding", "50px")
+      <!--and make sure what ever we append is visible-->
+      .style("overflow", 'visible');
+
+      <!-- create circle svg-->
+      node.append("circle")
+      <!-- add radious-->
+      .attr('r', 8)
+      <!-- stroke colour-->
+      .style('stroke', '#49c3b1')
+      <!-- thickness-->
+      .style('stroke-width', 1)
+      <!-- fill colour white-->
+      .style('fill', '#fff')
+
+      node.append("circle")
+      <!-- make it pulse with class-->
+      .classed("pulse", true)
+      <!-- add radious-->
+      .attr('r', 8)
+      <!-- stroke colour-->
+      .style('stroke', '#49c3b1')
+      <!-- thickness-->
+      .style('stroke-width', 1)
+      <!-- fill colour white-->
+      .style("fill", function(d) {
+      <!--use colour array to get gradient effect divide by 10 to get a better colour distribution-->
+      return myColor0((i / 10));
+      });
+      }
+
+
+      });
+
+      <!--------------------------Create pulse text----------------------->
+
+      <!--add text-->
+      svg.selectAll("dot")
+      <!-- get data -->
+      .data(data)
+      <!-- create elements at each dott-->
+      .enter()
+      <!-- create text at each time-->
+      .append("text")
+      <!-- get x position for text-->
+      .attr('x', function(d, i) {
+      return x(d.x);
+      })
+      <!-- get y position for text-->
+      .attr('y', function(d, i) {
+      return y(d.y)
+      })
+      <!-- display text-->
+      .text(function(d, i) {
+      <!--make sure for readability not every data point shows-->
+      if (i % 11 == 0) {
+
+      return "x:" + String(d.x.toFixed(2)) + ", y:" + String(d.y.toFixed(2));}
+
+      })
+      <!-- colour text white to make it visible in the black background-->
+      .attr("fill", "white");
+
+
+      }
+
+
+    </script>
+  </body>
+
+</html>
