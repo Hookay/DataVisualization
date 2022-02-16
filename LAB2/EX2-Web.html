@@ -1,0 +1,70 @@
+<!--Exercise 2: Create a webpage using D3 (adds items dynamically), then set the styles for the items so they use CSS to display extra information when the mouse cursor moves over them.  
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+  <div id="foo" class="ball"></div>
+
+
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li> <a href="#">About</a>
+      <ul>
+        <li><a href="#">Us</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Contact Us</a></li>
+    <li><a href="#">Links</a></li>
+  </ul>
+
+
+  <body>
+  
+  
+    <script>
+      <!--Set Dimensions -->
+      const xSize = 600;
+      const ySize = 600;
+      const margin= 40;
+      const xMax = xSize-margin*2;
+      const yMax = ySize-margin*2;
+
+
+    <!--Append SVG Object to the Page-->
+    const svg = d3.select("body")
+    .append("svg")
+    .append("g")
+    .attr("transform", "translate(" + margin + "," + margin + ")");
+
+
+
+    //graphical image added to graph
+    svg.append("image")
+    .attr("xlink:href", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVjtiZ-Xl2qKaSliPK-zjPjtLVMQjsCzhSkQ&usqp=CAU")
+    //scale the image to the svg bounds
+    .attr("width", xMax)
+    .attr("height",yMax)
+    //aline it to the corner
+    .attr("x", 0)
+    .attr("y", 0);
+
+
+
+
+    </script>
+
+  </body>
+
+
+</html>
