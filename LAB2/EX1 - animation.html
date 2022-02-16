@@ -54,7 +54,7 @@ The information in the pulse section has to repeat to make sure evry kind of bro
         }
 
         100% {
-          -webkit-transform: scale(1);
+          -webkit-transform: scale(6);
           opacity: 0;
         }
 
@@ -65,8 +65,7 @@ The information in the pulse section has to repeat to make sure evry kind of bro
         to {
           fill: red;
 
-          -webkit-transform: scale(6, 6);
-          transform: scale(6, 6);
+          
         }
 
     </style>
@@ -77,15 +76,11 @@ The information in the pulse section has to repeat to make sure evry kind of bro
   <body>
 
     <script>
-      <!-- colour array
-      -->
-      var
-
-      myColor0
-
-      =
-
-      d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
+    
+    <!----------------------- set global variables----------------------->
+    
+    <!-- colour array-->
+      var myColor0 =d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
 
 
     <!--Set Dimensions-->
@@ -99,8 +94,10 @@ The information in the pulse section has to repeat to make sure evry kind of bro
     <!--create empty array-->
     const data = [];
     <!--fill array-->
-    for (let i = 0; i < numPoints; i++) { data.push({ x: i / 100, y: Math.sin(6.2 * i / 100) }); } <!--call function-->
-      drawFunction(data);
+    for (let i = 0; i < numPoints; i++) { data.push({ x: i / 100, y: Math.sin(6.2 * i / 100) }); } 
+    
+    <!--call function-->
+    drawFunction(data);
 
 
 
@@ -220,8 +217,8 @@ The information in the pulse section has to repeat to make sure evry kind of bro
       <!--display it occasionaly so data can be read properly
        	if (i % 11 == 0) {
 <!--get data from 0,0 for top and left by conforming the data to the axis x(), y()-->
-      let b = x(d.x) - 10
-      let a = y(d.y) - 10
+      var b = x(d.x) - 10
+      var a = y(d.y) - 10
       <!--create nodes by appending divisions-->
       var node = d3.select("body")
       .append("div")
@@ -307,3 +304,4 @@ The information in the pulse section has to repeat to make sure evry kind of bro
   </body>
 
 </html>
+
