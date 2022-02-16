@@ -1,78 +1,97 @@
 body {
-  margin: 20;
+  /* define the background body */
+  margin: 20;/* add margin */
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: #171717;
-  background-image: url("https://cutewallpaper.org/22/anime-city-purple-wallpapers/moonlight-city-mini-art-print-by-elora-pautrat-without-stand-3quot-x-4quot--anime-scenery-wallpaper-anime-wallpaper-kawaii-wallpaper.png");
-  background-size: 50 50;
+  background-color: #171717;/* add colour */
+  background-image: url("https://cutewallpaper.org/22/anime-city-purple-wallpapers/moonlight-city-mini-art-print-by-elora-pautrat-without-stand-3quot-x-4quot--anime-scenery-wallpaper-anime-wallpaper-kawaii-wallpaper.png"); /* insert image */
+  background-size: 50 50; /* resize image */
+  background-repeat: no-repeat;/* dont repeat image */
 }
 
 svg {
-  width: 100%;
-  height: 100%;
+  width: 100%;/* strech to whole canvas */
+  height: 100%;/* strech to whole canvas */
 }
 
 ul {
+  /* list of blocks */
   margin: 20;
   padding: 0;
-  list-style: none;
+  list-style: none;/* no dots */
 }
 
 ul li {
-  float: left;
+  float: left; /* menu blocks position */
   width: 150px;
-  height: 30px;
+  
 
 }
 
 ul li ul li {
-  
+   /* secondary menu blocks */
   padding: 1rem;
-  text-align: bottom;
-  display: none;
+  display: none;/* dont display (until hover) */
   
 }
 
 ul li:hover ul li {
-
+  /* on hover display menu blocks */
   display: block;
 
 }
 
 ul li a {
+  /* menu colour and border colour */
   flex: 1;
   background-color: #333;
   color: #fff;
-  border: 1px solid;
-  padding: 0.8rem;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.7s ease-out;
+  border: 1px solid; /* thickness */
+  padding: 0.8rem; /* padding around text */
+  text-align: center; /* text in center of block */
+  text-decoration: none; /* dont decorate */
+  transition: all 0.7s ease-out; /* fading efect */
 }
 
 ul li a:hover,
 ul li a:focus {
+  /* on hover change colour for menu blocks */
   background-color: #fff;
   color: #333;
   
 }
 
+div {
+  /* create the appearing blocks */
+  position: absolute; 
+  background-color: yellow;/* colour it */
+  display: none; /* dont display (till hover) */
+  border-radius: 40px;/* round it off */
+}
+   
+span:hover + div {
+  /* display appearing block on hover */
+  position: absolute;
+  display: inline-block;
+}
+   
 
 
 .ball {
-   
-  border-radius: 30px;
-  width: 60px;
-  height: 60px;
-  background: #c00;
-  background-image: url("https://c.tenor.com/WmOR9BWcehIAAAAC/molang-love.gif");
-  background-size: 60px 60px;
+  /* create ball */
+  border-radius: 40px;
+  width: 80px;
+  height: 80px;
+  background: #c00; /* give colour */
+  background-image: url("https://c.tenor.com/WmOR9BWcehIAAAAC/molang-love.gif");/* fitt gif */
+  background-size: 80px 80px;/* adjust size of gif */
+  background-repeat: no-repeat;/* dont repeat gif */
   position: absolute;
   top: 100px;
   left: 100px;
-  transition: transform 1s;
+  transition: transform 0.7s; /* speed of reaction to mouse */
   
 }
