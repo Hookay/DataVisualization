@@ -42,9 +42,11 @@ Author:Reka Hegedus
             .style("background-color", "orange")
             <!--give border-->
             .style("outline", "thick solid green")
-            <!--change the width-->
-            .style('width', (width-300).toString() + 'px')
-            <!--add text-->
+            <!--make it smooth the transition-->
+            .transition().duration(1000)
+            <!--change widtht--> 
+            .style('width', d=> (width-300).toString()+'px')
+             <!--add text-->
             .text(function(d) {
               return "^.^";
             })<!--add font style-->
@@ -68,13 +70,14 @@ Author:Reka Hegedus
              <!--give colour-->
             .style("background-color", "steelblue")
             <!--give border and colour it-->
-            .style("outline", "thin solid red")
-            <!--change height-->
-            .style('height', (height-100).toString() + 'px')
+            .style("outline", "thin solid red")     
+            <!--make it smooth-->
+            .transition().duration(1000)
+            <!--change height--> 
+            .style('height', d=> (height-100).toString()+'px')
             <!--add text-->
-            .text(function(d) {
-              return "O.O";
-            })<!--change text style-->
+            .text( d=>"O.O" )
+        <!--change text style-->
             .style('font-family', 'cursive')
              <!--move text left to right-->
             .style("text-align", "center")
