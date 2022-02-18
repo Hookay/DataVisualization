@@ -21,13 +21,13 @@ Author:Reka Hegedus
 
     <script>
     
-      <!--variables-->
+<!-------------------------------variables--------------------------------->
       var width = 600;
       var height = 300;      
       var lineH = 100;
     
     
-    
+<!-------------------------------create svg--------------------------------->    
     
       //Create SVG element 
       var svg = d3.select("body")
@@ -37,7 +37,7 @@ Author:Reka Hegedus
         .attr("width",width.toString() + 'px')
         .attr("height", height.toString() + 'px')
         
-
+<!-------------------------------circle------------------------------------>
       svg.append("circle")
         .attr("id","c1")
       <!--give the with and the height keep adjustable parameters-->
@@ -49,7 +49,7 @@ Author:Reka Hegedus
         <!--colour it-->
         .style('fill', 'green');
         
-        
+ <!-------------------------------mouse on-------------------------------->      
      d3.selectAll("svg")
          <!--listen to the mouse when the cursor moves to the div do smtg-->
         .on("mouseover", function(event) {
@@ -65,7 +65,7 @@ Author:Reka Hegedus
             .attr('r', d=> 100);   
             }) 
 
-
+ <!-------------------------------mouse off--------------------------------> 
 
         .on("mouseout", function() {
           d3.select("#c1")
@@ -87,3 +87,4 @@ Author:Reka Hegedus
   </body>
 
 </html>
+
