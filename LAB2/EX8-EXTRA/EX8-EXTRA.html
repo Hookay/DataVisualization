@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+</style>
+<body>
+
+<!-- load the d3.js library -->    
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script>
+// array containing easing style 
+var easing = [ "easeBounce"];
+
+//create body
+var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 500)
+        .attr("height", 500);
+        
+//send in y position in order to move it as a global variable
+function circleTransition(easement,yPos){ 
+    //create circle
+    var timeCircle = svg.append("circle")
+        .attr("fill", "steelblue")
+        .attr("r", 20);
+    //call repeat function
+    repeat();
+    
+    function repeat() {
+      timeCircle
+        .transition() 
+        .duration(2000) 
+        .style("fill","steelblue")
+        .attr('cx', 210)          // position the circle at 40 on the x axis
+        .attr('cy', (yPos*45)+25) // position the circle at 250 on the y axis
+        .transition()             // apply a transition
+        .ease(easement)           // control the speed of the transition
+        .duration(4000)           // apply it over 2000 milliseconds
+        .attr('cx', 400)          // move the circle to 920 on the x axis
+        .transition()             // apply a transition
+        .duration(2000)           // apply it over 2000 milliseconds
+        .attr("r", d=>40)         //chgange size
+        .style("fill","pink")     //change colour        
+        .transition()             // apply a transition
+        .ease(easement)           // control the speed of the transition
+        .duration(4000)           // apply it over 2000 milliseconds
+        .attr('cx', 210)          // return the circle to 40 on the x axis
+        .transition()             // apply a transition
+        .duration(2000)           // apply it over 2000 milliseconds
+        .attr("r", d=>20)         //chgange size
+        .style("fill","orange")   //change colour
+        .on("end", repeat);       // when the transition finishes start again
+    };
+
+  
+};
+//start function
+circleTransition(d3.easeBounce,3);
+
+
+</script>
+</body>
