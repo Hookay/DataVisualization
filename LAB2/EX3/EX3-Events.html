@@ -1,4 +1,4 @@
-<!--Exercise 3: Modify the below example so in addition to the color changing, other styles change (e.g., size and border 
+<!--Exercise 3: Modify the above example so in addition to the color changing, other styles change (e.g., size and border 
 styles). 
 
 Author:Reka Hegedus  
@@ -18,12 +18,12 @@ Author:Reka Hegedus
   <body>
 
     <script>
-      <!--variables-->
+<!-------------------------------variables--------------------------------->
       var width = 500;
       var height = 200;      
       var lineH = 100;
 
-
+<!-------------------------------create div--------------------------------->
       <!--append to the body a division-->
       d3.select('body')
         .append('div')
@@ -33,7 +33,7 @@ Author:Reka Hegedus
          <!--colour it-->
         .style('background-color', 'green');
 
-
+<!-------------------------------mouse on----------------------------------->
       d3.selectAll("div")
          <!--listen to the mouse when the cursor moves to the div do smtg-->
         .on("mouseover", function(event) {
@@ -64,6 +64,10 @@ Author:Reka Hegedus
           <!-- Note: d3.mouse was removed in d3v6, you should use d3.pointer(event)--> 
           <!-- console.log(d3.pointer(event));-->
         })
+ 
+ 
+  
+<!-------------------------------mouse off--------------------------------->              
         <!--listen to the mouse when the cursor moves from the div do smtg-->
         .on("mouseout", function() {
           d3.select(this)
