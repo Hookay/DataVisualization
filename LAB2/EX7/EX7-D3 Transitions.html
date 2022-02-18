@@ -1,0 +1,73 @@
+<!--Exercise 7: In addition to transitioning the color, also change the ‘size’ of the div element so it transitions smaller 
+then transitions larger (i.e., width and height style values). 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+    
+  <!-----------------------------variables---------------------------------->   
+   var width = 100;
+   var height = 100; 
+   var ch1 = "20px";
+   var ch2 = "200px";
+   
+  <!------------------------------square---------------------------------->  
+  d3.select('body') 
+  <!--add div to body-->
+  .append("div") 
+  <!--set width-->
+  .style('width',  width.toString() + 'px') 
+  <!--set height-->
+  .style('height', height.toString() + 'px') 
+  <!--set colour-->
+  .style('background-color', 'blue') 
+  <!--start transition-->
+  .transition() 
+  <!--add duration-->
+  .duration(1000) 
+  <!--agive colour-->
+  .style("background-color", "red")
+  <!--make the edges round-->
+  .style("border-radius","10px")
+  <!-----------------transition to green for 2 sec------------------------->
+  .transition() 
+  .duration(2000) 
+  .style("background-color", d=>"green")
+  .style("border-radius","0px")
+  <!-----------------transition to width 10px------------------------------>
+  .transition() 
+  .duration(2000) 
+  .style("width", d=>ch1)
+  .style("height", d=>ch1)
+  <!-----------------transition to lilacfor 3 sec------------------------->
+  .transition() 
+  .duration(3000) 
+  .style("background-color", d=>"#ce94f7")
+  <!-----------------transition to width 200px---------------------------->
+  .transition() 
+  .duration(2000) 
+  .style("width", d=>ch2)
+  .style("height", d=>ch2)
+  .style("border-radius","40px")
+  ; 
+    
+    
+    </script>
+  </body>
+
+</html>
