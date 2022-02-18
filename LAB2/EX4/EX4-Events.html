@@ -1,0 +1,89 @@
+<!--Exercise 4: Based on the example above, instead of a ‘div’ element, use an ‘svg’ container and add a ‘circle’ svg.  
+When the mouse moves over the svg circle, change the radius (e.g., larger when the mouse moves over and back to 
+the default size when the mouse moves out) 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+    
+      <!--variables-->
+      var width = 600;
+      var height = 300;      
+      var lineH = 100;
+    
+    
+    
+    
+      //Create SVG element 
+      var svg = d3.select("body")
+        .append("svg")
+        <!--give the with and the height keep adjustable parameters-->
+       
+        .attr("width",width.toString() + 'px')
+        .attr("height", height.toString() + 'px')
+        
+
+      svg.append("circle")
+        .attr("id","c1")
+      <!--give the with and the height keep adjustable parameters-->
+        .style('width', width.toString() + 'px')
+        .style('cx', (width-400).toString() + 'px')
+        .style('cy', (width-450).toString() + 'px') 
+        <!--add radious-- >
+        .attr('r', 40)
+        <!--colour it-->
+        .style('fill', 'green');
+        
+        
+     d3.selectAll("svg")
+         <!--listen to the mouse when the cursor moves to the div do smtg-->
+        .on("mouseover", function(event) {
+          d3.select("#c1")
+            <!--colour it add edge-->
+            .style("fill", "orange")
+            .style("stroke", "purple")
+            .style("stroke-width",8)
+            <!--make it smooth the transition-->
+            .transition()
+            .duration(2000)
+            <!--change radious-> 
+            .attr('r', d=> 100);   
+            }) 
+
+
+
+        .on("mouseout", function() {
+          d3.select("#c1")
+          <!--colour it add edge-->
+          .style("fill", "steelblue")
+          .style("stroke", "yellow")
+          <!--make it smooth the transition-->
+          .style("stroke-width",1)  
+          .transition().duration(1000)
+          <!--change radious-> 
+          .attr('r', d=> 40);
+        
+   
+          });
+
+
+
+    </script>
+  </body>
+
+</html>
