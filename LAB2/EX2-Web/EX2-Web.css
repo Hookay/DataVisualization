@@ -1,3 +1,6 @@
+
+/* -----------------------------setup--------------------------------- */
+
 body {
   /* define the background body */
   margin: 20;/* add margin */
@@ -16,6 +19,8 @@ svg {
   width: 100%;/* strech to whole canvas */
   height: 100%;/* strech to whole canvas */
 }
+
+/* -----------------------------menu---------------------------------- */
 
 ul {
   /* list of blocks */
@@ -79,6 +84,8 @@ span:hover + div {
 }
    
 
+
+/* -----------------------------ball---------------------------------- */
 
 .ball {
   /* create ball */
