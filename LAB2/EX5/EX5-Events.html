@@ -1,0 +1,71 @@
+<!--Exercise 5: The "d3.pointer” method lets you get the mouse position.  When the mouse moves over the ‘svg’ container, add a ‘text’ svg element at the location of the mouse position.  As the mouse cursor moves around the svg container, have the text move to the cursor position (i.e., text follows the mouse cursor). 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+ <div id="follow2" class="ball"></div>
+
+  <body>
+
+    <script>
+   
+   
+<!------------------------------variables----------------------------->
+      var width = 600;
+      var height = 300;      
+
+<!------------------------------create SVG----------------------------->
+      //Create SVG element 
+      var svg = d3.select("body")
+        .append("svg")
+        <!--give the with and the height keep adjustable parameters-->
+        .attr("width",width.toString() + 'px')
+        .attr("height", height.toString() + 'px')
+        
+<!------------------------------add text------------------------------->     
+     svg.append("text")
+            .text("Stalker")
+            .attr("id","follow")
+     				<!--add font style-->
+            .style('font-family', 'cursive')
+            <!--set original position and position from arrow-->
+            .attr('x', 10)
+            .attr('y', 10)
+            <!--move text left to right-->
+            .style("font-size",30)
+            <!--colour text->
+            .attr("fill","white");
+            
+      
+<!------------------------------follow object-------------------------->     
+           <!--makes sure that the text follows the mouse cursor-->
+           var f = document.getElementById('follow');
+			     document.addEventListener('mousemove', function(ev){
+ 		           f.style.transform = 'translateY('+(ev.clientY)+'px)';
+   		         f.style.transform += 'translateX('+(ev.clientX)+'px)';
+		         	},true);
+              
+           <!--makes sure that the round circle follows the mouse cursor-->         
+           var f2 = document.getElementById('follow2');
+			     document.addEventListener('mousemove', function(ev){
+ 		           f2.style.transform = 'translateY('+(ev.clientY)+'px)';
+   		         f2.style.transform += 'translateX('+(ev.clientX)+'px)';
+		         	},true);
+       
+       
+    
+
+    </script>
+  </body>
+
+</html>
