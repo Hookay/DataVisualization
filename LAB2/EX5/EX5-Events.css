@@ -1,0 +1,27 @@
+     body {
+        /* give body parameters */
+        margin: 30;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #171717;
+      }
+      
+      
+  .ball {
+  /* create ball */
+  border-radius: 40px;
+  width: 80px;
+  height: 80px;
+  background: #c00; /* give colour */
+  background-image: url("https://c.tenor.com/WmOR9BWcehIAAAAC/molang-love.gif");/* fitt gif */
+  background-size: 80px 80px;/* adjust size of gif */
+  background-repeat: no-repeat;/* dont repeat gif */
+  position: absolute;
+  top: 10px;/* set original position and position from arrow */
+  left: 10px;
+  transition: transform 0.7s; /* speed of reaction to mouse */
+  
+  }
