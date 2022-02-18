@@ -18,17 +18,21 @@ Author:Reka Hegedus
   <body>
 
     <script>
+<!-----------------------------variables---------------------------------->   
+   var width = 100;
+   var height = 100;
+   var ch1 = "10px";
+   var ch2 = "200px";
    
-   
-
+<!-----------------------------rectangle---------------------------------->  
 
 d3.select('body') 
   <!--add div to body-->
   .append("div") 
   <!--set width-->
-  .style('width',  '100px') 
+  .style('width',  width.toString() + 'px') 
   <!--set height-->
-  .style('height', '100px') 
+  .style('height', height.toString() + 'px') 
   <!--set colour-->
   .style('background-color', 'blue') 
   <!--start transition-->
@@ -44,7 +48,7 @@ d3.select('body')
   <!-----------------transition to width 10px------------------------------>
   .transition() 
   .duration(2000) 
-  .style("width", d=>"10px")
+  .style("width", d=>ch1)
   <!-----------------transition to lilacfor 3 sec------------------------->
   .transition() 
   .duration(3000) 
@@ -52,7 +56,7 @@ d3.select('body')
   <!-----------------transition to width 200px---------------------------->
   .transition() 
   .duration(2000) 
-  .style("width", d=>"200px")
+  .style("width", d=>ch2)
   ; 
 
 
