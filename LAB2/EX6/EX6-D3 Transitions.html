@@ -1,0 +1,63 @@
+<!--Exercise 6: Chain an extra transition onto the example given so that after the ‘div’ element animates to ‘red’ it then continues to transition to ‘green’ over 2 seconds.  
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+   
+   
+
+
+d3.select('body') 
+  <!--add div to body-->
+  .append("div") 
+  <!--set width-->
+  .style('width',  '100px') 
+  <!--set height-->
+  .style('height', '100px') 
+  <!--set colour-->
+  .style('background-color', 'blue') 
+  <!--start transition-->
+  .transition() 
+  <!--add duration-->
+  .duration(1000) 
+  <!--agive colour-->
+  .style("background-color", "red")
+  <!-----------------transition to green for 2 sec------------------------->
+  .transition() 
+  .duration(2000) 
+  .style("background-color", d=>"green")
+  <!-----------------transition to width 10px------------------------------>
+  .transition() 
+  .duration(2000) 
+  .style("width", d=>"10px")
+  <!-----------------transition to lilacfor 3 sec------------------------->
+  .transition() 
+  .duration(3000) 
+  .style("background-color", d=>"#ce94f7")
+  <!-----------------transition to width 200px---------------------------->
+  .transition() 
+  .duration(2000) 
+  .style("width", d=>"200px")
+  ; 
+
+
+
+    </script>
+  </body>
+
+</html>
