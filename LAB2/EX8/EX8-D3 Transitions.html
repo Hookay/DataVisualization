@@ -1,0 +1,75 @@
+<!--Exercise 8: Combining the ‘transition’ method with the mouse over ‘event’.  So that the ‘div’ transitions color only 
+when the mouse moves over and back to the original color when moves away from the element. 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+    
+  <!-----------------------------variables---------------------------------->   
+   var width = 600;
+   var height = 300; 
+   var ch1 = "20px";
+   var ch2 = "200px";
+   
+  <!------------------------------square---------------------------------->  
+ 
+  d3.select('body') 
+      <!--add div to body-->
+      .append("div") 
+      <!--add id to be able to use it in hover-->
+      .attr("id","rect")
+      <!--set width-->
+      .style('width',  (width-300).toString() + 'px') 
+      <!--set height-->
+      .style('height', (height-200).toString() + 'px') 
+       <!--set colour-->
+      .style('background-color', 'red') 
+      
+ 
+ 
+  .on("mouseover", function(event) {
+       d3.select("#rect")
+      <!--start transition makes colour purplish inbetween blue to red-->
+      .transition() 
+      <!--add duration-->
+      .duration(1000) 
+      <!--set colour-->
+      .style('background-color', 'blue')
+      <!--make the edges round-->
+      .style("border-radius","20px") 
+      
+      
+      }).on("mouseout", function() {
+       d3.select("#rect")
+      <!--start transition makes colour purplish inbetween blue to red-->
+      .transition() 
+      <!--add duration-->
+      .duration(1000) 
+      <!--agive colour-->
+      .style("background-color", "red")
+       <!--make the edges round-->
+      .style("border-radius","0px") 
+      
+      
+      })
+
+  
+      </script>
+  </body>
+
+</html>
