@@ -1,0 +1,108 @@
+<!--Exercise 9: Add two additional ‘div’ elements and perform the same ‘transitions’ but with different ‘easing’ methods 
+(see the elements transition at the same time but with different easing motions). 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+    
+  <!-----------------------------variables---------------------------------->     
+    
+    var s1='100px';
+    var time= 2000;
+   
+    
+  <!-----------------------------first square--------------------------------->   
+  d3.select('body') 
+  <!--add div to body-->
+  .append("div") 
+  <!--set width-->
+  .style('width',  s1) 
+  <!--set height-->
+  .style('height', s1) 
+   <!--set colour-->
+  .style('background-color', 'blue') 
+   <!--position-->
+  .style('transform', 'scale(1.0)') 
+   <!--start transition-->
+  .transition() 
+   <!--add ease style->
+  .ease( d3.easeBounce ) 
+  <!--duration->
+  .duration(time) 
+  <!--change colour->
+  .style("background-color", "red") 
+  <!--position->
+  .style('transform', 'scale(0.5)') 
+ 
+  <!-----------------------------second square-------------------------------->
+ 
+   d3.select('body') 
+   <!--add div to body-->
+  .append("div") 
+  <!--set width-->
+  .style('width',  s1) 
+  <!--set height-->
+  .style('height', s1) 
+   <!--set colour-->
+  .style('background-color', 'green') 
+  <!--position-->
+  .style('transform', 'scale(1.0)') 
+   <!--start transition-->
+  .transition() 
+  <!--add ease style->
+  .ease( d3.easeElastic ) 
+  <!--duration->
+  .duration(time) 
+  <!--change colour->
+  .style("background-color", "purple") 
+  <!--position->
+  .style('transform', 'scale(0.8)') 
+  <!--make the edges round-->
+  .style("border-radius","20px") 
+
+ <!------------------------------third square--------------------------------->
+
+   d3.select('body') 
+   <!--add div to body-->
+  .append("div") 
+  <!--set width-->
+  .style('width',  s1) 
+  <!--set height-->
+  .style('height', s1) 
+   <!--set colour-->
+  .style('background-color', 'orange') 
+  <!--position-->
+  .style('transform', 'scale(1.0)') 
+  <!--start transition-->
+  .transition() 
+   <!--add ease style->
+  .ease( d3.easeCircle ) 
+  <!--duration->
+  .duration(time) 
+  <!--change colour->
+  .style("background-color", "pink") 
+  <!--position->
+  .style('transform', 'scale(0.5)') 
+  <!--make the edges round-->
+  .style("border-radius","50px") 
+   
+   
+         </script>
+  </body>
+
+</html>
