@@ -29,6 +29,7 @@ Author:Reka Hegedus
       var time = 2000;
       var delay = 2000;
       var change = 100;
+      var baseCol = "blue"
     
     
  <!-------------------------------create svg--------------------------------->     <!--Create SVG element--> 
@@ -44,7 +45,7 @@ Author:Reka Hegedus
         <!--append first bar-->
         var bar1 = svg.append("rect") 
         		<!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x) 
             .attr("y", y) 
@@ -54,7 +55,7 @@ Author:Reka Hegedus
        <!--append second bar-->
         var bar2 = svg.append("rect") 
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x+20) 
             .attr("y", y) 
@@ -63,7 +64,7 @@ Author:Reka Hegedus
         <!--append third bar-->   
         var bar3 = svg.append("rect")
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x+40) 
             .attr("y", y) 
@@ -125,7 +126,7 @@ Author:Reka Hegedus
             <!--change width and colour-->
             .attr("height",h)
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             
         <!--add transition to bar2--> 
         bar2.transition() 
@@ -138,7 +139,7 @@ Author:Reka Hegedus
             <!--change height--> 
             .attr("height",h)
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
       
         <!--add transition to bar1--> 
         bar1.transition() 
@@ -150,7 +151,7 @@ Author:Reka Hegedus
             .delay(delay*5) 
             .attr("height",h)
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
          
            
     
