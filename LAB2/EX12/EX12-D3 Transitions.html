@@ -28,6 +28,7 @@ Author:Reka Hegedus
       var time = 2000;
       var delay = 2000;
       var change = 100;
+      var baseCol = "blue";
     
     
  <!-------------------------------create svg--------------------------------->     <!--Create SVG element--> 
@@ -43,7 +44,7 @@ Author:Reka Hegedus
         <!--append first bar-->
         var bar1 = svg.append("rect") 
         		<!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x) 
             .attr("y", y) 
@@ -53,7 +54,7 @@ Author:Reka Hegedus
        <!--append second bar-->
         var bar2 = svg.append("rect") 
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x+20) 
             .attr("y", y) 
@@ -62,7 +63,7 @@ Author:Reka Hegedus
         <!--append third bar-->   
         var bar3 = svg.append("rect")
             <!--colour it--> 
-            .attr("fill", "blue") 
+            .attr("fill", baseCol) 
             <!--position it--> 
             .attr("x", x+40) 
             .attr("y", y) 
@@ -127,7 +128,7 @@ Author:Reka Hegedus
             .delay(delay*4) 
             <!--change width and colour-->
             .attr("width",10)
-            .attr("fill", "blue")
+            .attr("fill", baseCol)
         
         
 } 
