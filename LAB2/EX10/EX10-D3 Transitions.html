@@ -22,8 +22,8 @@ Author:Reka Hegedus
     <script>
     
 <!-------------------------------variables--------------------------------->
-      var width = 400;
-      var height = 400;      
+      var width = 100;
+      var height = 100;      
       var time = 1000;
     
     
@@ -39,11 +39,15 @@ Author:Reka Hegedus
       svg.append("circle")
         .attr("id","c1")
       <!--give the with and the height keep adjustable parameters-->
-        .style('cx', (width-340).toString() + 'px')
-        .style('cy', (height-340).toString() + 'px') 
+        .style('cx', (width-65).toString() + 'px')
+        .style('cy', (height-65).toString() + 'px') 
         <!--add radious-- >
-        .attr('r', 50)  
-        .style("fill", "green")
+        .attr('r', 30)  
+        <!--colour it add edge-->
+        .style("fill", "steelblue")
+        .style("stroke", "pink")
+        <!--make it smooth the transition-->
+        .style("stroke-width",1) 
         
  <!-------------------------------mouse on-------------------------------->      
      d3.selectAll("svg")
@@ -75,7 +79,7 @@ Author:Reka Hegedus
           .duration(time) 
           <!--colour it add edge-->
           .style("fill", "steelblue")
-          .style("stroke", "yellow")
+          .style("stroke", "pink")
           <!--make it smooth the transition-->
           .style("stroke-width",1) 
           <!--position->
