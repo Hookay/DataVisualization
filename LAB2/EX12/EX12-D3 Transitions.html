@@ -27,6 +27,7 @@ Author:Reka Hegedus
       var w = 10;
       var time = 2000;
       var delay = 2000;
+      var change = 100;
     
     
  <!-------------------------------create svg--------------------------------->     <!--Create SVG element--> 
@@ -84,7 +85,7 @@ Author:Reka Hegedus
             .ease(d3.easeLinear) 
             <!--length of time--> 
             .duration(time) 
-            .attr("height",100) 
+            .attr("height",change) 
         <!--add transition to bar2--> 
         bar2.transition() 
              <!--use ease feature--> 
@@ -94,7 +95,7 @@ Author:Reka Hegedus
             <!--wait--> 
             .delay(delay) 
             <!--change height--> 
-            .attr("height",100) 
+            .attr("height",change) 
         <!--add transition to bar3-->     
         bar3.transition() 
             <!--use ease feature-->
@@ -104,7 +105,7 @@ Author:Reka Hegedus
             <!--wait--> 
             .delay(delay*2) 
             <!--change width and colour-->
-            .attr("width",100)
+            .attr("width",change)
             .attr("fill","#ce4efc")
         <!--add transition to bar3-->     
         bar3.transition() 
@@ -115,7 +116,7 @@ Author:Reka Hegedus
             <!--wait--> 
             .delay(delay*3) 
             <!--change height-->
-            .attr("height",100)
+            .attr("height",change)
         <!--add transition to bar3--> 
         bar3.transition() 
              <!--use ease feature-->
