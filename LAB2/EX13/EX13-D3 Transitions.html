@@ -1,0 +1,169 @@
+<!--Exercise 13: Chain an additional ‘transition’ effect to the above example, so that after completing the transition, the 
+bars ‘transition’ back to their original height (grow then shrink). 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+ <!-------------------------------variables--------------------------------->
+      var width = 500;
+      var height = 500; 
+      var x = 100;
+      var y = 20;
+      var h = 20;
+      var w = 10;
+      var time = 2000;
+      var delay = 2000;
+      var change = 100;
+    
+    
+ <!-------------------------------create svg--------------------------------->     <!--Create SVG element--> 
+     var svg = d3.select("body") 
+     				<!--append svg-->
+            .append("svg") 
+            <!--give the with and the height keep adjustable parameters-->
+            .attr("width", width) 
+            .attr("height", height); 
+            
+
+
+        <!--append first bar-->
+        var bar1 = svg.append("rect") 
+        		<!--colour it--> 
+            .attr("fill", "blue") 
+            <!--position it--> 
+            .attr("x", x) 
+            .attr("y", y) 
+            <!--give dimension--> 
+            .attr("height", h) 
+            .attr("width", w) 
+       <!--append second bar-->
+        var bar2 = svg.append("rect") 
+            <!--colour it--> 
+            .attr("fill", "blue") 
+            <!--position it--> 
+            .attr("x", x+20) 
+            .attr("y", y) 
+            .attr("height", h) 
+            .attr("width", w) 
+        <!--append third bar-->   
+        var bar3 = svg.append("rect")
+            <!--colour it--> 
+            .attr("fill", "blue") 
+            <!--position it--> 
+            .attr("x", x+40) 
+            .attr("y", y) 
+            <!--give dimension--> 
+            .attr("height", h) 
+            .attr("width", w) 
+            
+            
+        <!-----------------call function----------------->
+        update(); 
+        
+        
+        
+        
+<!---------------------------update function---------------------------------> 
+    function update() { 
+        <!--add transition to bar1--> 
+        bar1.transition() 
+             <!--use ease feature--> 
+            .ease(d3.easeLinear) 
+            <!--length of time--> 
+            .duration(time) 
+            .attr("height",change) 
+            <!--colour it--> 
+            .attr("fill", "#cefc4e") 
+        <!--add transition to bar2--> 
+        bar2.transition() 
+             <!--use ease feature--> 
+            .ease(d3.easeLinear) 
+            <!--length of time--> 
+            .duration(time) 
+            <!--wait--> 
+            .delay(delay) 
+            <!--change height--> 
+            .attr("height",change)
+            <!--colour it--> 
+            .attr("fill", "#9560f7") 
+            
+        <!--add transition to bar3-->     
+        bar3.transition() 
+             <!--use ease feature-->
+            .ease(d3.easeLinear)
+            <!--length of time--> 
+            .duration(time) 
+            <!--wait--> 
+            .delay(delay*2) 
+            <!--change height--> 
+            .attr("height",change)
+            <!--colour it--> 
+            .attr("fill", "#acfcfa")      
+        <!--add transition to bar3-->      
+        bar3.transition() 
+             <!--use ease feature-->
+            .ease(d3.easeLinear)
+            <!--length of time--> 
+            .duration(time) 
+            <!--wait--> 
+            .delay(delay*3) 
+            <!--change width and colour-->
+            .attr("height",h)
+            <!--colour it--> 
+            .attr("fill", "blue") 
+            
+        <!--add transition to bar2--> 
+        bar2.transition() 
+             <!--use ease feature--> 
+            .ease(d3.easeLinear) 
+            <!--length of time--> 
+            .duration(time) 
+            <!--wait--> 
+            .delay(delay*4) 
+            <!--change height--> 
+            .attr("height",h)
+            <!--colour it--> 
+            .attr("fill", "blue") 
+      
+        <!--add transition to bar1--> 
+        bar1.transition() 
+             <!--use ease feature--> 
+            .ease(d3.easeLinear) 
+            <!--length of time--> 
+            .duration(time) 
+            <!--wait--> 
+            .delay(delay*5) 
+            .attr("height",h)
+            <!--colour it--> 
+            .attr("fill", "blue") 
+         
+           
+    
+       
+            
+        
+        
+} 
+    
+    
+    
+    
+     </script>
+  </body>
+
+</html>
