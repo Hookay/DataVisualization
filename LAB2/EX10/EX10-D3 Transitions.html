@@ -1,0 +1,88 @@
+<!--Exercise 10: Add the easing effect to the svg circle example, so when a mouse moves over a ‘circle’ svg element, it 
+grows by a small amount, when the mouse moves away (out of focus) the svg circle returns to the original size (use 
+the ease ‘bounce’). 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+  </head>
+
+
+  <body>
+
+    <script>
+    
+<!-------------------------------variables--------------------------------->
+      var width = 400;
+      var height = 400;      
+      var time = 1000;
+    
+    
+<!-------------------------------create svg--------------------------------->       
+      //Create SVG element 
+      var svg = d3.select("body")        
+        .append("svg")
+        <!--give the with and the height keep adjustable parameters-->
+        .attr("width",width.toString() + 'px')
+        .attr("height", height.toString() + 'px')
+        
+<!-------------------------------circle------------------------------------>
+      svg.append("circle")
+        .attr("id","c1")
+      <!--give the with and the height keep adjustable parameters-->
+        .style('cx', (width-340).toString() + 'px')
+        .style('cy', (height-340).toString() + 'px') 
+        <!--add radious-- >
+        .attr('r', 50)  
+        .style("fill", "green")
+        
+ <!-------------------------------mouse on-------------------------------->      
+     d3.selectAll("svg")
+         <!--listen to the mouse when the cursor moves to the div do smtg-->
+         .on("mouseover", function(event) {
+          d3.select("#c1")
+         <!--start transition-->
+         .transition() 
+         <!--add ease style->
+         .ease( d3.easeBounce ) 
+         <!--duration->
+         .duration(time) 
+         <!--colour it add edge-->
+         .style("fill", "orange")
+         .style("stroke", "purple")
+         .style("stroke-width",8)
+         <!--position->
+         .style('transform', 'scale(1.09)')}) 
+
+ <!-------------------------------mouse off--------------------------------> 
+
+        .on("mouseout", function() {
+          d3.select("#c1")
+          <!--start transition-->
+          .transition() 
+          <!--add ease style->
+          .ease( d3.easeBounce ) 
+          <!--duration->
+          .duration(time) 
+          <!--colour it add edge-->
+          .style("fill", "steelblue")
+          .style("stroke", "yellow")
+          <!--make it smooth the transition-->
+          .style("stroke-width",1) 
+          <!--position->
+          .style('transform', 'scale(1.0)') 
+          });
+
+             </script>
+  </body>
+
+</html>
