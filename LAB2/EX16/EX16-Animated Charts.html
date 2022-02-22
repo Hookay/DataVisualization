@@ -43,6 +43,10 @@ Author:Reka Hegedus
 
     <!-- colour array-->
     var myColor0 =d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
+    <!-- position-->
+    var move = 100;
+    <!-- duration-->
+    var dur = 400;
   
   
     <!-- create svg-->
@@ -58,7 +62,7 @@ Author:Reka Hegedus
     var y = d3.scaleLinear().range([height, 0]); 
     <!-- data positions-->
     var g = svg.append("g") 
-               .attr("transform", "translate(" + 100 + "," + 100 + ")"); 
+               .attr("transform", "translate(" + move + "," + move + ")"); 
    
    
    
@@ -67,9 +71,9 @@ Author:Reka Hegedus
        <!-- text positions-->
        .attr("transform", "translate(100,0)") 
         <!-- x positions-->
-       .attr("x", 100) 
+       .attr("x", move) 
         <!-- y positions-->
-       .attr("y", 50) 
+       .attr("y", move/2) 
         <!-- font size-->
        .attr("font-size", "24px") 
         <!-- text-->
@@ -106,9 +110,9 @@ Author:Reka Hegedus
          <!--color title text-->
          .attr("stroke", "#deadc1")
          <!--position x-->
-         .attr("y", height - 250) 
+         .attr("y", height - (move+150)) 
          <!--position y-->
-         .attr("x", width - 100) 
+         .attr("x", width - move) 
           <!--align title to the end-->
          .attr("text-anchor", "end")
          <!--sub title-->
@@ -168,7 +172,7 @@ Author:Reka Hegedus
          <!--ease it-->
          .ease(d3.easeLinear) 
          <!--time-->
-         .duration(2000) 
+         .duration(dur+1600) 
          <!--delay each bar transition -->
          .delay(function (d, i) { return i * 300; }) 
          <!--give height -->
@@ -190,7 +194,7 @@ function onMouseOver(d, i) {
         <!--add animation-->
         .transition() 
         <!--time-->
-        .duration(400) 
+        .duration(dur) 
         <!--change thickness-->
         .attr('width', x.bandwidth() + 5) 
         <!--change height-->
@@ -223,7 +227,7 @@ function onMouseOut(d, i) {
            <!--adds animation -->
           .transition()
            <!--time-->
-          .duration(400) 
+          .duration(dur) 
            <!--change thickness-->
           .attr('width', x.bandwidth()) 
           <!--change height-->
