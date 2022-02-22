@@ -202,9 +202,9 @@ function onMouseOver(d, i) {
         <!--add class to it-->
          .attr('class', 'val') 
          <!--place it on x-->
-         .attr('x', function() { return x(i.year); }) 
+         .attr('x', function() { return x(d.year); }) 
           <!--place it on y-->
-         .attr('y', function() { return y(i.value) - 15;})
+         .attr('y', function() { return y(d.value) - 15;})
           <!--Value of the text-->
          .text( function(d) { return '$' + i.value; } )
           <!--colour text-->
