@@ -1,0 +1,237 @@
+<!--Exercise 15: Take the below example, and add in the mouse event 
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+
+
+
+  <style> 
+  .bar { 
+      stroke: #48474a;  
+  } 
+
+  .highlight { 
+      stroke: orange; 
+  } 
+  </style>  
+
+  <svg width="600" height="500"></svg> 
+
+  </head>
+  
+
+ 
+
+  <body>
+
+    <script>
+    
+    
+    
+    
+    
+ 
+<!----------------------------variables-------------------------------------->
+
+    <!-- colour array-->
+    var myColor0 =d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
+  
+  
+    <!-- create svg-->
+    var svg = d3.select("svg"); 
+    <!-- add margin-->
+    var margin = 200; 
+    <!-- create width-->
+    var width  = svg.attr("width") - margin; 
+    <!-- create height-->
+    var height = svg.attr("height") - margin; 
+    <!-- create scaled variables-->
+    var x = d3.scaleBand().range([0, width]).padding(0.4); 
+    var y = d3.scaleLinear().range([height, 0]); 
+    <!-- data positions-->
+    var g = svg.append("g") 
+               .attr("transform", "translate(" + 100 + "," + 100 + ")"); 
+   
+   
+   
+<!---------------------------- main title---------------------------------->
+    svg.append("text") 
+       <!-- text positions-->
+       .attr("transform", "translate(100,0)") 
+        <!-- x positions-->
+       .attr("x", 100) 
+        <!-- y positions-->
+       .attr("y", 50) 
+        <!-- font size-->
+       .attr("font-size", "24px") 
+        <!-- text-->
+       .text("STOCK PRICE")
+        <!--colour-->
+       .attr('fill', '#a1b5af')
+   
+   
+   
+   
+    <!--read in data-->
+    d3.csv( "https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB2/CSV/15.csv" ).then(function(data) {  
+    
+    
+    
+<!----------------------------create graph axes--------------------------->
+        
+        <!--add domains from data-->
+        x.domain( data.map(function(d) { return d.year; }) ); 
+        y.domain([0, d3.max(data, function(d) { return d.value; })]); 
+        
+        <!--create year axes (x)------------------------->
+        g.append("g") 
+         <!--position it-->
+         .attr("transform", "translate(0," + height + ")") 
+         <!--place bottom axis-->
+         .call(d3.axisBottom(x))
+         <!--color axis-->
+         .attr('color', 'pink')
+          <!--color axis text-->
+         .attr("stroke", "#a1b5af")
+         <!--add text-->
+         .append("text") 
+         <!--color title text-->
+         .attr("stroke", "#deadc1")
+         <!--position x-->
+         .attr("y", height - 250) 
+         <!--position y-->
+         .attr("x", width - 100) 
+          <!--align title to the end-->
+         .attr("text-anchor", "end")
+         <!--sub title-->
+         .text("YEAR"); 
+         
+         
+        <!--create stock price axes (y)-------------------->
+        g.append("g") 
+          <!--position it values -->
+         .call(d3.axisLeft(y).tickFormat(function(d){ return "$" + d;})
+         .ticks(10)) 
+         <!--color axis-->
+         .attr('color', 'pink')
+          <!--color axis text-->
+         .attr("stroke", "#a1b5af")
+         <!--add text-->
+         .append("text")  
+         <!--color title text-->
+         .attr("stroke", "#deadc1")
+         <!--position rotated-->
+         .attr("transform", "rotate(-90)") 
+         <!--so position x for text-->
+         .attr("y", 6) 
+         <!--position fine adjust x for text-->
+         .attr("dy", "-5.1em") 
+         <!--align title to the end-->
+         .attr("text-anchor", "end") 
+           <!--sub title-->
+         .text("STOCK PRICE");
+         
+         
+<!----------------------------create bars----------------------------------->        
+        <!--append bars-->
+        g.selectAll(".bar") 
+         <!--add data to use it-->
+         .data(data) 
+         <!--create as many as in the data-->
+         .enter()
+         <!--make them rectangles-->
+         .append("rect") 
+         <!--give class ->color frame-->
+         .attr("class", "bar") 
+          <!--use colour array to get gradient effect-->
+         .style("fill", function(d,i) {return myColor0(i);})
+          <!--Add listener for the mouseover event-->
+         .on("mouseover", onMouseOver)
+          <!--Add listener for the mouseout event-->
+         .on("mouseout", onMouseOut)   
+         <!--position on x on x-axes->
+         .attr("x", function(d) {return x(d.year); }) 
+         <!--position on y  on x-axes-->
+         .attr("y", function(d) { return y(d.value); }) 
+         <!--thickness-->
+         .attr("width",  x.bandwidth()) 
+         <!--make transition smooth-->
+         .transition() 
+         <!--ease it-->
+         .ease(d3.easeLinear) 
+         <!--time-->
+         .duration(2000) 
+         <!--delay each bar transition -->
+         .delay(function (d, i) { return i * 300; }) 
+         <!--give height -->
+         .attr("height", function(d) { return height - y(d.value);});
+         
+   
+   
+ <!------------------mouseover event handler function------------------>     
+
+function onMouseOver(d, i) { 
+        
+        <!--select data bars-->
+        d3.select(this)
+        <!--add class --> frame colour-->
+        .attr('class', 'highlight'); 
+        
+        <!--select bars-->
+        d3.select(this) 
+        <!--add animation-->
+        .transition() 
+        <!--time-->
+        .duration(400) 
+        <!--change thickness-->
+        .attr('width', x.bandwidth() + 5) 
+        <!--change height-->
+        .attr("y", function(d) { return y(d.value) - 10; }) 
+        .attr("height", function(d) { return height - y(d.value) + 10; }); 
+ 
+       <!--add money value on top-->
+        g.append("text") 
+        <!--add class to it-->
+         .attr('class', 'val') 
+         <!--place it on x-->
+         .attr('x', function() { return x(i.year); }) 
+          <!--place it on y-->
+         .attr('y', function() { return y(i.value) - 15;})
+          <!--Value of the text-->
+         .text( function(d) { return '$' + i.value; } )
+          <!--colour text-->
+         .attr('fill', 'white'); //  
+} 
+<!------------------mouseout event handler function-----------------------> 
+
+function onMouseOut(d, i) { 
+
+        <!--use the text label class to remove label on mouseout -->
+        d3.select(this)
+        .attr('class', 'bar'); 
+        
+        
+        d3.select(this) 
+           <!--adds animation -->
+          .transition()
+           <!--time-->
+          .duration(400) 
+           <!--change thickness-->
+          .attr('width', x.bandwidth()) 
+          <!--change height-->
+          .attr("y", function(d) { return y(i.value); }) 
+          .attr("height", function(d) { return height - y(i.value); }); 
+      
+      <!--remove money value-->
+        d3.selectAll('.val') 
+          .remove() 
+} 
+}); 
