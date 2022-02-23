@@ -1,0 +1,340 @@
+<!--
+Exercise 22: Update the example so that the data sets can be different sizes (e.g., [A,B,C] but the second data set 
+could have [A,B,C,D]).  You’ll need to update the ‘axis’ details (range) and extra details to ‘remove’
+
+Author:Reka Hegedus  
+
+-->
+
+<html>
+
+
+  <head>
+
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    
+    <!-- Add buttons --> 
+    <button onclick="update(data1)"  >Variable 1</button> 
+    <button onclick="update(data2)">Variable 2</button> 
+    <button onclick="update(data3)" >Variable 3</button> 
+    
+  </head>
+  <body>
+       <script>
+       
+  <!----------------------------variables-------------------------------------->
+         
+         <!--color array for coloring ABC separate-->
+        // var col=["pink","steelblue","#69b3a2"]
+
+
+ <!--------------set the dimensions and margins of the graph------------------->
+
+          <!--give margin-->
+          const margin = {top: 30, right: 30, bottom: 70, left: 60}; 
+          <!--give width-->
+          const width  = 460 - margin.left - margin.right;
+          <!--give height-->
+          const height = 400 - margin.top - margin.bottom; 
+          
+<!--------------append the svg object to the body of the page ----------------->
+        
+          var svg = d3.select('body') 
+                       <!--append div-->
+                       .append('div') 
+                       <!--append svg-->
+                       .append("svg") 
+                       <!--width position-->
+                       .attr("width", width + margin.left + margin.right)
+                       <!--height position-->
+                       .attr("height", height + margin.top + margin.bottom+100) 
+                       <!--append data point-->
+                       .append("g") 
+                       <!-- position-->
+                       .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
+                       
+<!-----------------------create gradient colour-------------------------------->                       
+                       
+           <!--Append a defs (for definition) element to your SVG
+          var defs = svg.append("defs");
+
+          <!--Append a linearGradient element to the defs and give it a unique id
+          var linearGradient = defs.append("linearGradient")
+                                    .attr("id", "linear-gradient");
+                                    
+                                    
+          <!--Vertical gradient-->
+          linearGradient
+              .attr("x1", "0%")
+              .attr("y1", "0%")
+              .attr("x2", "0%")
+              .attr("y2", "100%");
+          <!--Append multiple color stops by using D3's data/enter step-->
+          linearGradient.selectAll("stop")
+              .data([
+                  {offset: "0%", color: "#ffc7c7"},
+                  {offset: "12.5%", color: "#fff0c7"},
+                  {offset: "25%", color: "#e6ffc7"},
+                  {offset: "37.5%", color: "#fff0c7"},
+                  {offset: "50%", color: "#c7fdff"},
+                  {offset: "62.5%", color: "#c7d0ff"},
+                  {offset: "75%", color: "#e8c7ff"},
+                  {offset: "87.5%", color: "#ffc7ed"},
+                  {offset: "100%", color: "#ffc7c8"}
+                ])
+              .enter()
+              <!--Set the color for the start (0%)-->
+              .append("stop")
+              .attr("offset", function(d) { return d.offset; })
+              <!--Set the color for the end (100%)-->
+              .attr("stop-color", function(d) { return d.color; });
+
+            
+   <!----------------------create 3 data_set------------------------------------>     
+          const data1 = [ 
+             {group: "A", value: 5,  color:"pink"}, 
+             {group: "B", value: 20, color:"pink"}, 
+             {group: "C", value: 9,  color:"pink"} 
+          ]; 
+
+          const data2 = [ 
+             {group: "A", value: 10, color:"url(#linear-gradient)"}, 
+             {group: "B", value: 2,  color:"url(#linear-gradient)"}, 
+             {group: "C", value: 17, color:"url(#linear-gradient)"},
+             {group: "D", value: 16, color:"url(#linear-gradient)"} 
+          ];
+          
+           const data3 = [ 
+             {group: "A", value: 14, color:"#69b3a2"}, 
+             {group: "B", value: 7,  color:"#69b3a2"}, 
+             {group: "C", value: 2,  color:"#69b3a2"} 
+          ];
+
+ <!--------------------------------X axes-------------------------------------->
+        
+        var x = d3.scaleBand() 
+             <!--give range-->
+            .range([ 0, width ]) 
+            <!--domain-->
+            .domain(data1.map(function(d) { return d.group; })) 
+            <!--add padding to bars x-scale-->
+            .padding(0.2); 
+            
+            
+          
+           svg.append("g") 
+            .attr("id","r")
+             <!-- position-->
+            .attr("transform", "translate(0," + height + ")") 
+            <!--on the bottom add axis-->
+            .call(d3.axisBottom(x))
+             <!--color axis-->
+            .attr('color', 'pink')
+             <!--color axis text-->
+            .attr("stroke", "#a1b5af");
+         
+         
+            svg.append("g") 
+            .attr("id","r")
+             <!-- position-->
+            .attr("transform", "translate(0," + 0 + ")") 
+            <!--on the top add axis-->
+            .call(d3.axisTop(x))
+             <!--color axis-->
+            .attr('color', 'pink')
+             <!--color axis text-->
+            .attr("stroke", "#a1b5af");
+           
+            
+            
+            
+
+ <!--------------------------------Y axes-------------------------------------->
+        
+        var y = d3.scaleLinear() 
+                      <!--add domain y--> 
+                     .domain([0, 20]) 
+                     <!--add range y-->
+                     .range([ height, 0]); 
+                     
+          svg.append("g") 
+             <!--add class-->
+            .attr("class", "myYaxis") 
+            <!--on the side add axis-->
+            .call(d3.axisLeft(y))
+            <!--color axis-->
+            .attr('color', 'pink')
+            <!--color axis text-->
+            .attr("stroke", "#a1b5af"); 
+            
+            
+            svg.append("g") 
+             <!--add class-->
+            .attr("class", "myYaxis") 
+            <!-- position-->
+            .attr("transform", "translate( "+ width +",0)") 
+            <!--on the side add axis-->
+            .call(d3.axisRight(y))
+            <!--color axis-->
+            .attr('color', 'pink')
+            <!--color axis text-->
+            .attr("stroke", "#a1b5af"); 
+
+<!-----A function that create / update the plot for a given variable: --------->
+          
+          function update(data) { 
+           
+           svg.selectAll("g").remove()
+           <!--domain-->
+           x.domain(data.map(function(d) { return d.group; }))  
+                    
+            var j = svg.selectAll("g").data(data)
+
+               
+                j.enter() 
+                .append("g") 
+                <!--apply transition-->
+                .transition()
+                <!--add ease style->
+                .ease( d3.easeElastic ) 
+                <!--for a given time-->
+                .duration(3000)
+                 <!-- position-->
+                .attr("transform", "translate(0," + height + ")") 
+                <!--on the bottom add axis-->
+                .call(d3.axisBottom(x))
+                 <!--color axis-->
+                .attr('color', 'pink')
+                 <!--color axis text-->
+                .attr("stroke", "#a1b5af");
+                
+
+               j.enter()
+                .append("g")
+                <!--apply transition-->
+                .transition()
+                <!--add ease style->
+                .ease( d3.easeElastic ) 
+                <!--for a given time-->
+                .duration(9000)
+                 <!-- position-->
+                .attr("transform", "translate(0," + 0 + ")") 
+                <!--on the top add axis-->
+                .call(d3.axisTop(x))
+                 <!--color axis-->
+                .attr('color', 'pink')
+                 <!--color axis text-->
+                .attr("stroke", "#a1b5af");
+                
+                
+                svg.append("g") 
+                   <!--add class-->
+                  .attr("class", "myYaxis") 
+                  <!--on the side add axis-->
+                  .call(d3.axisLeft(y))
+                  <!--color axis-->
+                  .attr('color', 'pink')
+                  <!--color axis text-->
+                  .attr("stroke", "#a1b5af"); 
+
+
+                 svg.append("g") 
+                   <!--add class-->
+                  .attr("class", "myYaxis") 
+                  <!-- position-->
+                  .attr("transform", "translate( "+ width +",0)") 
+                  <!--on the side add axis-->
+                  .call(d3.axisRight(y))
+                  <!--color axis-->
+                  .attr('color', 'pink')
+                  <!--color axis text-->
+                  .attr("stroke", "#a1b5af"); 
+                   
+               
+             // j.exit().remove() 
+  
+            
+           
+           <!--get data ready-->
+            var u = svg.selectAll("rect") 
+                    .data(data)                     
+          
+            u .enter() 
+                <!--append rectangle-->
+               .append("rect") 
+                 
+                <!--Add listener for the mouseover event-->
+        			 .on("mouseover", onMouseOver)
+    			      <!--Add listener for the mouseout event-->
+			         .on("mouseout", onMouseOut) 
+               <!--merge them to one layer-->
+               .merge(u) 
+               <!--apply transition-->
+               .transition() 
+               <!--for a given time-->
+               .duration(2300) 
+               <!--give x position-->
+               .attr("x", function(d) { return x(d.group); }) 
+               <!--give y position-->
+               .attr("y", function(d) { return y(d.value); })
+               <!--thickness-->
+               .attr("width", x.bandwidth()) 
+               <!--height-->
+               .attr("height", function(d) { return height - y(d.value); }) 
+               .attr("fill", function(d,i){return d.color });
+               
+               u.exit()
+               <!--apply transition-->
+               .transition() 
+               <!--for a given time-->
+               .duration(1000)
+
+               .attr("y", y(0))
+               <!--height-->
+               .attr("height", function(d) { return height - y(0); })
+               <!--make it dissapear-->
+               <!--.style("opacity","0")-->
+               .remove();
+               
+               <!--colour bars by ABC--> 
+               <!--.attr("fill", function(d,i){return col[i]; })-->
+          } 
+
+         <!-- Initialize the plot with the first dataset--> 
+          update(data1) 
+          
+          
+          
+       <!------------------mouseover event handler function------------------>     
+
+function onMouseOver(d, i) { 
+        
+      
+       <!--add money value on top-->
+        svg.append("text") 
+        <!--add class to it-->
+         .attr('class', 'val') 
+         <!--place it on x-->
+         .attr('x', function() { return x(i.group); }) 
+          <!--place it on y-->
+         .attr('y', function() { return y(i.value)-10;})
+          <!--Value of the text-->
+         .text( function(d) { return  i.value; } )
+          <!--colour text-->
+         .attr('fill', 'white'); //  
+         
+} 
+<!------------------mouseout event handler function-----------------------> 
+
+function onMouseOut(d, i) { 
+
+      <!--remove money value-->
+        d3.selectAll('.val') 
+          .remove() 
+} 
+    
+   
+     </script>
+  </body>
+
+</html>
