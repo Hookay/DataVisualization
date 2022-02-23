@@ -94,7 +94,9 @@ Author:Reka Hegedus
  <!--------------------------------Y axes-------------------------------------->
         
         var y = d3.scaleLinear() 
+                      <!--add domain y--> 
                      .domain([0, 20]) 
+                     <!--add range y-->
                      .range([ height, 0]); 
                      
           svg.append("g") 
@@ -110,23 +112,32 @@ Author:Reka Hegedus
 <!-----A function that create / update the plot for a given variable: --------->
           
           function update(data) { 
-
+            <!--get data ready-->
             var u = svg.selectAll("rect") 
                     .data(data) 
 
             u .enter() 
+                <!--append rectangle-->
                .append("rect") 
+               <!--merge them to one layer-->
                .merge(u) 
+               <!--apply transition-->
                .transition() 
+               <!--for a given time-->
                .duration(1000) 
+               <!--give x position-->
                .attr("x", function(d) { return x(d.group); }) 
+               <!--give y position-->
                .attr("y", function(d) { return y(d.value); }) 
+               <!--thickness-->
                .attr("width", x.bandwidth()) 
+               <!--height-->
                .attr("height", function(d) { return height - y(d.value); }) 
+               <!--colour it-->
                .attr("fill", "#69b3a2") 
           } 
 
-          // Initialize the plot with the first dataset 
+         <!-- Initialize the plot with the first dataset--> 
           update(data1) 
     
    
