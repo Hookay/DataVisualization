@@ -1,0 +1,227 @@
+<!--Exercise 23: Extend the concept of the ‘bar chart’, however, instead draw a ‘line graph’ with two data sets that 
+‘transition’ between them when you select a button (as you did for the bar graph example above).  
+-->
+
+<html>
+
+
+<script src='https://d3js.org/d3.v7.min.js'></script>
+<button onclick="update(data1)">Dataset 1</button>
+<button onclick="update(data2)">Dataset 2</button>
+
+<body>
+
+
+<script>
+
+ <!----------------------- set global variables----------------------->
+    <!-- colour array-->
+    var myColor0 =d3.scaleSequential().domain([1, 10]).interpolator(d3.interpolateViridis);
+
+
+    <!--Set Dimensions-->
+    const xSize = 600;
+    const ySize = 600;
+    const margin = 40;
+    const xMax = xSize - margin * 2;
+    const yMax = ySize - margin * 2;
+    
+    <!--Create Random Points-->
+    const numPoints = 100;
+    <!--create empty array-->
+    const data1 = [];
+    const data2 = [];
+    <!--fill array-->
+    for (let i = 0; i < numPoints; i++) { data1.push({ ser1: i / 100, ser2: Math.sin(6.2 * i / 100) });  data2.push({ ser1: i / 200, ser2: Math.cos(10 * i / 100) });}
+
+
+
+
+<!--Get the 'limits' of the data1 - the full extent (mins and max) so the plotted data fits perfectl--y> 
+
+        const xExtent = d3.extent(data1, d => {
+          return d.ser1
+        });
+        const yExtent = d3.extent(data1, d => {
+          return d.ser2
+        });
+
+
+<!--------------------Append SVG Object to the Page-------------------------->
+       <!--Select body-->
+      const svg = d3.select("body")
+       <!--ass svg-->
+      .append("svg")
+       <!--group svg elements together-->
+      .append("g")
+       <!--position-->
+      .attr("transform", "translate(" + margin + "," + margin + ")");
+
+      <!--graphical image added to graph-->
+      svg.append("image")
+      .attr("xlink:href", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVjtiZ-Xl2qKaSliPK-zjPjtLVMQjsCzhSkQ&usqp=CAU")
+      <!--scale the image to the svg bounds-->
+      .attr("width", xMax)
+      .attr("height",yMax)
+      <!--aline it to the corner-->
+      .attr("x", 0)
+      .attr("y", 0);
+
+
+
+<!-----------------------------Initialise a X axis:-------------------------->
+ <!--scale linear -->
+var x = d3.scaleLinear()
+           <!--Add domain what smallest and largest in data-->
+           .domain([xExtent[0], xExtent[1]])
+            <!--Add the overal range-->
+           .range([0, xMax]);
+ <!--Create the axis on the bottom-->
+var xAxis = d3.axisBottom().scale(x);
+ <!--add svg group elemnt-->
+svg.append("g")
+   <!--sets the position-->
+   .attr("transform", "translate(0," + xMax + ")")
+    <!--give class for later identification-->
+   .attr("class", "myXaxis")
+   <!--sets the numbers looking down-->
+   .call(d3.axisBottom(x))
+    <!--colour axis-->
+   .attr('color', 'green');
+  
+
+
+      
+      
+<!-----------------------------Initialise a Y axis:-------------------------->
+ <!--scale linear -->
+var y = d3.scaleLinear()
+        <!--Add domain what smallest and largest in data-->
+        .domain([yExtent[0], yExtent[1]])
+        <!--Add the overal range-->
+        .range([yMax, 0]);
+        
+ <!--Create the axis on the bottom-->       
+var yAxis = d3.axisLeft().scale(y);
+<!--add svg group elemnt-->
+svg.append("g")
+ <!--give class for later identification-->
+  .attr("class", "myYaxis")
+  <!--sets the numbers looking left-->
+  .call(d3.axisLeft(y)) 
+  <!-- colour axis-->
+  .attr('color', 'purple');
+  
+
+  
+
+<!----Create a function that takes a dataset as input and update the plot:-->
+
+function update(data) {
+
+<!--Update the 'limits' of the data using specific dataset - the full extent (mins and max) so the plotted data fits perfectl--y> 
+       const xExtent = d3.extent(data, d => {
+          return d.ser1
+        });
+        const yExtent = d3.extent(data, d => {
+          return d.ser2
+        });
+
+
+
+
+ <!------------------------- Create the X axis:-->
+ <!--update domain so its adjusting to dataset-->
+  x.domain([xExtent[0], xExtent[1]])
+  <!--Identify axes add transition so its smoother-->
+  svg.selectAll(".myXaxis")
+    .transition()
+    .duration(1000)
+    .call(xAxis);
+
+  <!-------------------------create the Y axis-->
+   <!--update domain so its adjusting to dataset-->
+  y.domain([yExtent[0], yExtent[1]])
+  <!--Identify axes add transition so its smoother-->
+  svg.selectAll(".myYaxis")
+    .transition()
+    .duration(1000)
+    .call(yAxis);
+
+ <!-------------Create a update selection: bind to the new data-->
+  var u = svg.selectAll(".lineTest")
+    .data([data], function(d) {return d.ser1});
+
+  <!--Updata the line-->
+   u.enter()
+    <!--append path-->
+    .append("path")
+    <!--add class-->
+    .attr("class", "lineTest")
+    <!--merge svg-->
+    .merge(u)
+    <!--add transition-->
+    .transition()
+    <!--time-->
+    .duration(1000)
+    <!--add line-->
+    .attr("d", d3.line()
+       <!--x position-->
+      .x(function(d) {return x(+d.ser1); })
+      <!--y position-->
+      .y(function(d) {return y(+d.ser2);})
+      <!--data is sorted according to the x coordinates -->
+      .curve(d3.curveMonotoneX))
+      <!--make sure inbetween lines colour not shows->
+    .attr("fill", "none")
+     <!--colur line-->
+    .attr("stroke", "pink")
+     <!--add line thickness->
+    .attr("stroke-width", 2.5)
+  
+    <!--exit-->
+    u.exit()
+    <!--give transition-->
+    .transition()
+    <!--for a given time-->
+    .duration(1000)
+    <!--something...-->
+    
+    <!---------------------------add dott-->
+    var dot = svg.selectAll("circle")
+  
+   <!--enter-->          
+    dot.enter()
+       <!--take data-->
+       .data(data)
+       .enter()
+       <!--create circle as many as data-->
+       .append('circle')
+       <!--make animation smoother-->
+       .transition()
+       <!--cmake it wait-->
+       .delay(1000)
+       <!--time-->
+       .duration(1000)
+       <!--r position x-->
+       .attr("cx", function(d) { return x(+d.ser1) })
+        <!--r position y-->
+       .attr("cy", function(d) { return y(+d.ser2) })
+        <!--radius-->
+       .attr("r", function(d,i){if(i%2==0){return 7}})
+        <!--fill in the points from array -->
+       .style("fill",function(d,i){return myColor0((i / 10));})
+     <!--remove it once switched--> 
+    dot.remove()
+       
+       
+       
+}
+
+<!-- At the beginning, I run the update function on the first dataset:-->
+update(data1)
+
+ </script>
+ 
+ </body>
+</html>
