@@ -1,0 +1,134 @@
+<!--Exercise 27: Add an additional data set and modify to the code so the ‘pie chart’ transitions (animated) between the currently displayed data set and your new test data set 
+(e.g., click button the pie chart segments animate to new 
+data values). 
+Note, all the segments should not ‘pop’ out/in but should transition smoothly. 
+
+author: Reka Hegedus
+-->
+
+<html>
+
+<head>
+
+
+<script src='https://d3js.org/d3.v7.min.js'></script>
+
+    <!-- Add buttons --> 
+    <button onclick="update(dataset1)" >Variable 1</button> 
+    <button onclick="update(dataset2)">Variable 2</button> 
+    
+</head>
+<body>
+
+
+  <script>
+  
+  
+<!----------------------------- datasets---------------------------------->
+        <!--use data depending on this the arc sizes change-->
+        var dataset1 = { 
+           apples: [5345, 2879, 1997, 2437, 4045], 
+        }; 
+        
+         var dataset2 = { 
+           apples: [1345, 3879, 997, 2837, 6935], 
+        }; 
+<!----------------------------- variables---------------------------------->
+        var width = 460, 
+            height = 300, 
+            radius = Math.min(width, height) / 2; 
+        <!--sets or reads the scale’s range-->
+        var color = d3.scaleOrdinal().range(d3.schemeSet1); 
+        
+<!----------------------------- pie chart----------------------------------->        
+        
+        <!--create pie-->
+        var pie = d3.pie() 
+             <!-- put it in growing order-->
+            .sort(null); 
+
+        <!-- create arc-->
+        var arc = d3.arc() 
+             <!--give inner radious-->
+            .innerRadius(radius - 100) 
+             <!--give outer radious-->
+            .outerRadius(radius - 50); 
+            
+        <!--create svg-->
+        var svg = d3.select("body").append("svg") 
+            <!--add with-->
+            .attr("width", width) 
+            <!--add height-->
+            .attr("height", height) 
+            <!--cadd group-->
+  				  .append("g") 
+            <!--add position->
+ 					  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")"); 
+ 
+        <!--ccreate path-->
+        var path = svg.selectAll("path") 
+            <!--use data depending on this the arc sizes change-->
+            .data(pie(dataset1.apples)) 
+            <!--ccreate as many empty object as in data-->
+            .enter().append("path") 
+            <!--fill with the given colour-->
+            .attr("fill", function(d, i) { return color(i); }) 
+            <!--shape of the svg path-->
+            .attr("d", arc) 
+            <!--transition for smoother action-->
+            .transition() 
+            <!--give time->
+            .duration(1000) 
+             <!--interpolates taking in account the shape of the arc basicaly moves the arc bits-->                   
+            .attrTween("d", function (d) { 
+                     <!-- crate variable interpolate-->
+                    var i = d3.interpolate(d.endAngle, d.startAngle); 
+                    <!-- add a function which determines the arc shape
+                    return function (t) { 
+                            <!--create start angle 
+                            d.startAngle = i(t); 
+                            <!--return the arc-->
+                            return arc(d); } }); 
+                            
+       function update(data) { 
+            
+              <!--ccreate path-->
+        var path = svg.selectAll("path")
+                      .enter()
+        							.data(pie(data.apples)) 
+                          <!--ccreate as many empty object as in data-->
+                      path.enter()
+                          .append("path") 
+                          <!--fill with the given colour-->
+                          .attr("fill", function(d, i) { return color(i); }) 
+                          <!--shape of the svg path-->
+                          .attr("d", arc) 
+                          <!--transition for smoother action-->
+                          .transition() 
+                          <!--add ease style->
+                          .ease( d3.easeElastic) 
+                          <!--give time->
+                          .duration(2000) 
+                           <!--interpolates taking in account the shape of the arc basicaly moves the arc bits-->                   
+                          .attrTween("d", function (d) { 
+                                   <!-- crate variable interpolate-->
+                                  var i = d3.interpolate(d.endAngle, d.startAngle);
+                                  
+                                   
+                                  <!-- add a function which determines the arc shape
+                                  return function (t) { 
+                                          <!--create start angle 
+                                          d.startAngle = i(t); 
+                                          <!--return the arc-->
+                                          return arc(d); } }
+                                          ); 
+                           
+         
+              }
+         <!-- Initialize the plot with the first dataset--> 
+          update(dataset1) 
+
+ </script>
+ 
+ </body>
+</html>
