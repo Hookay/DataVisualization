@@ -1,0 +1,28 @@
+<!--Exercise 24: What is the output for the example above (and why)? 
+
+
+author: Reka Hegedus
+-->
+
+<html>
+
+
+<script src='https://d3js.org/d3.v7.min.js'></script>
+
+<body>
+
+
+  <script>
+    <!--computing intermediate values between two given values a * (1 - t) + b * t;-->
+    <!--creatr two arrays to interpolate-->
+    let intr = d3.interpolate( [20, 40, 4], [1, 12, 10]) 
+     <!--log in console  the type of function-->
+    console.log("Type of returned function is: ", typeof (intr) ); 
+     <!--log in console the case when t is 0.2-->
+    console.log( intr(0.2) ) 
+  
+
+ </script>
+ 
+ </body>
+</html>
