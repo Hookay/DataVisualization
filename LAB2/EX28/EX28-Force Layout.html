@@ -65,16 +65,19 @@ author: Reka Hegedus
           <!--colour it->
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-           var u =  100000+Math.floor(Math.max(Math.random(),0.1) * 10000)*i
-           
+           var u =  100000+Math.floor(Math.max(Math.random(),0.1) * 9000)*i
+           <!--use hex code->
            return "#"+ u.toString();
           }) 
+          <!--add radious->
           .attr('r', function(d) { 
             return d.radius 
           }) 
+          <!--x position->
           .attr('cx', function(d) { 
             return d.x 
           }) 
+          <!--y position->
           .attr('cy', function(d) { 
             return d.y 
           }) 
