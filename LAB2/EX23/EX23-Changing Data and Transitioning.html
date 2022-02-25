@@ -188,31 +188,37 @@ function update(data) {
     <!--something...-->
     
     <!---------------------------add dott-->
-    var dot = svg.selectAll("circle")
-  
+   var dot = svg.selectAll(".circ")
+             <!--take data-->
+            .data(data)
+    
    <!--enter-->          
     dot.enter()
-       <!--take data-->
-       .data(data)
-       .enter()
        <!--create circle as many as data-->
        .append('circle')
-       <!--make animation smoother-->
-       .transition()
-       <!--cmake it wait-->
-       .delay(1000)
-       <!--time-->
-       .duration(1000)
+       <!--add class-->
+       .attr("class", "circ")
+       <!--change opacity-->
+       .attr("opacity","50")
+       <!--merge svg-->
+        .merge(dot)
+        <!--add transition-->
+        .transition()
+        <!--time-->
+        .duration(1000)
        <!--r position x-->
        .attr("cx", function(d) { return x(+d.ser1) })
         <!--r position y-->
        .attr("cy", function(d) { return y(+d.ser2) })
         <!--radius-->
        .attr("r", function(d,i){if(i%2==0){return 7}})
+      
         <!--fill in the points from array -->
        .style("fill",function(d,i){return myColor0((i / 10));})
+       
+       
      <!--remove it once switched--> 
-    dot.remove()
+    dot.exit().remove()
        
        
        
