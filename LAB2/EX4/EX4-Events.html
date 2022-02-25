@@ -41,7 +41,6 @@ Author:Reka Hegedus
       svg.append("circle")
         .attr("id","c1")
       <!--give the with and the height keep adjustable parameters-->
-        .style('width', width.toString() + 'px')
         .style('cx', (width-400).toString() + 'px')
         .style('cy', (width-450).toString() + 'px') 
         <!--add radious-- >
@@ -54,13 +53,14 @@ Author:Reka Hegedus
          <!--listen to the mouse when the cursor moves to the div do smtg-->
         .on("mouseover", function(event) {
           d3.select("#c1")
-            <!--colour it add edge-->
-            .style("fill", "orange")
+             <!--add edge -->
             .style("stroke", "purple")
             .style("stroke-width",8)
-            <!--make it smooth the transition-->
+             <!--make it smooth the transition-->
             .transition()
             .duration(2000)
+            <!--colour it -->
+            .style("fill", "orange")
             <!--change radious-> 
             .attr('r', d=> 100);   
             }) 
@@ -69,12 +69,12 @@ Author:Reka Hegedus
 
         .on("mouseout", function() {
           d3.select("#c1")
+          <!--make it smooth the transition-->
+          .transition().duration(1000)
           <!--colour it add edge-->
           .style("fill", "steelblue")
           .style("stroke", "yellow")
-          <!--make it smooth the transition-->
-          .style("stroke-width",1)  
-          .transition().duration(1000)
+          .style("stroke-width",1)
           <!--change radious-> 
           .attr('r', d=> 40);
         
@@ -87,4 +87,3 @@ Author:Reka Hegedus
   </body>
 
 </html>
-
