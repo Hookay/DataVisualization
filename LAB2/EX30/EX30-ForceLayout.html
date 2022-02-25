@@ -1,0 +1,112 @@
+<!--Exercise 30: Update the example, so each of the spheres displays extra information when the mouse cursor moves 
+over them (e.g., popup text) 
+
+author: Reka Hegedus
+-->
+
+
+<html>
+
+  <head>
+
+            <script src='https://d3js.org/d3.v7.min.js'></script>
+
+  </head>
+  
+      <body>
+
+
+        <script>
+<!----------------------------------variables----------------------------------------->
+      var width = 400, height = 400; 
+      
+      <!--inline array-->
+      var numNodes = 100; 
+       <!--create nodes with varying radious-->
+      var dott = [0.2,0.6,0.6,0.7,0.2,0.6,0.6,0.7,0.2,0.6,0.6,0.7,0.2,0.6,0.6,0.7]
+       
+      <!--create nodes with varying radious-->
+      var nodes = d3.range(numNodes).map(function(d,i) { 
+        return {radius: dott[i] * 25} 
+      })           
+ 
+<!----------------------------------setup svg ----------------------------------------->      
+     
+  var svg =d3.select('body').append('svg').attr('width',width).attr('height',height);            
+            
+
+<!----------------------------------add forces----------------------------------------->  
+      
+      <!--use simulation on nodes-->
+      var simulation = d3.forceSimulation(nodes) 
+             <!--apply body force strength-->
+            .force('charge', d3.forceManyBody().strength(5)) 
+            <!--tell where the center of mass should be-->
+            .force('center', d3.forceCenter(width / 2, height / 2)) 
+            <!--collide the circles mind their radious-->
+            .force('collision', d3.forceCollide().radius(function(d) { 
+                return d.radius 
+            })) 
+            <!--call function to append circles with attributes-->
+            .on('tick', ticked); 
+          
+  <!---------------------------------- tick function-------------------------------------> 
+      function ticked() { 
+      
+       <!--uselect the created svg-->
+        var u = d3.select('svg') 
+           <!--select circle objects-->
+          .selectAll('circle') 
+           <!--Add listener for the mouseover event -->
+          .on("mouseover", onMouseOver) 
+          <!--Add listener for the mouseout event-->
+          .on("mouseout", onMouseOut) 
+          <!--use nodes as data-->
+          .data(nodes) 
+          <!--join appends entering elements and removes exiting elements to match the data-->
+          .join('circle')
+          <!--colour it->
+          .attr('fill', function(d,i){
+          <!--use random numbers to create colours->
+           var u =  100000+Math.floor(Math.max(Math.random(),0.1) * 10000)*i;
+           <!--use hex code->
+           return "#"+ u.toString();}) 
+          <!--add radious->
+          .attr('r', function(d) { return d.radius}) 
+          <!--x position->
+          .attr('cx', function(d) { return d.x}) 
+          <!--y position->
+          .attr('cy', function(d) { return d.y}) 
+      } 
+       
+        function onMouseOver(d, i) {
+            <!--append text to svg-->
+            svg.append("text")
+               <!--add class so we can refer to it--> 
+              .attr('class', 'val')
+              <!--add x position--> 
+              .attr('x', function() {return i.x;})
+              <!--add y position--> 
+              .attr('y', function() {return i.y;})
+              <!--mdetermine font size depending on radious--> 
+              .style("font-size", function (){return (i.radius/20)*20;})
+              <!--display radious--> 
+              .text(function() {return i.radius; }) 
+              <!--colour text-->
+              .attr('fill', 'white');
+
+          }
+
+          <!--mouseout event handler function--> 
+          function onMouseOut(d, i) {
+            <!--remove text from svg--> 
+            d3.selectAll('.val')
+              .remove()
+          }
+
+        console.log('ready..');
+
+ </script>
+ 
+ </body>
+</html>
