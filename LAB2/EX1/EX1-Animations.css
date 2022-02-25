@@ -1,0 +1,65 @@
+      body {
+        /* give body parameters */
+        margin: 0;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #171717;
+      }
+
+
+      svg {
+        /* make sure the whole area is used */
+        width: 100%;
+        height: 100%;
+      }
+
+      .pulse {
+        /* Giving Animation Function */
+        -webkit-animation: pulse 2s linear infinite;
+
+
+      }
+
+      .pulse:hover {
+        /* name the animation */
+        -webkit-animation-name: pulsar;
+        -webkit-animation-duration: 2s; /* animation duration */
+        -webkit-animation-iteration-count: infinite;/* animation iteration continous */
+        -webkit-animation-direction: alternate;/* make sure pulsing goes backwards too */
+        
+        /* The information in the pulse section has to repeat to make sure evry kind of browser can use it */
+        animation-name: pulsar;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+
+      }
+
+      @-webkit-keyframes pulsar {
+        0% {
+          /* it starts with a scaling of the circle of 0.5 and opacity 1 */
+          -webkit-transform: scale(0.5);
+          opacity: 1;
+        }
+
+        100% {
+          /* it finishes with a scaling of the circle of 6 and fades away */
+          -webkit-transform: scale(6);
+          opacity: 0;
+        }
+
+        from {
+          /* to begin with pink pulse circle */
+          fill: pink;
+        }
+
+        to {
+          /* to finish with red pulse circle */
+          fill: red;
+
+
+        }
+      }
