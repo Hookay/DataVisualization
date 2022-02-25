@@ -38,12 +38,12 @@ Author:Reka Hegedus
          <!--listen to the mouse when the cursor moves to the div do smtg-->
         .on("mouseover", function(event) {
           d3.select(this)
+            <!--make it smooth the transition-->
+            .transition().duration(1000)
             <!--colour it-->
             .style("background-color", "orange")
             <!--give border-->
             .style("outline", "thick solid green")
-            <!--make it smooth the transition-->
-            .transition().duration(1000)
             <!--change widtht--> 
             .style('width', d=> (width-300).toString()+'px')
              <!--add text-->
@@ -71,12 +71,12 @@ Author:Reka Hegedus
         <!--listen to the mouse when the cursor moves from the div do smtg-->
         .on("mouseout", function() {
           d3.select(this)
-             <!--give colour-->
-            .style("background-color", "steelblue")
-            <!--give border and colour it-->
-            .style("outline", "thin solid red")     
             <!--make it smooth-->
             .transition().duration(1000)
+            <!--give colour-->
+            .style("background-color", "steelblue")
+            <!--give border and colour it-->
+            .style("outline", "thin solid red")
             <!--change height--> 
             .style('height', d=> (height-100).toString()+'px')
             <!--add text-->
