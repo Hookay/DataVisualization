@@ -93,12 +93,14 @@ author: Reka Hegedus
        function update(data) { 
             
               <!--ccreate path-->
-        var path = svg.selectAll("path")
-                      .enter()
+        var path = svg.selectAll(".mu")
         							.data(pie(data.apples)) 
                           <!--ccreate as many empty object as in data-->
                       path.enter()
                           .append("path") 
+                          .attr("class","mu")
+                          <!--merge svg-->
+                          .merge(path)
                           <!--fill with the given colour-->
                           .attr("fill", function(d, i) { return color(i); }) 
                           <!--shape of the svg path-->
@@ -122,6 +124,8 @@ author: Reka Hegedus
                                           <!--return the arc-->
                                           return arc(d); } }
                                           ); 
+                                          
+                   path.exit().remove()
                            
          
               }
