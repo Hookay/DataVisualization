@@ -1,6 +1,5 @@
 <!--
-Exercise 22: Update the example so that the data sets can be different sizes (e.g., [A,B,C] but the second data set 
-could have [A,B,C,D]).  You’ll need to update the ‘axis’ details (range) and extra details to ‘remove’
+Exercise 22: Update the example so that the data sets can be different sizes (e.g., [A,B,C] but the second data set could have [A,B,C,D]).  You’ll need to update the ‘axis’ details (range) and extra details to ‘remove’
 
 Author:Reka Hegedus  
 
@@ -188,17 +187,21 @@ Author:Reka Hegedus
            <!--domain-->
            x.domain(data.map(function(d) { return d.group; }))  
                     
-            var j = svg.selectAll("g").data(data)
+            var j = svg.selectAll(".gi").data(data)
 
                
                 j.enter() 
-                .append("g") 
+                .append("g")
+                <!--add class-->
+      					.attr("class", "gi")
+                <!--merge-->
+                .merge(j)
                 <!--apply transition-->
                 .transition()
                 <!--add ease style->
                 .ease( d3.easeElastic ) 
                 <!--for a given time-->
-                .duration(3000)
+                .duration(2000)
                  <!-- position-->
                 .attr("transform", "translate(0," + height + ")") 
                 <!--on the bottom add axis-->
@@ -206,11 +209,15 @@ Author:Reka Hegedus
                  <!--color axis-->
                 .attr('color', 'pink')
                  <!--color axis text-->
-                .attr("stroke", "#a1b5af");
+                .attr("stroke", "#a1b5af")
                 
 
                j.enter()
                 .append("g")
+                <!--add class-->
+                .attr("class", "gi")
+                 <!--merge-->
+                .merge(j)
                 <!--apply transition-->
                 .transition()
                 <!--add ease style->
@@ -226,7 +233,10 @@ Author:Reka Hegedus
                  <!--color axis text-->
                 .attr("stroke", "#a1b5af");
                 
-                
+               <!--remove it once switched--> 
+               j.exit().remove()    
+    
+    
                 svg.append("g") 
                    <!--add class-->
                   .attr("class", "myYaxis") 
