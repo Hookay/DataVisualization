@@ -19,7 +19,8 @@ author: Reka Hegedus
         <script>
 <!----------------------------------variables----------------------------------------->
       var width = 400, height = 400; 
-      
+      <!--generate some random data for colour-->
+      var p=Math.floor(Math.random()* 9000);
       <!--inline array-->
       var numNodes = 100; 
        <!--create nodes with varying radious-->
@@ -47,8 +48,10 @@ author: Reka Hegedus
             .force('collision', d3.forceCollide().radius(function(d) { 
                 return d.radius 
             })) 
-            <!--call function to append circles with attributes-->
-            .on('tick', ticked); 
+             <!--call function to append circles with attributes-->
+            .on('tick', function(){
+            <!--send in random colour number-->
+            return ticked(p);});
           
   <!---------------------------------- tick function-------------------------------------> 
       function ticked() { 
@@ -68,9 +71,11 @@ author: Reka Hegedus
           <!--colour it->
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-           var u =  100000+Math.floor(Math.max(Math.random(),0.1) * 10000)*i;
+          
+           var u = 500000+p*i
            <!--use hex code->
-           return "#"+ u.toString();}) 
+           return "#"+ u.toString();
+          })
           <!--add radious->
           .attr('r', function(d) { return d.radius}) 
           <!--x position->
