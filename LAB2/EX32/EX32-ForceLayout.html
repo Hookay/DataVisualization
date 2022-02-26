@@ -23,6 +23,8 @@ author: Reka Hegedus
         <script>
 <!----------------------------------variables----------------------------------------->
           var width = 600, height = 600; 
+          <!--generate some random data for colour-->
+          var p=Math.floor(Math.random()* 9000);
 
           var xScale = d3.scaleLinear().domain([0, 1]).range([0, 600]);
           <!--inline array-->
@@ -48,12 +50,14 @@ author: Reka Hegedus
             .force('collision', d3.forceCollide().radius(function(d) { 
                 return d.radius 
             })) 
-            <!--call function to append circles with attributes-->
-            .on('tick', ticked);                                   
+             <!--call function to append circles with attributes-->
+            .on('tick', function(){
+            <!--send in random colour number-->
+            return ticked(p);});                                  
                                   
 
   <!---------------------------------- tick function-------------------------------------> 
-      function ticked() { 
+      function ticked(p) { 
       
        <!--uselect the created svg-->
         var u = d3.select('svg g') 
@@ -66,12 +70,14 @@ author: Reka Hegedus
           .data(nodes) 
           <!--join appends entering elements and removes exiting elements to match the data-->
           .join('circle')
-          <!--colour it->
+            <!--colour it->
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-           var u =  800000+Math.floor(Math.max(Math.random(),0.1) * 900)*i;
+          
+           var u = 200000+p*i
            <!--use hex code->
-           return "#"+ u.toString();}) 
+           return "#"+ u.toString();
+          })
           <!--add radious->
           .attr('r', function(d) { return d.radius}) 
           <!--x position->
@@ -94,3 +100,5 @@ author: Reka Hegedus
      </script>
       
  </body>
+ 
+</html>
