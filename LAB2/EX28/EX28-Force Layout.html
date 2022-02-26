@@ -20,7 +20,7 @@ author: Reka Hegedus
       
 <!----------------------------------variables----------------------------------------->
       var width = 400, height = 400; 
-      <!--generate some random numbers for colour-->
+      <!--generate some random data for colour-->
       var p=Math.floor(Math.random()* 9000);
       <!--generate some random data-->
       var numNodes = 100; 
@@ -50,7 +50,7 @@ author: Reka Hegedus
             }))
             <!--call function to append circles with attributes-->
             .on('tick', function(){
-            <!--send in colour value-->      
+            <!--send in random colour number-->
             return ticked(p);}); 
             
             
@@ -66,10 +66,8 @@ author: Reka Hegedus
           <!--join appends entering elements and removes exiting elements to match the data-->
           .join('circle') 
           <!--colour it->
-           
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-          
            var u = 100000+p*i
            <!--use hex code->
            return "#"+ u.toString();
