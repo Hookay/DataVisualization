@@ -20,7 +20,8 @@ author: Reka Hegedus
       
 <!----------------------------------variables----------------------------------------->
       var width = 400, height = 400; 
-      
+      <!--generate some random numbers for colour-->
+      var p=Math.floor(Math.random()* 9000);
       <!--generate some random data-->
       var numNodes = 100; 
       <!--create nodes with varying radious-->
@@ -36,7 +37,7 @@ author: Reka Hegedus
 
 
 <!----------------------------------add forces----------------------------------------->  
-      
+       
       <!--use simulation on nodes-->
       var simulation = d3.forceSimulation(nodes) 
              <!--apply body force strength-->
@@ -44,16 +45,18 @@ author: Reka Hegedus
             <!--tell where the center of mass should be-->
             .force('center', d3.forceCenter(width / 2, height / 2)) 
             <!--collide the circles mind their radious-->
-            .force('collision', d3.forceCollide().radius(function(d) { 
-                return d.radius 
-            })) 
+            .force('collision', d3.forceCollide().radius(function(d){ 
+               return d.radius 
+            }))
             <!--call function to append circles with attributes-->
-            .on('tick', ticked); 
+            .on('tick', function(){
+            <!--send in colour value-->      
+            return ticked(p);}); 
             
             
 <!---------------------------------- tick function-------------------------------------> 
-      function ticked() { 
-      
+      function ticked(p) { 
+        
        <!--uselect the created svg-->
         var u = d3.select('svg') 
            <!--select circle objects-->
@@ -63,9 +66,11 @@ author: Reka Hegedus
           <!--join appends entering elements and removes exiting elements to match the data-->
           .join('circle') 
           <!--colour it->
+           
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-           var u =  100000+Math.floor(Math.max(Math.random(),0.1) * 9000)*i
+          
+           var u = 100000+p*i
            <!--use hex code->
            return "#"+ u.toString();
           }) 
