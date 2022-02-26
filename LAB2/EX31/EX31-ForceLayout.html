@@ -18,7 +18,8 @@ author: Reka Hegedus
         <script>
 <!----------------------------------variables----------------------------------------->
       var width = 400, height = 400; 
-      
+      <!--generate some random data for colour-->
+      var p=Math.floor(Math.random()* 9000);
       <!--inline array-->
       var numNodes = 100; 
        <!--create nodes with varying radious-->
@@ -47,10 +48,12 @@ author: Reka Hegedus
                 return d.radius 
             })) 
             <!--call function to append circles with attributes-->
-            .on('tick', ticked); 
+            .on('tick', function(){
+            <!--send in random colour number-->
+            return ticked(p);});
           
   <!---------------------------------- tick function-------------------------------------> 
-      function ticked() { 
+      function ticked(p) { 
       
        <!--uselect the created svg-->
         var u = d3.select('svg') 
@@ -58,17 +61,20 @@ author: Reka Hegedus
           .selectAll('circle') 
            <!--Add listener for the mouseover event -->
           .on("mouseover", onMouseOver) 
+      
           
           <!--use nodes as data-->
           .data(nodes) 
           <!--join appends entering elements and removes exiting elements to match the data-->
           .join('circle')
-          <!--colour it->
+           <!--colour it->
           .attr('fill', function(d,i){
           <!--use random numbers to create colours->
-           var u =  800000+Math.floor(Math.max(Math.random(),0.1) * 10000)*i;
+          
+           var u = 500000+p*i
            <!--use hex code->
-           return "#"+ u.toString();}) 
+           return "#"+ u.toString();
+          })
           <!--add radious->
           .attr('r', function(d) { return d.radius}) 
           <!--x position->
@@ -81,9 +87,8 @@ author: Reka Hegedus
            d3.select(this).style("fill","blue")
 
           }
-
-   
-          <!--log data in cnsole-->
+          
+       <!--log data in cnsole-->
         console.log('ready..');
 
  </script>
