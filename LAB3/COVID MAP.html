@@ -1376,7 +1376,7 @@
 
 
 
-            <!-------------------------create the Y axis-->
+            <!-------------------------create the Y2 axis-->
          <!--update domain so its adjusting to dataset-->
         y2.domain([yExtent2[0], yExtent2[1]])
         <!--Identify axes add transition so its smoother-->
@@ -1682,10 +1682,10 @@
       //===============Cluster total cases by geographical position============
      cluster();
      function cluster(){
-     
-      const colr=['#292725','#615c58','grey',"#dbaffa",'#575656','grey',"#a0fad3","#afbdfa","#f5a2af","#f77472","#facf7f","#e6f7f6","#7ff4fa","#94fa7f",'#f8fa7f',"#bf7ffa"];
+       //colours
+       const colr=['#292725','#615c58','grey',"#dbaffa",'#575656','grey',"#a0fad3","#afbdfa","#f5a2af","#f77472","#facf7f","#e6f7f6","#7ff4fa","#94fa7f",'#f8fa7f',"#bf7ffa"];
        var width5 = 1800, height5 = 200,nodePadding = 2.5;
-
+          //Force simulation      
        var simulation = d3.forceSimulation()
         .force("forceX", d3.forceX().strength(.1).x(width5 * .5))
         .force("forceY", d3.forceY().strength(.1).y(height5 * .5))
@@ -1693,7 +1693,7 @@
         .force("charge", d3.forceManyBody().strength(-15));
 
 
-       
+       // load in processed data
         let url4="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB3/covid_data_processed.csv"
         var a=0,b=0,c=0,d=0,e=0,f=0,g=0,h=0,i=0,j=0,k=0;
 
@@ -1737,7 +1737,7 @@
          }).then(function(data4){
 
         var scale2=0.0001;
-
+        // reorganised data
         var data4 = {
           "name": "World",
           "children": [
@@ -1811,7 +1811,7 @@
         }
 
 
-        const svg4 = d3.select('svg');  // 'var data' - given earlier slides 
+        const svg4 = d3.select('svg');  
 
         var packLayout = d3.pack().size([100, 100]);
 
@@ -1852,7 +1852,7 @@
                     .style("stroke-width",1)
                     //on click change data to wealth
                     .on("click", pu2);
-        
+        // Title=======================
         svg3.append("text") 
            <!-- text positions-->
            .attr("transform", "translate(100,-20)") 
@@ -1868,118 +1868,118 @@
            <!--colour-->
            .attr('fill', '#a1b5af')
                    
-
-    
-    disperse();
-     function pu(d,i) {
-      <!--select button-->
-      d3.selectAll(".c3")
-       <!--add animation-->
-        .transition() 
-        <!--time-->
-        .duration(1000) 
-        <!--change size-->
-        .attr('r',12 ) 
-        // colour it white
-        .style("fill", "#a0a19c")
-      
-       //make the other inactive
-      d3.selectAll(".c4")
-            <!--add animation-->
-            .transition() 
-             <!--time-->
-            .duration(1000) 
-            <!--change size-->
-            .attr('r',10 ) 
-             // colour it white
-            .style("fill", "#3d3b3a")
-       cluster();
-       d3.selectAll(".clu2").remove()
-     }
-     function pu2(d,i) {
-     
-       <!--select bars-->
-       d3.selectAll(".c4")
+        
+       // CHANGE CLUSTER TO FORCES=====================
+   	   disperse();
+     	 function pu(d,i) {
+        <!--select button-->
+        d3.selectAll(".c3")
          <!--add animation-->
-        .transition() 
-        <!--time-->
-        .duration(1000) 
-        <!--change size-->
-        .attr('r',12 ) 
-        // colour it white
-         .style("fill", "#a0a19c")
-         
-       d3.selectAll(".c3")
-             <!--add animation-->
-            .transition() 
-             <!--time-->
-            .duration(1000) 
-            <!--change size-->
-            .attr('r',10 ) 
-             // colour it white
-            .style("fill", "#3d3b3a")
-       disperse();
-       d3.selectAll(".clu").remove()
-     }
+          .transition() 
+          <!--time-->
+          .duration(1000) 
+          <!--change size-->
+          .attr('r',12 ) 
+          // colour it white
+          .style("fill", "#a0a19c")
 
-    function disperse(){
-    //update the simulation based on the data
-    simulation.nodes(rootNode.descendants())
-              .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.r + nodePadding; }).iterations(1))
-              .on("tick", function(d){
-                node
-                    .attr("cx", function(d){ return d.x; })
-                    .attr("cy", function(d){ return d.y; })
-              });
-          
-  
-    var node = svg4.append("g")
-      .selectAll("circle")
-      .data(rootNode.descendants())
-      .join('g').append('circle')
-      .attr('class','clu2')
-      .style("fill",function(d,i) {return colr[i]})  
-      .attr('r', function(d) { return d.r; })
-      .attr("cx", function(d){ return d.x; })
-      .attr("cy", function(d){ return d.y; })
-      .call(d3.drag()
-                  .on("start", dragstarted)
-                  .on("drag", dragged)
-                  .on("end", dragended))
+         //make the other inactive
+        d3.selectAll(".c4")
+              <!--add animation-->
+              .transition() 
+               <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',10 ) 
+               // colour it white
+              .style("fill", "#3d3b3a")
+         cluster();
+         d3.selectAll(".clu2").remove()
+       }
+    	  function pu2(d,i) {
 
-     }
+         <!--select bars-->
+         d3.selectAll(".c4")
+           <!--add animation-->
+          .transition() 
+          <!--time-->
+          .duration(1000) 
+          <!--change size-->
+          .attr('r',12 ) 
+          // colour it white
+           .style("fill", "#a0a19c")
 
-    var nodes = svg4.append("g")
-      .selectAll("circle")
-      .data(rootNode.descendants())
-      .join('g')
-      .attr('transform', function(d) {return 'translate(' + [(d.x+850), d.y] + ')'})
-    function cluster(){
-nodes
-  .append('circle')
-  .attr('class','clu')
-  .style("fill",function(d,i) {return colr[i]})  
-  .attr('r', function(d) { return d.r; })
+         d3.selectAll(".c3")
+               <!--add animation-->
+              .transition() 
+               <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',10 ) 
+               // colour it white
+              .style("fill", "#3d3b3a")
+         disperse();
+         d3.selectAll(".clu").remove()
+       }
+	
+  	    function disperse(){
+      //update the simulation based on the data
+      simulation.nodes(rootNode.descendants())
+                .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.r + nodePadding; }).iterations(1))
+                .on("tick", function(d){
+                  node
+                      .attr("cx", function(d){ return d.x; })
+                      .attr("cy", function(d){ return d.y; })
+                });
 
 
-  }
-    function dragstarted(event,d) {
-      if (!event.active) simulation.alphaTarget(.03).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
+      var node = svg4.append("g")
+        .selectAll("circle")
+        .data(rootNode.descendants())
+        .join('g').append('circle')
+        .attr('class','clu2')
+        .style("fill",function(d,i) {return colr[i]})  
+        .attr('r', function(d) { return d.r; })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
 
-    function dragged(event,d) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
+       }
 
-    function dragended(event,d) {
-      if (!event.active) simulation.alphaTarget(.03);
-      d.fx = null;
-      d.fy = null;
-    }})
-      }
+    	  var nodes = svg4.append("g")
+        .selectAll("circle")
+        .data(rootNode.descendants())
+        .join('g')
+        .attr('transform', function(d) {return 'translate(' + [(d.x+850), d.y] + ')'})
+    	  function cluster(){
+      nodes
+        .append('circle')
+        .attr('class','clu')
+        .style("fill",function(d,i) {return colr[i]})  
+        .attr('r', function(d) { return d.r; })
+
+
+        }
+        function dragstarted(event,d) {
+          if (!event.active) simulation.alphaTarget(.03).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        }
+
+        function dragged(event,d) {
+          d.fx = event.x;
+          d.fy = event.y;
+        }
+
+        function dragended(event,d) {
+          if (!event.active) simulation.alphaTarget(.03);
+          d.fx = null;
+          d.fy = null;
+        }})
+          }
       
       
       
@@ -2113,12 +2113,8 @@ nodes
           .style("stroke",'#9066ba')
           .attr("font-size",15);
 
- // Color scale: give me a specie name, I return a color
-          var color2 = d3.scaleOrdinal()
-             .domain(["Australia","Chile","Greenland","China","Egypt","Japan","Hungary","India","South Africa","United Kingdom","United States"])
-            .range(d3.quantize(d3.interpolateHcl("#999699", "#0a0a0a"), 11)); 
 
-
+//==================================V A C C I N A T I O N =========================================
 
           // Color scale: give me a specie name, I return a color
           var color = d3.scaleOrdinal()
@@ -2152,12 +2148,21 @@ nodes
 
                 return color(d.location) }} ) 
                 
-                
-                
-        //CASES
+                 
+ //=========================================== B O O S T E R =====================================               
+       
+       
+ // Color scale: give me a specie name, I return a color
+          var color2 = d3.scaleOrdinal()
+             .domain(["Australia","Chile","Greenland","China","Egypt","Japan","Hungary","India","South Africa","United Kingdom","United States"])
+            .range(d3.quantize(d3.interpolateHcl("#999699", "#0a0a0a"), 11)); 
+       
+       
+       
+       //CASES
       <!------------------mouseover event handler function--------------------->     
       function onMouseOver5(d, i) { 
-  console.log("pip")
+ 
          function ret(actual){  
               //look for map 
               svg.selectAll(".colCtry")
@@ -2285,14 +2290,13 @@ nodes
 
   }
 
+      // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+      function mouseleave9(d,i) {
 
-  // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-  function mouseleave9(d,i) {
-  
-  d3.selectAll(".val").remove()
-   
-  }          
-                
+      d3.selectAll(".val").remove()
+
+      }          
+             
                 
                           // Add dots
           var myCircle2 = svg6.append('g')
@@ -2300,31 +2304,26 @@ nodes
             .data(data)
             .enter()
             .append("circle")
-             .on("mouseover", mouseover9 )
-             .on("mouseleave", mouseleave9 )
-              .attr("cx", function (d) { 
+            .on("mouseover", mouseover9 )
+            .on("mouseleave", mouseleave9 )
+            .attr("cx", function (d) { 
               if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
 
               return x(d.date);} } )
-              .attr("cy", function (d) { 
+            .attr("cy", function (d) { 
 
               if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
 
             return y2(d.total_boosters); }} )
-              .attr("r",function(d){ 
-              return 5})   
-              .style("fill", function (d) { 
+            .attr("r",function(d){ 
+                 return 5})   
+            .style("fill", function (d) { 
 
               if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){         
 
                 return color2(d.location) }} ) 
               
-
-
-
-
-
-
+   //=================================SQUARE=====================================
 
           // Add brushing
           svg5.call( d3.brush()                 // Add the brush feature using the d3.brush function
@@ -2373,9 +2372,6 @@ nodes
             })  
 
               }
-              
-      
-  
 
 
               })})}).catch(function(err) {
