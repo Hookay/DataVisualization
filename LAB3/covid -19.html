@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<!--Author :Reka Hegedus  d3 library examples https://www.d3-graph-gallery.com/index.html been used to produce these graphs.-->
+<html>
+
+
+  <meta charset="utf-8">
+  <!-- import the d3 library -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- import slider -->
+  <script src="https://unpkg.com/d3-simple-slider"></script>
+  <!-- import for cluster -->
+ 
+  <!-- Create an element where the map will take place -->
+  <svg id="my_dataviz" width="1400" height="700"></svg>
+  <!-- id for a paragraph -->
+  <p id="value" ></p>
+  <div id="my_dataviz2"></div>
+  
+  <style>
+     body {
+       /* give body parameters */
+       margin: 50;
+       position: fixed;
+       top: 0;
+       right: 0;
+       bottom: 0;
+       left: 0;
+       background-color: #3b3939;
+       font-family: "avenir next", Montserrat, sans-serif;
+       font-size: 12px;
+       color: #bfbdbd;
+     }
+      /* parameters for the pie chart design */
+      path.slice{
+      stroke-width:2px;
+     }
+      polyline{
+        opacity: .3;
+        stroke: black;
+        stroke-width: 2px;
+        fill: none;
+      }   
+      .selected {
+        opacity: 1 !important;
+        stroke: black;
+        stroke-width: 1px;
+      }
+      
+       .selected2 {
+        opacity: 1 !important;
+        stroke: pink;
+        stroke-width: 1px;
+      }
+  </style>
+  
+  <body>
+
+
+    <script>
+
+      // =============================== S V G =================================
+      // Create the svg which will be our canvas to place the graphs
+      var svg = d3.select("svg"),
+          //add width to it
+          width = +svg.attr("width"),
+          //add height to it
+          height = +svg.attr("height");
+
+      // =============================== M A P =================================
+      // Map and projection scale the pam to the right size and place it 
+      let projection = d3.geoMercator()
+                          .scale(70)
+                          .translate([width/2, height/3])
+                          .center([0, 5]);
+      // A path generator-----------------------------------
+      let path = d3.geoPath().projection(projection);
+      
+      // Create data: coordinates of start and end of  spread covid line
+      var link = [
+        {type: "LineString", coordinates: [[114.305542,30.592850], [-0.127758, 51.507351]]},//Wuhan-UK
+        {type: "LineString", coordinates: [[114.305542,30.592850], [-71.542969, -35.675148]]},//Wuhan-Chile
+        {type: "LineString", coordinates: [[114.305542,30.592850], [-84.155502, 40.284218]]}, //Wuhan-USA
+        {type: "LineString", coordinates: [[114.305542,30.592850], [133.775131, -25.274399]]},//Wuhan-Australia 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [19.040236,47.497913]]},//Wuhan-Hungary 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [83,21]]},//Wuhan-India 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [-41.7,70.100796]]},//Wuhan-Greenland 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [30.240091,25.799891]]},//Wuhan-Egypt 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [23.210863,-30.751278]]},//Wuhan-South Africa 
+        {type: "LineString", coordinates: [[114.305542,30.592850], [139.890068,38.822591]]}]//Wuhan-Japan
+
+      // Create data for circles on the map coordinates countries:
+      var markers = [
+        {long:114.305542, lat: 30.592850, country:"China"}, // China
+        {long: -0.127758, lat: 51.507351, country:"United Kingdom"}, // UK
+        {long:-71.542969, lat: -35.675148, country:"Chile"}, // Chile
+        {long: -84.155502, lat:  40.284218, country:"United States"}, // USA
+        {long: 133.775131, lat: -25.274399, country:"Australia"}, // Australia
+        {long:19.040236, lat: 47.497913, country:"Hungary"}, // Hungary
+        {long:83, lat: 21, country:"India"}, // India
+        {long:-41.7, lat: 70.100796, country:"Greenland"}, // Greenland
+        {long:30.240091, lat: 25.799891, country:"Egypt"}, // Egypt
+        {long:23.210863, lat: -30.751278, country:"South Africa"}, // South Africa
+        {long:139.890068, lat: 38.822591, country:"Japan"}, // Japan
+      ];
+ 
+      //title of the map-----------------------------------
+      var title=d3.selectAll(svg)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(500,91)")
+                   //append the text
+                   .append("text") 
+                   <!--place it on x-->
+                   .attr('x', function() { return -30 }) 
+                   <!--place it on y-->
+                   .attr('y', function() { return -70})
+                   <!--Value of the text-->
+                   .text("SPREAD OF COVID-19" )
+                   <!-- font size-->
+                   .attr("font-size", "14px") 
+                    <!--colour text-->
+                   .attr('fill', "white");
+
+      
+      // =============================== D A T A S E T S  =================================
+      
+      let url="https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
+      let url2="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB3/covid_data_processed.csv"
+      let url3 ="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv" 
+
+      var vaccineTime;
+      <!--create empty arrays for country separation-->
+      const US = [];
+      const India = [];
+      const Japan = [];
+      const China = [];
+      const Chile = [];
+      const Greenland = [];
+      const Hungary = [];
+      const Egypt = [];
+      const SouthAfrica = [];
+      const Australia = [];
+      const UK = [];
+      // to be able to parse date format this has to be initialised
+      var parseTime = d3.timeParse("%Y-%m-%d");
+      // read in 3 files
+      d3.json(url).then(function(data){d3.csv(url2).then(function(data2){ d3.csv(url3,function(data3){
+      //==================================== F I L L  I N   A R R A Y S ================================    
+           if("India"==data3.location){
+
+               data3.date = parseTime(data3.date);
+               India.push({ ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }    
+
+             if("United States"==data3.location){
+
+               data3.date = parseTime(data3.date);
+                  US.push({ ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+
+              if("Japan"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Japan.push({ ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+
+              if("China"==data3.location){
+
+               data3.date = parseTime(data3.date);
+                  China.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+               if("Chile"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Chile.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("Greenland"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Greenland.push({ ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("Hungary"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Hungary.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("Egypt"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Egypt.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("South Africa"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  SouthAfrica.push({ ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("Australia"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  Australia.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+                if("United Kingdom"==data3.location){
+
+                data3.date = parseTime(data3.date);
+                  UK.push({  ser2:+data3.total_cases, time:data3.date, tot:+data3.new_cases, tded:+data3.total_deaths, nded:+data3.new_deaths, country:data3.location});
+                  }
+
+           }).then(function(data3){
+         
+     
+      // ======================================== M A P ===========================================     
+      //CREATE MAP------------------------------------------------------------
+      map();
+      function map(){
+
+       // Draw the map
+          svg.append("g")
+              .selectAll("path")
+              .data(data.features)     
+              .enter().append("path")
+                  .attr("class","colCtry")
+                   //colour of map
+                  .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+                  .attr("d", d3.geoPath()
+                      .projection(projection)) 
+                  //country outline make sure antarctica is hidden 
+                  .style("stroke", function(d){
+                      if(d.properties.name=="Antarctica"){  return "#3b3939"}
+                      else{ return "#171717"}})
+                  .style("stroke-width", 1)
+                   <!--Add listener for the mouseover event-->
+                   .on("mouseover", onMouseOver)
+                    <!--Add listener for the mouseout event-->
+                   .on("mouseout", onMouseOut)   
+
+                // Add the path
+                svg.selectAll("myPath")
+                   .data(link)
+                   .enter()
+                   .append("path")
+                   .attr("d", function(d){ return path(d)})
+                   .style("fill", "none")
+                    //colour of line
+                   .style("stroke", "orange")
+                    //line
+                   .style("stroke-width", 2)
+            }
+      //SLIDER-----------------------------------------------------------------
+      slider();
+      function slider(){
+      // Time
+        var dataTime = d3.range(0, 26).map(function(d) {
+          //this runs until the observed time period in the dataset
+          return new Date(2020, 1+d, 22);
+        });
+
+        var g=0;
+
+        var sliderTime = d3.sliderBottom()
+                            .min(d3.min(dataTime))
+                            .max(d3.max(dataTime))
+                            //slider width
+                            .width(400)
+                            //give  correct date format
+                            .tickFormat(d3.timeFormat('%d/%m/%Y'))
+                            .ticks(4)
+                            // make sure we go by day
+                            .step(1000 * 60 * 60 * 24)    
+                            .default(new Date(2020, 1, 22))
+                            //add colour to passes area
+                            .fill("#f78686")
+                            //change slider button
+                            .handle(
+                              d3.symbol()
+                                .type(d3.symbolCircle)
+                                //round button size
+                                .size(200)()     
+                            )
+                            .on('onchange', val => {
+                            // every time the slider is moved update the bubble value with its date
+                              var date=d3.timeFormat('%d/%m/%Y')(val); 
+                                 
+                              update(date)
+                              //display slider values 
+                              d3.select('#value').text(d3.timeFormat('%d/%m/%Y')(val));      
+                            });
+        // position on the svg plane for the group
+        var gTime = svg.append('g')
+                        .attr('transform', 'translate(500,330)')
+
+
+        gTime.call(sliderTime);
+
+       //colour ticks
+        svg.selectAll( ".tick text")
+           .attr("fill","pink")   
+
+         }
+      
+      var old="22/01/2020"; 
+      //colour variable
+      var col;
+      //variable to controll repetition onchange
+      var h=0;
+      //bubles``````````````````````````````````````````````````````````````````
+      function update(date) {
+      //to make sure only once we call this since onchange is 2 round
+       if(h==1){
+       // Add circles:
+       var bubble= svg.selectAll("#blub")
+                       .select("#blub")
+                       .data(data2);
+
+       //append the circles
+       bubble.enter()
+             .append("circle")
+             //give id to separate it from data
+             .attr("id","blub")
+             .attr("cx", function(d){  
+                    // if the date is the same as on slider
+                    if(d.date==date){
+                       // get  the location from that day and look up coordinates for countries
+                       for(var u=0;u<11;u++){
+                           if(d.location==markers[u].country){
+                              
+                                 var lo=markers[u].long;
+                                 var la=markers[u].lat;
+                                 //get longitude data for cx
+                                 return projection([lo,la])[0]}   }}})
+
+             .attr("cy", function(d){
+                          // if the date is the same as on slider
+                          if(d.date==date){
+                               // get  the location from that day and look up coordinates for countries
+                               for(var u=0;u<11;u++){
+                                       if(d.location==markers[u].country){
+
+                                             var lo2=markers[u].long;
+                                             var la2=markers[u].lat;
+                                              //get latitude data for cy
+                                             return projection([lo2,la2])[1]}   }}})
+             .attr("r", function(d){   
+                        // if the date is the same as on slider
+                        if(d.date==date){
+                                 //look for total cases and make it to numerical
+                                 var c=+d.total_cases;    
+                                 // give it as the radious and scale it down for map size
+                                 return (c*0.000002) }})
+             // opacity of the circles 0 so it can appear 
+             .attr("fill-opacity", 0)
+             //add animation elastic
+             .transition().ease( d3.easeElastic ) 
+             <!--duration->
+             .duration(1000) 
+             // opacity finish after transition
+             .attr("fill-opacity", 0.2)
+             //give outline
+             .attr("stroke-width", 3)
+             //fill it yellow, orange, red depending on cases intensity
+             .style("fill", function(d){ 
+                            if(d.date==date){
+                                     var c=d.total_cases;    
+
+                                     if(+c>10000000){
+                                             col="red";
+                                     }else if(+c>1000000){
+                                             col="#ff5f03"
+                                     }else{
+                                             col="#fcf005"}
+
+                                     return col }})
+              // adjust the outline of the bubles to the same colours                       
+              .attr("stroke", function(d){       
+
+                              if(d.date==date){
+                                     var c=d.total_cases;    
+
+
+                                     if(+c>10000000){
+                                           col="red";
+                                     }else if(+c>1000000){
+                                           col="#ff5f03"
+                                     }else{
+                                           col="#fcf005"}
+
+                                     return col }});  
+
+        }
+        //make sure the second round gets read     
+        h++
+        if(h>1){h=0}
+        //exit function .exit() did not register
+        //if the date wich arrived not the same as we have change (this is twice called because of onchange)
+        if(date!=old){
+            d3.selectAll('#blub')
+              .transition()
+              .delay(1000)
+              .attr("fill","#fa02e9")
+              .attr("stroke","#fa02e9")
+              .attr("fill-opacity", 0)
+              .attr("stroke-width", 0)
+              .remove();
+        }//update old date
+         old=date;
+
+        }
+        
+      //CALL ON  CASES & DEATHS CHART ------------------------------------------
+      function ca(d,i) {
+       <!-----------------------------Update cases and death
+          update2(US);
+       } 
+      function ca1(d,i) {
+
+          update2(Chile);
+       } 
+      function ca2(d,i) {
+
+          update2(Greenland);
+       } 
+      function ca3(d,i) {
+
+          update2(UK);
+       }
+      function ca4(d,i) {
+
+          update2(Hungary);
+       }
+      function ca5(d,i) {
+
+          update2(Egypt);
+       }
+      function ca6(d,i) {
+
+          update2(SouthAfrica);
+       }
+      function ca7(d,i) {
+
+          update2(India);
+       }
+      function ca8(d,i) {
+
+          update2(China);
+       } 
+      function ca9(d,i) {
+
+          update2(Australia);
+       }
+      function ca10(d,i) {
+
+          update2(Japan);
+       }
+      <!--``````````````````mouseover event handler function````````````````````   
+      function onMouseOver(d, i) { 
+      
+              
+           
+              var colour ="pink";
+              var x=550;
+              var y=385;
+              <!--select bars-->
+              d3.select(this) 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--use colour array to get gradient effect-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("USA population: 329.5 million national wealth: 126,340 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+                           
+                           
+
+                        svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(596,185)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca)
+
+
+
+
+                          return "red"
+                    }if(d.properties.name=="Chile"){
+                           <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Chile population: 19.12 million national wealth: 764 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+                       svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(613,285)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca1)
+
+
+
+                          return "red"
+                    }if(d.properties.name=="Greenland"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Greenland population: 56,367 national wealth: 2.714  bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                            svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(650,120)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca2)
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+
+
+
+                          return "red"
+
+                    }if(d.properties.name=="England"){
+                           <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("UK population: 67.22 million national wealth: 15,284 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+
+                       svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(700,170)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca3)
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                           return "red"
+                    }if(d.properties.name=="Hungary"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Hungary population 9.75 million national wealth: 417 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+                        svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(730,170)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca4)
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                          return "red"
+                    }if(d.properties.name=="Egypt"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Egypt population: 102.3 million million national wealth: 1,159 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                        svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(743,205)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca5)
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                          return "red"
+                    }if(d.properties.name=="South Africa"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("South Africa population: 59.31 million national wealth: 41.4 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+                            svg.append("circle")
+                           .attr("class","point")
+                           //adjust it to the right part of the svg
+                           .attr("transform", "translate(735,277)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca6)
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                          return "red"
+                    }if(d.properties.name=="India"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("India population: 1.38 billion national wealth: 12,833 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+                           svg.append("circle")
+                           .attr("class","point")
+                           //adjust it to the right part of the svg
+                           .attr("transform", "translate(800,210)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca7)
+                            <!--colour text-->
+                           .attr('fill', colour);
+
+
+                          return "red"
+
+                    }if(d.properties.name=="China"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("China population: 1.402 billion national wealth: 74,884 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+                        svg.append("circle")
+                           .attr("class","point")
+                           //adjust dott position
+                           .attr("transform", "translate(838,197)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca8)
+
+                          return "red" 
+
+                    }if(d.properties.name=="Australia"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Australia population: 25.69 million national wealth: 9,268 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+                           
+                         svg.append("circle")
+                           .attr("class","point")
+                           .attr("transform", "translate(865,270)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca9)
+                           
+
+                          return "red"
+                    }if(d.properties.name=="Japan"){
+                          <!--add name-->
+                          svg.append("text") 
+                          <!--add class to it-->
+                           .attr('class', 'val') 
+                           <!--place it on x-->
+                           .attr('x', function() { return x }) 
+                            <!--place it on y-->
+                           .attr('y', function() { return y})
+                            <!--Value of the text-->
+                           .text("Japan population: 125.8 million national wealth: 26,931 bn$" )    
+                            <!--colour text-->
+                           .attr('fill', colour); 
+
+
+                           svg.append("circle")
+                           .attr("class","point")
+                           //adjust it to the right part of the svg
+                           .attr("transform", "translate(865,188)")
+                           <!--place it on x-->
+                           .attr('x', function() { return 730}) 
+                            <!--place it on y-->
+                           .attr('y', function() { return 150})
+                           .attr("r",7)
+                           .style("fill","white")
+                           //.attr("fill-opacity",0)
+                           .on("click",ca10)
+                            <!--colour text-->
+                           .attr('fill', colour);
+
+
+                          return "red"
+
+                    }else{
+                          return "#5e5d5d"}})
+
+
+
+      } 
+      <!--``````````````````mouseout event handler function`````````````````````
+      function onMouseOut(d, i) { 
+
+              <!--use the text label class to remove label on mouseout -->
+              d3.select(this)
+               <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+               <!--use colour array to get gradient effect-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+
+
+            <!--remove money value-->
+              d3.selectAll('.val') 
+                .remove() 
+             <!--remove money value-->
+              d3.selectAll('.point').transition().delay(1000) 
+                .remove() 
+
+
+      } 
+
+
+
+
+      // ======================== W E A L T H   A N D   P O P U L A T I O N =======================
+      wealth();
+      function wealth(){
+      //name the svg different to separate group---------SVG
+      var svg2 = d3.select("svg")
+                    .append("g")
+
+      // append separate groups
+      svg2.append("g")
+        .attr("class", "slices");
+      svg2.append("g")
+        .attr("class", "labels");
+      svg2.append("g")
+        .attr("class", "lines");
+       ;
+      //add parameters for dimensions-------------------PARAMETERS
+      var width = 760,
+          height = 250,
+          radius = Math.min(width, height) / 2;
+      //create pie from values
+      var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.4);
+      // define outer arc so we coplete the hollow look
+      var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+      //position it on the svg plane
+      svg2.attr("transform", "translate(" + ((width / 2)+300) + "," + ((height / 2)+400) + ")");
+     // get the labels  
+      var key = function(d){ return d.data.label; };
+      //order to colour countries and their colour
+      var color = d3.scaleOrdinal()
+        .domain(["Australia","Chile","Greenland","China","Egypt","Japan","Hungary","India","South Africa","United Kingdom","United States"])
+        .range(["#a0fad3","#f5a2af","#dbaffa","#f77472","#bf7ffa","#e6f7f6","#94fa7f","#facf7f","#f8fa7f","#7ff4fa","#afbdfa"]);
+
+
+
+        <!----------------------------- datasets---------------------------------->
+              <!--use data depending on this the arc sizes change-->
+       var population =[ 25.69,19.12,0.56367,1402,102.3,125.8,9.75,1380,59.31,67.22,329.5];
+
+       var wealth = [ 9268,764,2.714,74884,1159,26931,417 ,12833,41.4 ,15284,126340]; 
+
+        function randomData (val){
+        //define label as the domain of colour
+        var labels = color.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      }
+
+       //initialise chart
+      change(randomData(wealth));
+      function change(data) {
+
+        /* ------- PIE SLICES -------*/
+        var slice = svg2.select(".slices").selectAll("path.slice")
+          .data(pie(data), key);
+
+        slice.enter()
+          .insert("path")
+          .style("fill", function(d) { 
+
+          return color(d.data.label); })
+          .attr("class", "slice");
+
+        slice		
+          .transition().duration(1000)
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc(interpolate(t));
+            };
+          })
+
+        slice.exit()
+          .remove();
+
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg2.select(".labels").selectAll("text")
+          .data(pie(data), key);
+
+        text.enter()
+          .append("text")
+          .attr("dy", ".35em")
+          .attr("font-size","16px")
+          .attr("fill","#b8b5b4")
+          .text(function(d) {
+            return d.data.label;
+          });
+
+        function midAngle(d){
+          return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+        
+        // adjust text and line positions in order so they do not overlap
+        var u= [0,0.6,1,0,0,0.5,1,1.6,2,0,0];
+
+        text.transition().duration(1000)
+          .attrTween("transform", function(d,i) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+
+              return "translate("+ pos +")";
+            };
+          })
+          .styleTween("text-anchor", function(d){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              return midAngle(d2) < Math.PI ? "start":"end";
+            };
+          });
+
+        text.exit()
+          .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*/
+
+        var polyline = svg2.select(".lines").selectAll("polyline")
+          .data(pie(data), key);
+
+        polyline.enter()
+          .append("polyline")
+          .style("stroke","#b8b5b4");
+
+        polyline.transition().duration(1000)
+          .attrTween("points", function(d,i){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+              return [arc.centroid(d2), outerArc.centroid(d2), pos];
+            };			
+          });
+
+        polyline.exit()
+          .remove();
+      };
+      
+      //=================================CREATE BUTTONS=================================
+      buttons();      
+      function buttons(){    
+                //hide some loading text but make it dissapear on data load at onMouse
+                svg2.append("rect")       
+                     <!--give the with and the height keep adjustable parameters-->
+                    .attr("transform", "translate(100,0)")
+                    .attr("class","sq")
+                    .attr('x','-100px')
+                    .attr('y', '-15px') 
+                    .attr('width', 120)
+                    .attr('height', 40)
+                    <!--colour it add edge-->
+                    .style("fill",  "#3b3939")
+                // WEALTH====================================
+                svg2.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  '0px')
+                    .style('cy', '-30px') 
+                    .attr("class","c2")
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "#3d3b3a")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                    <!--Add listener for the mouseover event-->
+                    .on("mouseover", onMouseOver)
+                     <!--Add listener for the mouseout event-->
+                    .on("mouseout", onMouseOut)  
+                    //on click change data to wealth
+                    .on("click", up2);
+
+              svg2.append("text")  
+                  <!-- text positions-->
+                  .attr("transform", "translate(100,0)")     
+                  .attr('x',  -125)
+                  .attr('y', 14)  
+                  <!--colour it add edge-->
+                  .style("fill", "White")
+                  .text("WEALTH");
+              // POPULATION===================================
+              svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '0px')
+                  .style('cy', '30px') 
+                  .attr("class","c1")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "#3d3b3a")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click", up);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(500,91)")
+                   .append("text")  
+                  <!-- text positions-->
+                  .attr("transform", "translate(100,0)")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("POPULATION");
+
+           }  
+      // WEALTH ACTIVATION=============
+      function up(d,i) {
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+      //activate wealth
+      change(randomData(wealth));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }
+      // POPULATION ACTIVATION=============
+      function up2(d,i) {
+          <!--select bars-->
+          d3.select(this)
+            .style("fill", "#a0a19c")
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a") 
+      //activate population
+      change(randomData(population));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }
+      //==========================Animate Buttons=======================================
+      <!---------------mouseover event handler function for button---------------------->     
+      function onMouseOver(d, i) { 
+
+              <!--select buttons-->
+              d3.select(this) 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',15 ) 
+               <!--colour it -->
+              .style("fill", "#a0a19c")
+
+      } 
+      <!-----------------mouseout event handler function for button---------------------> 
+
+      function onMouseOut(d, i) { 
+
+
+              d3.select(this) 
+                 <!--adds animation -->
+                .transition()
+                 <!--time-->
+                .duration(1000) 
+                <!--change size-->
+                .attr('r',10 ) 
+
+      } 
+
+
+      }
+
+
+      // ======================== C A S E S  A N D   D E A T H S   G R A P H =======================
+      
+       <!---------------------Set Dimensions fo the graph------------------------->
+       const xSize = 400;
+       const ySize = 360;
+       //margin named different so it does not intefere with the map one's
+       const margin2 = 40;
+       //create boundaries
+       const xMax = xSize - margin2 * 2;
+       const yMax = ySize - margin2 * 2;
+
+      <!--Get the 'limits' of the start data - the full extent (mins and max) so the plotted data fits perfectly--> 
+       const yExtent = d3.extent(India, d => {
+                return d.ser2
+              });
+       const yExtent2 = d3.extent(India, d => {
+                return d.tded
+              });
+
+      <!--------------------Append SVG Object to the Page-------------------------->
+      <!--Select svg give a new name to separate it from the map and wealth graphs-->
+       const svg3 = d3.selectAll("svg")
+                       <!--group svg elements together-->
+                       .append("g")
+                       
+      <!--position on the svg plane-->
+       svg3.attr("transform", "translate(" + (margin2+50) + "," + margin2 + ")");
+
+       //--------------------------TITLE OF THE GRAPH -------------------------------
+       svg3.append("text") 
+           <!-- text positions-->
+           .attr("transform", "translate(100,-20)") 
+           <!-- x positions-->
+           .attr("x", -100) 
+           <!-- y positions-->
+           .attr("y", 0) 
+           <!-- font size-->
+           .attr("font-size", "14px") 
+           <!-- text-->
+           .text("CASES & DEATHS")
+           <!--colour-->
+           .attr('fill', '#a1b5af')
+
+      <!-----------------------------INITIALISE  X AXIS TIME:----------------------------->
+        // set the ranges with the time series as we read in dates
+        var x = d3.scaleTime()
+                   .range([0, xMax])
+                   // Scale the range of the starting data
+                   .domain(d3.extent(India, function(d) { return d.time; }));
+        //make sure x axis scales with the data and it is set to the right date format and it is on the bottom
+        var xAxis = d3.axisBottom() .tickFormat(d3.timeFormat("%Y-%m-%d")).scale(x);
+
+        // Add the X Axis
+        svg3.append("g") 
+            // use class in order to separate it from the rest of the data
+            .attr("class", "myXaxis")
+            // adjust it to Y axes
+            .attr("transform", "translate(0," + (xMax-40) + ")")
+            //format it keep it to the bottom and give time format
+            .call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%Y-%m-%d")))
+             //create the text
+            .selectAll("text")	
+             //anchor it to the end
+            .style("text-anchor", "end")
+             //give position
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+             // and angle
+            .attr("transform", "rotate(-65)");
+
+
+
+        <!-----------------------------INITIALISE Y AXIS CASES:-------------------------->
+         <!--scale linear -->
+        var y = d3.scaleLinear()
+                   <!--Add domain what smallest and largest in data-->
+                   .domain([yExtent[0], yExtent[1]])
+                   <!--Add the overal range-->
+                   .range([yMax, 0]);
+
+         <!--Create the axis on the bottom-->       
+        var yAxis = d3.axisLeft().scale(y);
+        <!--add svg group elemnt-->
+        svg3.append("g")
+             <!--give class for later identification-->
+            .attr("class", "myYaxis")
+             <!--sets the numbers looking left-->
+            .call(d3.axisLeft(y)) 
+            //colour data
+            .style("stroke",'#9066ba')
+            //give font size
+            .attr("font-size",15);
+
+
+       <!-----------------------------INITIALISE Y AXIS 2 DEATHS:-------------------------->
+       var y2 = d3.scaleLinear()
+                   <!--complete set of values->
+                  .domain([yExtent2[0], yExtent2[1]])
+                   <!--specified array of values -->
+                  .range([yMax, 0]);
+
+      var yAxis2=d3.axisRight().scale(y2);
+      <!--left y axis-->
+      svg3.append("g")
+           <!--give class for later identification-->
+          .attr("class", "myYaxis2")
+          <!--sets the numbers looking left-->
+          .call(d3.axisRight(y2)) 
+          <!-- colour axis-->
+          .attr("font-size",15)
+          //colour it
+          .attr('color', 'black');
+
+
+      // Add a scale for bubble size`````````````````````````````````````````
+      var z = d3.scaleLinear()
+                 .domain([0, 131000000000])
+                 .range([ 1, 10000000]);
+
+
+      // Add a scale for bubble color cases`````````````````````````````````
+      var myColor = d3.scaleOrdinal()
+                       .domain([yExtent[0], yExtent[1]])
+                       //use preset colour scheme
+                       .range(d3.schemeSet3);
+      // Add a scale for bubble color deaths
+      var myColor2 = d3.scaleOrdinal()
+                        .domain([yExtent2[0], yExtent2[1]])
+                        //interpolate inbetween two values gradient
+                        .range(d3.quantize(d3.interpolateHcl("#999699", "#0a0a0a"), 10));   
+
+      
+       
+      <!-----------------------------UPDATE TO ADJUST TO DATA-------------------------->
+      function update2(data){
+
+      <!--Update the 'limits' of the data using specific dataset - the full extent (mins and max) so the plotted data fits perfectl--y> 
+           //  const xExtent = d3.extent(data, d => {
+           //     return d.ser1
+           //   });
+              const yExtent = d3.extent(data, d => {
+                return d.ser2
+              });
+              const yExtent2 = d3.extent(data, d => {
+                return d.tded
+              });
+
+
+
+       <!------------------------- Create the X axis:-->
+       <!--update domain so its adjusting to dataset-->
+      //  x.domain([xExtent[0], xExtent[1]])
+       x.domain(d3.extent(data, function(d) {
+
+        return d.time; }));
+        <!--Identify axes add transition so its smoother-->
+        svg3.selectAll(".myXaxis")
+          .transition()
+          .duration(1000)
+          .call(xAxis);
+
+        <!-------------------------create the Y axis-->
+         <!--update domain so its adjusting to dataset-->
+        y.domain([yExtent[0], yExtent[1]])
+        <!--Identify axes add transition so its smoother-->
+        svg3.selectAll(".myYaxis")
+          .transition()
+          .duration(1000)
+          .call(yAxis);
+
+
+
+            <!-------------------------create the Y2 axis-->
+         <!--update domain so its adjusting to dataset-->
+        y2.domain([yExtent2[0], yExtent2[1]])
+        <!--Identify axes add transition so its smoother-->
+        svg3.selectAll(".myYaxis2")
+          .transition()
+          .duration(1000)
+          .call(yAxis2);
+
+
+         <!---------------------------add dott-->
+         var dot = svg3.selectAll(".circ")
+                   <!--take data-->
+                  .data(data)
+
+         <!--enter-->          
+          dot.enter()
+             <!--create circle as many as data-->
+             .append('circle')
+             <!--add class-->
+             .attr("class", "circ")
+             <!--Add listener for the mouseover event-->
+              .on("mouseover", onMouseOver1)
+              <!--Add listener for the mouseout event-->
+              .on("mouseout", onMouseOut1) 
+             <!--change opacity-->
+             .attr("opacity","50")
+
+             <!--merge svg-->
+              .merge(dot)
+              <!--add transition-->
+              .transition()
+              <!--time-->
+              .duration(1000)
+             <!--r position x-->
+             .attr("cx", function (d) { return x(d.time); } )
+             .attr("cy", function (d) { return y(d.ser2); } )
+             .attr("r", function (d) { return z(d.tot); } )
+             .style("stroke","black")
+             .style("fill", function (d) { return myColor(d.ser2); } )
+             .style("opacity", "0.7")
+
+
+
+           <!--remove it once switched--> 
+          dot.exit().remove()      
+
+
+
+
+             <!---------------------------add dott-->
+         var dot2 = svg3.selectAll(".circ2")
+                   <!--take data-->
+                  .data(data)
+
+         <!--enter-->          
+          dot2.enter()
+             <!--create circle as many as data-->
+             .append('circle')
+             <!--add class-->
+             .attr("class", "circ2")
+               <!--Add listener for the mouseover event-->
+             .on("mouseover", onMouseOver2)
+             <!--Add listener for the mouseout event-->
+             .on("mouseout", onMouseOut2)
+             <!--change opacity-->
+             .attr("opacity","50") 
+             <!--merge svg-->
+              .merge(dot2)
+              <!--add transition-->
+              .transition()
+              <!--time-->
+              .duration(1000)
+             <!--r position x-->
+             .attr("cx", function (d) { return x(d.time); } )
+             .attr("cy", function (d) { return y2(d.tded); } )
+             .attr("r", function (d) { return z(d.nded); } )
+            .style("fill", function (d) { return myColor2(d.tded); } )
+            .style("opacity", "0.7")
+            .attr("stroke", function (d) { return myColor2(d.tded); } )
+            .style("stroke-width", "2px") 
+          ;
+
+
+           <!--remove it once switched--> 
+          dot2.exit().remove()  
+
+       }
+
+      <!-- At the beginning, I run the update function on the first dataset:-->
+      update2(India)
+      
+     
+
+       //CALL ON  MAP CHART -------------------------------------------------------------
+      
+      //CASES
+      <!------------------mouseover event handler function--------------------->     
+      function onMouseOver1(d, i) { 
+
+         function ret(actual){  
+              //look for map 
+              svg.selectAll(".colCtry")
+                  <!--add animation-->
+                  .transition() 
+                   <!--time-->
+                  .duration(100) 
+                  <!--use colour array to get gradient effect-->
+                  .attr("fill",function(d,i){
+                      // if the name of the country matches with mouse hover; colour it red except when its Antarctica
+                      if(d.properties.name=="Antarctica"){
+                            return "#3b3939"
+                      }if(d.properties.name==actual){
+                            return "red"  
+                      }else{//keep the rest grey
+                            return "#5e5d5d"}})
+                   }    
+         
+              <!--add value on top-->
+              svg3.append("text") 
+
+              <!--add class to it to separate it from data-->
+              .attr('class', 'val') 
+              <!--place it on x-->
+              .attr('x', function() { return 2; }) 
+              <!--place it on y-->
+              .attr('y', function() { return -4;})
+              <!--Value of the text-->
+              .text( function(d) { 
+                  // some of the names do not match in the two dataset 
+                  if(i.country=="United Kingdom"){
+                      ret("England")}
+                  if(i.country=="United States"){ret("USA")
+                  // get country from  cases graph
+                  }else{ret(i.country) }
+                  //return text
+                  return d3.timeFormat('%d/%m/%Y')(i.time) + ' NEW CASES: ' + i.tot; } )
+               <!--font style-->
+               .style('font-family', 'Montserrat')
+               <!--font size-->
+               .style("font-size", "14px")
+               <!--font colour-->
+               .attr('fill', '#fff8f7');
+
+                
+
+      } 
+      <!------------------mouseout event handler function-----------------------> 
+      function onMouseOut1(d, i) { 
+
+
+              <!--remove cases text value-->
+              d3.selectAll('.val') 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(500)
+              <!--text opacity-->
+              .style('opacity',0)
+                .remove() 
+
+           // interact with map
+           svg.selectAll(".colCtry")    
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--give back original colour for countries-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+
+      } 
+      //DEATHS
+      <!------------------mouseover event handler function---------------------->     
+      function onMouseOver2(d, i) { 
+
+           function ret(actual){  
+              //look for map 
+              svg.selectAll(".colCtry")
+                  <!--add animation-->
+                  .transition() 
+                   <!--time-->
+                  .duration(100) 
+                  <!--use colour array to get gradient effect-->
+                  .attr("fill",function(d,i){
+                      // if the name of the country matches with mouse hover; colour it red except when its Antarctica
+                      if(d.properties.name=="Antarctica"){
+                            return "#3b3939"
+                      }if(d.properties.name==actual){
+                            return "red"  
+                      }else{//keep the rest grey
+                            return "#5e5d5d"}})
+                   }    
+
+              <!--add money value on top-->
+              svg3.append("text") 
+
+              <!--add class to it to separate it from data-->
+              .attr('class', 'val2') 
+              <!--place it on x-->
+              .attr('x', function() { return 2; }) 
+              <!--place it on y-->
+              .attr('y', function() { return -4;})
+              <!--Value of the text-->
+              .text( function(d) { 
+                  // some of the names do not match in the two dataset 
+                  if(i.country=="United Kingdom"){
+                      ret("England")}
+                  if(i.country=="United States"){ret("USA")
+                  // get country from  cases graph
+                  }else{ret(i.country) }
+                  //return text
+                  return d3.timeFormat('%d/%m/%Y')(i.time) + ' NEW DEATHS: ' + i.nded; } )
+               <!--font style-->
+               .style('font-family', 'Montserrat')
+                <!--font size-->
+               .style("font-size", "14px")
+                <!--font colour-->
+               .attr('fill', '#fff8f7');
+
+
+
+
+      } 
+      <!------------------mouseout event handler function-----------------------> 
+      function onMouseOut2(d, i) { 
+
+             <!--remove death text value-->
+              d3.selectAll('.val2') 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(100)
+              <!--text opacity-->
+              .style('opacity',0)
+                .remove() 
+
+             // interact with map 
+             svg.selectAll(".colCtry")    
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+               <!--give back original colour for countries-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+
+      }        
+     
+     
+     
+      //===============Cluster total cases by geographical position============
+     cluster();
+     function cluster(){
+       //colours
+       const colr=['#292725','#615c58','grey',"#dbaffa",'#575656','grey',"#a0fad3","#afbdfa","#f5a2af","#f77472","#facf7f","#e6f7f6","#7ff4fa","#94fa7f",'#f8fa7f',"#bf7ffa"];
+       var width5 = 1800, height5 = 200,nodePadding = 2.5;
+          //Force simulation      
+       var simulation = d3.forceSimulation()
+        .force("forceX", d3.forceX().strength(.1).x(width5 * .5))
+        .force("forceY", d3.forceY().strength(.1).y(height5 * .5))
+        .force("center", d3.forceCenter().x(width5 * .5).y(height5 * .5))
+        .force("charge", d3.forceManyBody().strength(-15));
+
+
+       // load in processed data
+        let url4="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB3/covid_data_processed.csv"
+        var a=0,b=0,c=0,d=0,e=0,f=0,g=0,h=0,i=0,j=0,k=0;
+
+        d3.csv(url4, function(data4){
+             if("China"==data4.location){
+                   Math.max(data4.total_cases,a)  
+                   a=data.total_cases;}
+
+             if("Japan"==data4.location){
+                   Math.max(data4.total_cases,b)  
+                   b=data4.total_cases;}
+             if("India"==data4.location){
+                   Math.max(data4.total_cases,c)  
+                   c=data4.total_cases;}
+             if("United Kingdom"==data4.location){
+                   Math.max(data4.total_cases,d)  
+                   d=data4.total_cases;}
+
+              if("Hungary"==data4.location){
+                   Math.max(data4.total_cases,e)  
+                   e=data4.total_cases;}
+              if("Egypt"==data4.location){
+                   Math.max(data4.total_cases,f)  
+                   f=data4.total_cases;}
+              if("South Africa"==data4.location){
+                   Math.max(data4.total_cases,g)  
+                   bg=data4.total_cases;}
+              if("United States"==data4.location){
+                   Math.max(data4.total_cases,h)  
+                   h=data4.total_cases;}
+              if("Chile"==data4.location){
+                   Math.max(data4.total_cases,i)  
+                   i=data4.total_cases;}
+              if("Australia"==data4.location){
+                   Math.max(data4.total_cases,j)  
+                   j=data4.total_cases;}
+              if("Greenland"==data4.location){
+                   Math.max(data4.total_cases,k)  
+                   k=data4.total_cases;}
+
+         }).then(function(data4){
+
+        var scale2=0.0001;
+        // reorganised data
+        var data4 = {
+          "name": "World",
+          "children": [
+
+
+
+              {
+              "name": "America",
+              "children": [
+               {
+                  "name": "US",
+                  "value": h*scale2
+                },
+                {
+                  "name": "CH",
+                  "value": i*scale2
+                }
+              ]
+            }, {  
+              "name": "Asia",
+              "children": [
+                {
+                  "name": "C",
+                  "value": a*scale2
+                },
+                {
+                  "name": "I",
+                  "value": c*scale2
+                }, {
+                  "name": "J",
+                  "value": b*scale2
+                }
+              ]
+            }, { 
+
+                  "name": "G",
+                  "value": k*scale2
+
+              },  {
+              "name": "Europe",
+              "children": [
+               {
+                  "name": "UK",
+                  "value": d*scale2
+                },
+                {
+                  "name": "HU",
+                  "value": e*scale2
+                }
+              ]
+            }, {
+              "name": "Africa",
+              "children": [
+              {
+                  "name": "SA",
+                  "value":g*scale2
+                },
+               {
+                  "name": "E",
+                  "value": f*scale2
+                }      
+              ]
+            },{
+                  "name": "A",
+                  "value": j*scale2
+               } 
+
+
+
+          ]
+        }
+
+
+        const svg4 = d3.select('svg');  
+
+        var packLayout = d3.pack().size([100, 100]);
+
+        var rootNode = d3.hierarchy(data4)
+
+        rootNode.sum(function(d) {   return d.value;    });
+
+        packLayout(rootNode);
+        
+        // controll buttons=================================
+        svg4.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  '20px')
+                    .style('cy', ' 405px') 
+                    .attr("class","c3")
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "#3d3b3a")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                
+                    //on click change data to wealth
+                    .on("click", pu);
+ 
+        svg4.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  '40px')
+                    .style('cy', ' 405px') 
+                    .attr("class","c4")
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "#a0a19c")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                    //on click change data to wealth
+                    .on("click", pu2);
+        // Title=======================
+        svg3.append("text") 
+           <!-- text positions-->
+           .attr("transform", "translate(100,-20)") 
+           <!-- x positions-->
+           .attr("x", -130) 
+           <!-- y positions-->
+           .attr("y", 390) 
+           <!-- font size-->
+           .attr("font-size", "14px") 
+           <!-- text-->
+           .text("cluster total cases per continent")
+           .style("font-style","Italic")
+           <!--colour-->
+           .attr('fill', '#a1b5af')
+                   
+        
+       // CHANGE CLUSTER TO FORCES=====================
+   	   disperse();
+     	 function pu(d,i) {
+        <!--select button-->
+        d3.selectAll(".c3")
+         <!--add animation-->
+          .transition() 
+          <!--time-->
+          .duration(1000) 
+          <!--change size-->
+          .attr('r',12 ) 
+          // colour it white
+          .style("fill", "#a0a19c")
+
+         //make the other inactive
+        d3.selectAll(".c4")
+              <!--add animation-->
+              .transition() 
+               <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',10 ) 
+               // colour it white
+              .style("fill", "#3d3b3a")
+         cluster();
+         d3.selectAll(".clu2").remove()
+       }
+    	  function pu2(d,i) {
+
+         <!--select bars-->
+         d3.selectAll(".c4")
+           <!--add animation-->
+          .transition() 
+          <!--time-->
+          .duration(1000) 
+          <!--change size-->
+          .attr('r',12 ) 
+          // colour it white
+           .style("fill", "#a0a19c")
+
+         d3.selectAll(".c3")
+               <!--add animation-->
+              .transition() 
+               <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',10 ) 
+               // colour it white
+              .style("fill", "#3d3b3a")
+         disperse();
+         d3.selectAll(".clu").remove()
+       }
+	
+  	    function disperse(){
+      //update the simulation based on the data
+      simulation.nodes(rootNode.descendants())
+                .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.r + nodePadding; }).iterations(1))
+                .on("tick", function(d){
+                  node
+                      .attr("cx", function(d){ return d.x; })
+                      .attr("cy", function(d){ return d.y; })
+                });
+
+
+      var node = svg4.append("g")
+        .selectAll("circle")
+        .data(rootNode.descendants())
+        .join('g').append('circle')
+        .attr('class','clu2')
+        .style("fill",function(d,i) {return colr[i]})  
+        .attr('r', function(d) { return d.r; })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
+
+       }
+
+    	  var nodes = svg4.append("g")
+        .selectAll("circle")
+        .data(rootNode.descendants())
+        .join('g')
+        .attr('transform', function(d) {return 'translate(' + [(d.x+850), d.y] + ')'})
+    	  function cluster(){
+      nodes
+        .append('circle')
+        .attr('class','clu')
+        .style("fill",function(d,i) {return colr[i]})  
+        .attr('r', function(d) { return d.r; })
+
+
+        }
+        function dragstarted(event,d) {
+          if (!event.active) simulation.alphaTarget(.03).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        }
+
+        function dragged(event,d) {
+          d.fx = event.x;
+          d.fy = event.y;
+        }
+
+        function dragended(event,d) {
+          if (!event.active) simulation.alphaTarget(.03);
+          d.fx = null;
+          d.fy = null;
+        }})
+          }
+      
+      
+      
+      // ======================== V A C C I N A T I O N  A N D  B O O S T E R   G R A P H =======================
+      vaccination();
+      function vaccination(){
+
+              // set the dimensions and margins of the graph
+        var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 460 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+        <!--Set Dimensions-->
+            const xSize = 400;
+            const ySize = 360;
+            const margin2 = 40;
+            const xMax = xSize - margin2 * 2;
+            const yMax = ySize - margin2 * 2;
+       
+        // append the svg object to the body of the page
+        var svg5 =  d3.selectAll("svg")
+                       <!--group svg elements together-->
+                       
+          .append("g")
+            .attr("transform",
+                  "translate(" + (margin.left +1010)+ "," + (margin.top +20)+ ")");
+                  // append the svg object to the body of the page
+        var svg6 =  d3.selectAll("svg")
+                       <!--group svg elements together-->
+                       
+          .append("g")
+            .attr("transform",
+                  "translate(" + (margin.left +1010)+ "," + (margin.top +20)+ ")");      
+                  
+         svg5.append("text") 
+             <!-- text positions-->
+             .attr("transform", "translate(100,-20)") 
+              <!-- x positions-->
+             .attr("x", -100) 
+              <!-- y positions-->
+             .attr("y", 10) 
+              <!-- font size-->
+             .attr("font-size", "14px") 
+              <!-- text-->
+             .text("VACCINATIONS & BOOSTERS")
+              <!--colour-->
+             .attr('fill', '#a1b5af')
+
+           var parseTime = d3.timeParse("%Y-%m-%d");       
+
+        //Read the data
+        d3.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv").then( function(data) {
+
+           // format the data
+             data.forEach(function(d) {
+                d.date = parseTime(d.date);
+
+             });
+
+          // set the ranges
+          var x = d3.scaleTime().range([0, xMax])
+          // Scale the range of the data
+          .domain(d3.extent(data, function(d) {
+
+          return d.date; }));
+
+         var xAxis = d3.axisBottom() .tickFormat(d3.timeFormat("%Y-%m-%d")).scale(x);
+
+          // Add the X Axis
+          svg5.append("g") 
+              .attr("class", "myXaxis")
+              .attr("transform", "translate(0," + (xMax-40) + ")")
+              .transition()
+              .duration(2000)
+              .attr("opacity", "1")
+              .call(d3.axisBottom(x)
+                      .tickFormat(d3.timeFormat("%Y-%m-%d")))
+
+              .selectAll("text")	
+
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-65)");
+
+
+          <!-----------------------------Initialise a Y axis:-------------------------->
+         <!--scale linear -->
+        var y = d3.scaleLinear()
+                <!--Add domain what smallest and largest in data-->
+               //booster
+             //  .domain([0, 1500000000])
+                .domain([0, 3000000000])
+
+                <!--Add the overal range-->
+                .range([yMax, 0]);
+
+         <!--Create the axis on the bottom-->       
+        var yAxis = d3.axisLeft().scale(y);
+        <!--add svg group elemnt-->
+        svg5.append("g")
+         <!--give class for later identification-->
+          .attr("class", "myYaxis")
+          .transition()
+              .duration(2000)
+          <!--sets the numbers looking left-->
+          .call(d3.axisLeft(y)) 
+          .style("stroke",'#9066ba')
+          .attr("font-size",15);
+
+  <!-----------------------------Initialise a Y axis2:-------------------------->
+         <!--scale linear -->
+        var y2 = d3.scaleLinear()
+                <!--Add domain what smallest and largest in data-->
+               //booster
+            
+                .domain([0, 1500])
+
+                <!--Add the overal range-->
+                .range([yMax, 0]);
+
+         <!--Create the axis on the bottom-->       
+        var yAxis2 = d3.axisLeft().scale(y2);
+        <!--add svg group elemnt-->
+        svg5.append("g")
+         <!--give class for later identification-->
+          .attr("class", "myYaxis")
+          .transition()
+              .duration(2000)
+          <!--sets the numbers looking left-->
+          .call(d3.axisRight(y2)) 
+          .style("stroke",'#9066ba')
+          .attr("font-size",15);
+
+
+//==================================V A C C I N A T I O N =========================================
+
+          // Color scale: give me a specie name, I return a color
+          var color = d3.scaleOrdinal()
+             .domain(["Australia","Chile","Greenland","China","Egypt","Japan","Hungary","India","South Africa","United Kingdom","United States"])
+            .range(["#a0fad3","#f5a2af","#dbaffa","#f77472","#bf7ffa","#e6f7f6","#94fa7f","#facf7f","#f8fa7f","#7ff4fa","#afbdfa"])
+         
+
+ 
+
+          // Add dots
+          var myCircle = svg5.append('g')
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+              .attr("cx", function (d) { 
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
+
+              return x(d.date);} } )
+              .attr("cy", function (d) { 
+
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
+
+            return y(d.total_vaccinations); }} )
+              .attr("r",function(d){ 
+              if(d.total_vaccinations%11==0){
+              return 5}})   
+              .style("fill", function (d) { 
+
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){         
+
+                return color(d.location) }} ) 
+                
+                 
+ //=========================================== B O O S T E R =====================================               
+       
+       
+ // Color scale: give me a specie name, I return a color
+          var color2 = d3.scaleOrdinal()
+             .domain(["Australia","Chile","Greenland","China","Egypt","Japan","Hungary","India","South Africa","United Kingdom","United States"])
+            .range(d3.quantize(d3.interpolateHcl("#999699", "#0a0a0a"), 11)); 
+       
+       
+       
+       //CASES
+      <!------------------mouseover event handler function--------------------->     
+      function onMouseOver5(d, i) { 
+ 
+         function ret(actual){  
+              //look for map 
+              svg.selectAll(".colCtry")
+                  <!--add animation-->
+                  .transition() 
+                   <!--time-->
+                  .duration(100) 
+                  <!--use colour array to get gradient effect-->
+                  .attr("fill",function(d,i){
+                      // if the name of the country matches with mouse hover; colour it red except when its Antarctica
+                      if(d.properties.name=="Antarctica"){
+                            return "#3b3939"
+                      }if(d.properties.name==actual){
+                            return "red"  
+                      }else{//keep the rest grey
+                            return "#5e5d5d"}})
+                   }    
+         
+              <!--add value on top-->
+              svg3.append("text") 
+
+              <!--add class to it to separate it from data-->
+              .attr('class', 'val') 
+              <!--place it on x-->
+              .attr('x', function() { return 2; }) 
+              <!--place it on y-->
+              .attr('y', function() { return -4;})
+              <!--Value of the text-->
+              .text( function(d) { 
+                  // some of the names do not match in the two dataset 
+                  if(i.country=="United Kingdom"){
+                      ret("England")}
+                  if(i.country=="United States"){ret("USA")
+                  // get country from  cases graph
+                  }else{ret(i.country) }
+                  //return text
+                  return d3.timeFormat('%d/%m/%Y')(i.time) + ' NEW CASES: ' + i.tot; } )
+               <!--font style-->
+               .style('font-family', 'Montserrat')
+               <!--font size-->
+               .style("font-size", "14px")
+               <!--font colour-->
+               .attr('fill', '#fff8f7');
+
+                
+
+      } 
+      <!------------------mouseout event handler function-----------------------> 
+      function onMouseOut5(d, i) { 
+
+
+              <!--remove cases text value-->
+              d3.selectAll('.val') 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(500)
+              <!--text opacity-->
+              .style('opacity',0)
+                .remove() 
+
+           // interact with map
+           svg.selectAll(".colCtry")    
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--give back original colour for countries-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+
+      } 
+      //DEATHS             
+      function mouseover9(d,i){
+      
+               function ret(actual){  
+              
+              //look for map 
+              svg.selectAll(".colCtry")
+                  <!--add animation-->
+                  .transition() 
+                   <!--time-->
+                  .duration(100) 
+                  <!--use colour array to get gradient effect-->
+                  .attr("fill",function(d,i){
+                      // if the name of the country matches with mouse hover; colour it red except when its Antarctica
+                      if(d.properties.name=="Antarctica"){
+                            return "#3b3939"
+                      }if(d.properties.name==actual){
+                            return "red"  
+                      }else{//keep the rest grey
+                            return "#5e5d5d"}})
+                   } 
+      
+      
+      
+      
+      
+      
+      
+               d3.select(this).attr('opacity',function(d,i){
+             ret(d.location)              
+               return 1})
+   <!--add value on top-->
+              svg.append("text") 
+
+              <!--add class to it to separate it from data-->
+              .attr('class', 'val') 
+              <!--place it on x-->
+               
+              .attr('x', function() {
+                 
+                return 1170; }) 
+              <!--place it on y-->
+              .attr('y', function() { return 100;})
+              <!--Value of the text-->
+              .text( function(d) { 
+                  // some of the names do not match in the two dataset 
+              
+           return d3.timeFormat('%d/%m/%Y')(i.date) + ' BOOSTER: ' + (+i.total_boosters)  } )
+               <!--font style-->
+               .style('font-family', 'Montserrat')
+               <!--font size-->
+               .style("font-size", "16px")
+               <!--font colour-->
+               .attr('fill', 'black');
+
+  }
+
+      // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+      function mouseleave9(d,i) {
+
+      d3.selectAll(".val").remove()
+
+
+            // interact with map
+           svg.selectAll(".colCtry")    
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--give back original colour for countries-->
+              .attr("fill",function(d,i){
+
+                    if(d.properties.name=="Antarctica"){
+                          return "#3b3939"
+                    }if(d.properties.name=="USA"){
+                          return "#afbdfa"
+                    }if(d.properties.name=="Chile"){
+                          return "#f5a2af"
+                    }if(d.properties.name=="Greenland"){
+                          return "#dbaffa"
+                    }if(d.properties.name=="England"){
+                           return "#7ff4fa"
+                    }if(d.properties.name=="Hungary"){
+                          return "#94fa7f"
+                    }if(d.properties.name=="Egypt"){
+                          return "#bf7ffa"
+                    }if(d.properties.name=="South Africa"){
+                          return "#f8fa7f"
+                    }if(d.properties.name=="India"){
+                          return "#facf7f"
+                    }if(d.properties.name=="China"){
+                          return "#f77472"
+                    }if(d.properties.name=="Australia"){
+                          return "#a0fad3"
+                    }if(d.properties.name=="Japan"){
+                          return "#e6f7f6"
+                    }else{
+                          return "#5e5d5d"}})
+      }          
+             
+                
+                          // Add dots
+          var myCircle2 = svg6.append('g')
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .on("mouseover", mouseover9 )
+            .on("mouseleave", mouseleave9 )
+            .attr("cx", function (d) { 
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
+
+              return x(d.date);} } )
+            .attr("cy", function (d) { 
+
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){
+
+            return y2(d.total_boosters); }} )
+            .attr("r",function(d){ 
+                 return 5})   
+            .style("fill", function (d) { 
+
+              if((d.location=="China")||(d.location=="Hungary")||(d.location=="Australia")||(d.location=="Japan")||(d.location=="Egypt")||(d.location=="South Africa")||(d.location=="Greenland")||(d.location=="United States")||(d.location=="United Kingdom")||(d.location=="India")||(d.location=="Chile")){         
+
+                return color2(d.location) }} ) 
+              
+   //=================================SQUARE=====================================
+
+          // Add brushing
+          svg5.call( d3.brush()                 // Add the brush feature using the d3.brush function
+              .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+              .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
+             
+            )
+
+     
+
+          // Function that is triggered when brushing is performed
+          function updateChart(event,d) {
+           
+         
+                
+              svg.selectAll(".colCtry")
+                  <!--add animation-->
+                  .transition() 
+                   <!--time-->
+                  .duration(100) 
+                  <!--use colour array to get gradient effect-->
+                   <!--use colour array to get gradient effect-->
+                  <!--use colour array to get gradient effect-->
+                  .attr("fill","#3b3939")
+                    
+                 
+                  
+            extent = event.selection
+            myCircle.classed("selected", function(d){ 
+      
+            return isBrushed(extent, x(d.date), y(d.total_vaccinations) ) } )    
+          }
+         
+        
+          // A function that return TRUE or FALSE according if a dot is in the selection or not
+          function isBrushed(brush_coords, cx, cy) {
+               var x0 = brush_coords[0][0],
+                   x1 = brush_coords[1][0],
+                   y0 = brush_coords[0][1],
+                   y1 = brush_coords[1][1];
+              return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area      
+  
+              
+          }
+
+            })  
+
+              }
+
+
+              })})}).catch(function(err) {
+                  // handle loading error here
+                  console.log("whops")
+              });
+
+
+
+    </script>
+  </body>
+</html>
