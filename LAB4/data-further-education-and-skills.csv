@@ -59,10 +59,14 @@ England,E92000001,country,2016,"Languages, Literature and Culture",3800,1.5,6310
 England,E92000001,country,2016,"Languages, Literature and Culture",3800,1.5,63100,2.7,services,male,19,84590
 England,E92000001,country,2016,"Languages, Literature and Culture",3800,1.5,63100,2.7,services,male,25,176380
 England,E92000001,country,2016,"Languages, Literature and Culture",3800,1.5,63100,2.7,services,male,50,63690
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,female,19,83050
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,female,279650
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,female,50,85700
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,male,19,84590
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,male,25,176380
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,male,50,63690
 
 
-
-England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,83050,279650,85700,84590,176380,63690
 England,E92000001,country,2016,Not Applicable/ Not Known,300,~,3900,~,services,83050,279650,85700,84590,176380,63690
 England,E92000001,country,2016,Preparation for Life and Work,92200,35.6,703700,30.4,services,83050,279650,85700,84590,176380,63690
 England,E92000001,country,2016,Retail and Commercial Enterprise,21300,8.2,137900,6,services,83050,279650,85700,84590,176380,63690
