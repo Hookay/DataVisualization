@@ -1,49 +1,65 @@
-﻿location,location_code,geographic_level,time_period,ssa_t1_desc,total_achievements,total_achievements_percent,total_enrolments,total_enrolments_percent,profession
-England,E92000001,country,201617,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture
-England,E92000001,country,201617,"Arts, Media and Publishing",11300,4.4,83700,3.6,industry
-England,E92000001,country,201617,"Business, Administration and Law",27500,10.6,356900,15.4,services
-England,E92000001,country,201617,"Construction, Planning and the Built Environment",9700,3.7,107800,4.7,industry
-England,E92000001,country,201617,Education and Training,3900,1.5,37000,1.6,services
-England,E92000001,country,201617,Engineering and Manufacturing Technologies,18100,7,216000,9.3,industry
-England,E92000001,country,201617,"Health, Public Services and Care",44400,17.1,375100,16.2,services
-England,E92000001,country,201617,"History, Philosophy and Theology",700,~,7000,~,services
-England,E92000001,country,201617,Information and Communication Technology,16000,6.2,99200,4.3,services
-England,E92000001,country,201617,"Languages, Literature and Culture",3800,1.5,63100,2.7,services
-England,E92000001,country,201617,"Leisure, Travel and Tourism",5200,2,48200,2.1,services
-England,E92000001,country,201617,Not Applicable/ Not Known,300,~,3900,~,services
-England,E92000001,country,201617,Preparation for Life and Work,92200,35.6,703700,30.4,services
-England,E92000001,country,201617,Retail and Commercial Enterprise,21300,8.2,137900,6,services
-England,E92000001,country,201617,Science and Mathematics,1300,0.5,43400,1.9,industry
-England,E92000001,country,201617,Social Sciences,200,~,5400,~,services
-England,E92000001,country,201718,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture
-England,E92000001,country,201718,"Arts, Media and Publishing",7900,4.2,48500,2.4,industry
-England,E92000001,country,201718,"Business, Administration and Law",22600,11.9,330000,16.4,services
-England,E92000001,country,201718,"Construction, Planning and the Built Environment",9300,4.9,107800,5.4,industry
-England,E92000001,country,201718,Education and Training,3400,1.8,37300,1.9,services
-England,E92000001,country,201718,Engineering and Manufacturing Technologies,14100,7.4,208100,10.4,industry
-England,E92000001,country,201718,"Health, Public Services and Care",40900,21.5,377400,18.8,services
-England,E92000001,country,201718,"History, Philosophy and Theology",1600,0.9,5200,~,services
-England,E92000001,country,201718,Information and Communication Technology,11100,5.9,96800,4.8,services
-England,E92000001,country,201718,"Languages, Literature and Culture",3900,2.1,44900,2.2,services
-England,E92000001,country,201718,"Leisure, Travel and Tourism",3800,2,31900,1.6,services
-England,E92000001,country,201718,Not Applicable/ Not Known,300,~,4200,~,services
-England,E92000001,country,201718,Preparation for Life and Work,53300,28.1,529600,26.4,services
-England,E92000001,country,201718,Retail and Commercial Enterprise,14000,7.4,111600,5.6,services
-England,E92000001,country,201718,Science and Mathematics,1500,0.8,40100,2,industry
-England,E92000001,country,201718,Social Sciences,400,~,5400,~,services
-England,E92000001,country,201819,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture
-England,E92000001,country,201819,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry
-England,E92000001,country,201819,"Business, Administration and Law",18000,10.1,329200,15.9,services
-England,E92000001,country,201819,"Construction, Planning and the Built Environment",8600,4.9,106800,5.2,industry
-England,E92000001,country,201819,Education and Training,2700,1.5,42400,2.1,services
-England,E92000001,country,201819,Engineering and Manufacturing Technologies,14200,8,209800,10.2,industry
-England,E92000001,country,201819,"Health, Public Services and Care",36400,20.6,416800,20.2,services
-England,E92000001,country,201819,"History, Philosophy and Theology",500,~,5100,~,services
-England,E92000001,country,201819,Information and Communication Technology,11700,6.6,102300,5,services
-England,E92000001,country,201819,"Languages, Literature and Culture",3800,2.1,44900,2.2,services
-England,E92000001,country,201819,"Leisure, Travel and Tourism",2700,1.6,24200,1.2,services
-England,E92000001,country,201819,Not Applicable/ Not Known,400,~,6800,~,services
-England,E92000001,country,201819,Preparation for Life and Work,55000,31.1,540500,26.2,services
-England,E92000001,country,201819,Retail and Commercial Enterprise,11300,6.4,104800,5.1,services
-England,E92000001,country,201819,Science and Mathematics,1100,0.6,37700,1.8,industry
-England,E92000001,country,201819,Social Sciences,200,~,5300,~,services
+location,location_code,geographic_level,time_period,ssa_t1_desc,total_achievements,total_achievements_percent,total_enrolments,total_enrolments_percent,profession,tot_age1f,tot_age2f,tot_age3f,tot_age1m,tot_age2m,tot_age3m
+England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Arts, Media and Publishing",11300,4.4,83700,3.6,industry,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Business, Administration and Law",27500,10.6,356900,15.4,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Construction, Planning and the Built Environment",9700,3.7,107800,4.7,industry,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Education and Training,3900,1.5,37000,1.6,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Engineering and Manufacturing Technologies,18100,7,216000,9.3,industry,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Health, Public Services and Care",44400,17.1,375100,16.2,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"History, Philosophy and Theology",700,~,7000,~,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Information and Communication Technology,16000,6.2,99200,4.3,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Languages, Literature and Culture",3800,1.5,63100,2.7,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,"Leisure, Travel and Tourism",5200,2,48200,2.1,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Not Applicable/ Not Known,300,~,3900,~,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Preparation for Life and Work,92200,35.6,703700,30.4,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Retail and Commercial Enterprise,21300,8.2,137900,6,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Science and Mathematics,1300,0.5,43400,1.9,industry,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2016,Social Sciences,200,~,5400,~,services,83050,279650,85700,84590,176380,63690
+England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Arts, Media and Publishing",7900,4.2,48500,2.4,industry,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Business, Administration and Law",22600,11.9,330000,16.4,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Construction, Planning and the Built Environment",9300,4.9,107800,5.4,industry,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Education and Training,3400,1.8,37300,1.9,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Engineering and Manufacturing Technologies,14100,7.4,208100,10.4,industry,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Health, Public Services and Care",40900,21.5,377400,18.8,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"History, Philosophy and Theology",1600,0.9,5200,~,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Information and Communication Technology,11100,5.9,96800,4.8,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Languages, Literature and Culture",3900,2.1,44900,2.2,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,"Leisure, Travel and Tourism",3800,2,31900,1.6,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Not Applicable/ Not Known,300,~,4200,~,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Preparation for Life and Work,53300,28.1,529600,26.4,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Retail and Commercial Enterprise,14000,7.4,111600,5.6,services,75500,269240,70530,79740,170150,58150
+England,E92000001,country,2017,Science and Mathematics,1500,0.8,40100,2,industry,75500,269240,70530,79740,170150,58150,298630,83570,80060,180820,65650
+England,E92000001,country,2017,Social Sciences,400,~,5400,~,services,75500,269240,70530,79740,170150,58150,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Business, Administration and Law",18000,10.1,329200,15.9,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Construction, Planning and the Built Environment",8600,4.9,106800,5.2,industry,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Education and Training,2700,1.5,42400,2.1,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Engineering and Manufacturing Technologies,14200,8,209800,10.2,industry,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Health, Public Services and Care",36400,20.6,416800,20.2,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"History, Philosophy and Theology",500,~,5100,~,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Information and Communication Technology,11700,6.6,102300,5,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Languages, Literature and Culture",3800,2.1,44900,2.2,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,"Leisure, Travel and Tourism",2700,1.6,24200,1.2,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Not Applicable/ Not Known,400,~,6800,~,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Preparation for Life and Work,55000,31.1,540500,26.2,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Retail and Commercial Enterprise,11300,6.4,104800,5.1,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Science and Mathematics,1100,0.6,37700,1.8,industry,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2018,Social Sciences,200,~,5300,~,services,76340,298630,83570,80060,180820,65650
+England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Business, Administration and Law",18000,10.1,329200,15.9,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Construction, Planning and the Built Environment",8600,4.9,106800,5.2,industry,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Education and Training,2700,1.5,42400,2.1,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Engineering and Manufacturing Technologies,14200,8,209800,10.2,industry,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Health, Public Services and Care",36400,20.6,416800,20.2,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"History, Philosophy and Theology",500,~,5100,~,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Information and Communication Technology,11700,6.6,102300,5,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Languages, Literature and Culture",3800,2.1,44900,2.2,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,"Leisure, Travel and Tourism",2700,1.6,24200,1.2,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Not Applicable/ Not Known,400,~,6800,~,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Preparation for Life and Work,55000,31.1,540500,26.2,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Retail and Commercial Enterprise,11300,6.4,104800,5.1,services,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Science and Mathematics,1100,0.6,37700,1.8,industry,75870,319050,87820,76890,174030,62880
+England,E92000001,country,2019,Social Sciences,200,~,5300,~,services,75870,319050,87820,76890,174030,62880
