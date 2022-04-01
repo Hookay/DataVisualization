@@ -1,5 +1,5 @@
-year,Agriculture,Employers,Industry,SelfEmployed,Employees,Services
-2016,0.1,0.2,1.2,1.4,13.6,13.9
-2017,0.1,0.2,1.2,1.4,13.8,14.1
-2018,0.1,0.2,1.2,1.5,14,14.3
-2019,0.1,0.2,1.2,1.5,14.2,14.6
+year,Agriculture,Employers,Industry,SelfEmployed,Employees,Services,Num
+2016,0.1,0.2,1.2,1.4,13.6,13.9,0
+2017,0.1,0.2,1.2,1.4,13.8,14.1,0
+2018,0.1,0.2,1.2,1.5,14,14.3,0
+2019,0.1,0.2,1.2,1.5,14.2,14.6,0
