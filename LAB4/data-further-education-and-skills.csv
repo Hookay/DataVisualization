@@ -1,10 +1,10 @@
 location,location_code,geographic_level,time_period,ssa_t1_desc,total_achievements,total_achievements_percent,total_enrolments,total_enrolments_percent,profession,sex,age_g,tot_enr
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,female,19,83050
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,female,25,279650
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,female,50,85700
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,male,19,84590
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,male,25,176380
-England,E92000001,country,2016,"Agriculture, Horticulture and Animal Care",3000,1.2,29600,1.3,agriculture,male,50,63690
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,female,19,83050
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,female,25,279650
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,female,50,85700
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,male,19,84590
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,male,25,176380
+England,E92000001,country,2016,"Agriculture",3000,1.2,29600,1.3,agriculture,male,50,63690
 England,E92000001,country,2016,"Arts, Media and Publishing",11300,4.4,83700,3.6,industry,female,19,83050
 England,E92000001,country,2016,"Arts, Media and Publishing",11300,4.4,83700,3.6,industry,female,25,279650
 England,E92000001,country,2016,"Arts, Media and Publishing",11300,4.4,83700,3.6,industry,female,50,85700
