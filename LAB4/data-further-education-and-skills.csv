@@ -95,12 +95,12 @@ England,E92000001,country,2016,Social Sciences,200,~,5400,~,services,female,50,8
 England,E92000001,country,2016,Social Sciences,200,~,5400,~,services,male,19,84590
 England,E92000001,country,2016,Social Sciences,200,~,5400,~,services,male,25,176380
 England,E92000001,country,2016,Social Sciences,200,~,5400,~,services,male,50,63690
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,female,19,75500
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,female,25,269240
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,female,50,70530
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,male,19,79740
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,male,25,170150
-England,E92000001,country,2017,"Agriculture, Horticulture and Animal Care",1600,0.8,28800,1.4,agriculture,male,50,58150
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,female,19,75500
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,female,25,269240
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,female,50,70530
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,male,19,79740
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,male,25,170150
+England,E92000001,country,2017,"Agriculture",1600,0.8,28800,1.4,agriculture,male,50,58150
 England,E92000001,country,2017,"Arts, Media and Publishing",7900,4.2,48500,2.4,industry,female,19,75500
 England,E92000001,country,2017,"Arts, Media and Publishing",7900,4.2,48500,2.4,industry,female,25,269240
 England,E92000001,country,2017,"Arts, Media and Publishing",7900,4.2,48500,2.4,industry,female,50,70530
@@ -191,12 +191,12 @@ England,E92000001,country,2017,Social Sciences,400,~,5400,~,services,female,50,7
 England,E92000001,country,2017,Social Sciences,400,~,5400,~,services,male,19,79740
 England,E92000001,country,2017,Social Sciences,400,~,5400,~,services,male,25,170150
 England,E92000001,country,2017,Social Sciences,400,~,5400,~,services,male,50,58150
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,female,19,76340
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,female,25,298630
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,emale,50,83570
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,19,80060
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,25,180820
-England,E92000001,country,2018,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,50,65650
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,female,19,76340
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,female,25,298630
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,emale,50,83570
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,male,19,80060
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,male,25,180820
+England,E92000001,country,2018,"Agriculture",1800,1,30000,1.5,agriculture,male,50,65650
 England,E92000001,country,2018,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,19,76340
 England,E92000001,country,2018,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,25,298630
 England,E92000001,country,2018,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,50,83570
@@ -287,12 +287,12 @@ England,E92000001,country,2018,Social Sciences,200,~,5300,~,services,female,50,8
 England,E92000001,country,2018,Social Sciences,200,~,5300,~,services,male,19,80060
 England,E92000001,country,2018,Social Sciences,200,~,5300,~,services,male,25,180820
 England,E92000001,country,2018,Social Sciences,200,~,5300,~,services,male,50,65650
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,female,19,75870
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,female,25,319050
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,female,50,87820
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,19,76890
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,25,174030
-England,E92000001,country,2019,"Agriculture, Horticulture and Animal Care",1800,1,30000,1.5,agriculture,male,50,62880
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,female,19,75870
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,female,25,319050
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,female,50,87820
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,male,19,76890
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,male,25,174030
+England,E92000001,country,2019,"Agriculture",1800,1,30000,1.5,agriculture,male,50,62880
 England,E92000001,country,2019,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,19,75870
 England,E92000001,country,2019,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,25,319050
 England,E92000001,country,2019,"Arts, Media and Publishing",8700,4.9,60200,2.9,industry,female,50,87820
