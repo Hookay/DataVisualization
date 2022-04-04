@@ -1,0 +1,200 @@
+<!-- LAB4 Author:Reka Hegedus Further Studies in Great Britain Adult learners -->
+<html>
+  <head>
+     <script src='https://d3js.org/d3.v7.min.js'></script>
+     <!-- Create a box where the graph will take place and adjust to screen -->
+     <svg viewBox="0 0 1200 700"><g></g></svg>
+     <!-- Create a div where the text box will take place -->
+     <div id="my_dataviz"></div>
+     
+    <style>
+         /*hover effect parameters*/
+         .node:hover{
+              stroke-width: 7px !important;
+              opacity: 1 !important;}
+
+         /*setup of body*/
+          body {
+              background-color: #3b3939;}
+    </style>
+  </head>
+  
+  <body>
+    <script>
+ 
+   //PARAMETERS================================================
+   var width = window.innerWidth, height = window.innerHeight
+           //FS,?,Industry,Services,Agriculture,IN:Arts,IN:constr,IN:engineering,IN:science,SE:busn,SE:ed,SE:hlt,SE:his,SE:Inf,SE:lng,SE:tur,SE:non,SE:prep,SE:ret,SE:soc
+//   var color3 = ["white","black","#b7e9eb",'#ebb7c0','#aae632','#22e6c5',"#2256e6",'#6a22e6','#22e6e2',"#ed3d34","#eda934","#ede434","black","#e6325c","#e6329e","#d432e6","black",'#f8fa7f',"#e66b32"];
+    var color3=   d3.interpolateRgb("#5c5454", "#fcba8d");
+
+ 
+
+   let t=2;
+   let ag=1;
+   let gen=1;
+   // CREATE SVG
+ //  const svg = d3.select('svg');  
+    var gender=["male","female"]
+    var age3=["19","25","50"]
+    var time3 =["2016","2017","2018","2019"] 
+    var prof =["agriculture","industry","services"]
+ 
+    
+   //========================================GET DATA================================================
+    d3.csv("https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/data-further-education-and-skills.csv").then( function(graph3){ 
+  
+  var data=[];
+   
+  function load3(ag,t,gen){
+     
+         // format the data group fill d.profession   radius d.total_enrolments/ subject
+      var data1=[];
+      var data2=[];
+      var data3=[];
+      var data4=[];
+  
+      graph3.forEach(function(d) {
+          if(d.profession==prof[0]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+                        
+                       data1.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+                
+           if(d.profession==prof[1]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+                      
+                       data2.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+                
+              if(d.profession==prof[2]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+
+                       data3.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+         })
+     
+       data4=[{ "name":prof[0],"children": data1},{ "name":prof[1],"children": data2},{ "name":prof[2],"children": data3}];
+    
+      
+      
+      
+      data={"name": "Further Studies","children": data4}
+  ;} 
+	function furtherStudy(data){
+
+// console.log(data)
+var scale=0.1;
+
+  
+
+var packLayout = d3.pack().size([400, 400]);
+
+var rootNode = d3.hierarchy(data)
+
+
+rootNode.sum(function(d) {   return d.value;    });
+
+packLayout(rootNode);
+
+var nodes = d3.select('svg g')
+  .selectAll('g')
+  .data(rootNode.descendants())
+  .join('g')
+  .attr('transform', function(d) {return 'translate(' + [d.x, d.y] + ')'})
+
+nodes
+  .append('circle')
+  .style("stroke", "grey")
+  .style("stroke-width",2)
+  .style("fill",function(d,i) {return color3(i*0.07)})
+   .on("mouseover", mouseover) // What to do when hovered
+   .on("mousemove",  mousemove)
+   .on("mouseleave", mouseleave)
+  .transition() 
+   <!--time-->
+  .duration(1000)
+  .attr('r', function(d) { return d.r; })
+  
+  
+ 
+ //==================================TEXT TOOLTIP=====================================
+  // create a tooltip
+  var Tooltip = d3.select("#my_dataviz")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .attr("id","tool")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")  
+        .style('width','120px')
+        
+  // Three function that change the tooltip when user hover / move / leave a cell
+  function mouseover(d,i) {
+  
+   d3.select(this) 
+     .style("stroke","black")
+     //<!--make it smooth the transition-->
+     .style("stroke-width",6)
+    Tooltip
+      .style("opacity", 1)
+  }
+  function  mousemove(d,i) { 
+  
+      d3.select(this) 
+       
+        .attr('width',function(d,i){
+         
+           people= d.value;
+           
+         	Tooltip.html('<u>' + d.data.name + '</u>' + "<br>" + " enrolled - "+ people.toFixed(0) )
+                
+      
+                 
+                  <!--makes sure that the text follows the mouse cursor-->
+           var f = document.getElementById('tool');
+			     document.addEventListener('mousemove', function(ev){  
+                let evi=ev.clientY-600;
+           
+               // console.log(evi)
+ 		           f.style.transform = 'translateY('+(evi)+'px)';
+       
+   		         f.style.transform += 'translateX('+(ev.clientX)+'px)';
+		         	},true);
+                 
+               
+  }) }
+  function  mouseleave(d,i) {
+  
+  d3.select(this)
+          .style("stroke","grey")
+         .style("stroke-width",2)
+                 
+  
+    Tooltip
+      .style("opacity", 0)
+  }
+  
+  
+  }
+  
+  load3(ag,t,gen);
+  
+  furtherStudy(data);
+  });
+ 
+    </script>
+  </body>
+</html>
