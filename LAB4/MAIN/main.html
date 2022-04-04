@@ -1,0 +1,1568 @@
+<html>
+  <head>
+     <script src='https://d3js.org/d3.v7.min.js'></script>
+     <!-- Create a box where the graph will take place and adjust to screen -->
+     <svg viewBox="0 0 1200 700"><g></g></svg>
+     <!-- Create a div where the text box will take place -->
+     <div id="my_dataviz"></div>
+     <div id="pieChart"></div>
+      <style>
+           /*hover effect parameters*/
+           .node:hover{
+                stroke-width: 7px !important;
+                opacity: 1 !important;}
+
+           /*setup of body*/
+            body {
+                background-color: #3b3939;
+                font-family: "avenir next", Montserrat, sans-serif;
+                }
+
+
+      </style>
+    
+ 
+    
+  </head>
+  
+  <body>
+    <script>
+    
+     //to adjust the height for the Further studies bubbles chart tooltip
+     var tooltipadj=600;
+     
+     //create the SVG
+     var svg = d3.select("svg")
+                    .append("g")
+                          
+                      
+     //gradient colours four buttons         
+     var defs = svg.append('defs');
+     //small year buttons colour
+     var gradient = defs.append('linearGradient')
+                         //add ID in order to call it
+                        .attr('id', 'svgGradient')
+                         //start position and end position value
+                        .attr('x1', '0%')
+                        .attr('x2', '100%')
+                        .attr('y1', '0%')
+                        .attr('y2', '100%');
+                        //specify one end position
+                        gradient.append('stop')
+                         //specify start position
+                        .attr('class', 'start')
+                        //asjust "angle" for colour
+                        .attr('offset', '0%')
+                        //add colour
+                        .attr('stop-color', 'pink')
+                        //adjust intensity
+                        .attr('stop-opacity', 1);
+                        //specify other end position
+                        gradient.append('stop')
+                         //specify end position
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                         //add colour
+                        .attr('stop-color', '#3b3939')
+                        //adjust intensity
+                        .attr('stop-opacity', 1);
+     //pie chart menu button colour 1                   
+     var gradient1 = defs.append('linearGradient')
+                         //add ID in order to call it
+                        .attr('id', 'svgGradient1')
+                        //start position and end position value
+                        .attr('x1', '0%')
+                        .attr('x2', '20%')
+                        .attr('y1', '0%')
+                        .attr('y2', '60%');
+                        //specify one end position
+                        gradient1.append('stop')
+                         //specify start position
+                        .attr('class', 'start')
+                         //asjust "angle" for colour
+                        .attr('offset', '0%')
+                        //add colour
+                        .attr('stop-color', '#7b6888')
+                          //adjust intensity
+                        .attr('stop-opacity', 1);
+                         //specify other end position
+                        gradient1.append('stop')
+                        //specify end position
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', "#2a232e")
+                        //adjust intensity
+                        .attr('stop-opacity', 1);
+    //pie chart menu button colour 2   
+     var gradient2 = defs.append('linearGradient')
+                        //add ID in order to call it
+                        .attr('id', 'svgGradient2')
+                        //start position and end position value
+                        .attr('x1', '0%')
+                        .attr('x2', '40%')
+                        .attr('y1', '0%')
+                        .attr('y2', '20%');
+                        //specify one end position
+                        gradient2.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                         //add colour
+                        .attr('stop-color', '#cc7cfc')
+                        .attr('stop-opacity', 1);
+                        //specify other end position
+                        gradient2.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                         //add colour
+                        .attr('stop-color', "#2a232e")
+                        .attr('stop-opacity', 1);
+         //pie chart menu button colour 3                 
+         var gradient3 = defs.append('linearGradient')
+                        //add ID in order to call it
+                        .attr('id', 'svgGradient3')
+                        //start position and end position value
+                        .attr('x1', '0%')
+                        .attr('x2', '20%')
+                        .attr('y1', '0%')
+                        .attr('y2', '50%');
+                         //specify one end position
+                        gradient3.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                         //add colour
+                        .attr('stop-color', "#2a232e")
+                        //adjust intensity
+                        .attr('stop-opacity', 1);
+                        //specify other end position
+                        gradient3.append('stop')
+                        //specify end position
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                         //add colour
+                        .attr('stop-color', "#7b6888")
+                        //adjust intensity
+                        .attr('stop-opacity', 1);            
+          //light pink colour for pie button text
+          var butCol='#ebb7d1';
+
+	
+ 
+
+//DATA ##################################################################
+//https://explore-education-statistics.service.gov.uk/find-statistics
+let url="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/population.csv";
+let url2="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/data-further-education-outcome-based-success-measures.csv";
+let url3="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/data-further-education-and-skills.csv";
+let url4="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/feme3.csv";
+let url5="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/empmen.csv"
+
+
+d3.csv(url).then( function(graph2){ d3.csv(url2).then( function(graph){d3.csv(url3).then( function(graph3){d3.csv(url4).then( function(data5) {d3.csv(url5).then( function(data6) {
+
+
+ //######################################################################"       
+      //INTITIALISE MAIN CONTROLER PARAGRAPHS
+      //Year
+      var t=0;
+      //Age
+      var ag=0;
+     //Gender
+      var gen = 0;
+      
+
+     // STUDIES SUCCESS PIE CHART############################
+       
+      //add parameters for dimensions-------------------PARAMETERS
+      var width2 = 760,
+          height2 = 250,
+          radius = Math.min(width2, height2) / 2;
+      //adjust position for the pie chart
+      var adjedux=100;
+      var adjeduy=400;
+    
+      //name the svg different to separate group---------SVG
+      var svg2 = d3.select("svg")
+                    .append("g")
+
+      // append separate groups
+      svg2.append("g")
+        .attr("class", "slices");
+      svg2.append("g")
+        .attr("class", "labels");
+      svg2.append("g")
+        .attr("class", "lines");
+        //position it on the svg plane
+      svg2.attr("transform", "translate(" + ((width2 / 2)+adjedux) + "," + ((height2 / 2)+adjeduy) + ")");
+
+     //create pie from values
+      var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.6);
+      // define outer arc for hollow look
+      var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+     
+     // get the labels  
+      var key = function(d){ return d.data.label; };
+      //order to colour countries and their colour
+
+      //order colour and labels together
+      var color2 = d3.scaleOrdinal()
+        .domain(["Carry on Study","Work","Work and Study","Benefit","Fail","Undecided"])
+        .range(["#a0fad3","#f5a2af","#dbaffa","#f77472","#a897b8","#e6f7f6"]);
+      
+      // variables from the data
+      var total,study,work,wostu,benf,fail,und;
+      //variables to identify age
+      var age=["25 - 49","50 and over","19 - 24"]
+      //variables to identify the year
+      var time2 =["201516","201617","201718","201819"] 
+      // container for current data
+      var chart2=[];
+      
+      
+     //FURTHER STUDIES BUBBLES ####################################
+    
+      //use interpolation in colour to visually indicate the lowest and higest value for bubbles
+      var color3=   d3.interpolateRgb("#5c5454", "#fcba8d");
+      //identify age
+      var age3=["19","25","50"]
+      //identify year
+      var time3 =["2016","2017","2018","2019"] 
+      //identify work
+      var prof =["agriculture","industry","services"]
+      //container for current data
+      var data=[];
+      //scale the bubbles
+      var scale=0.1;
+      //scale the whole chart
+      var packLayout = d3.pack().size([130, 130]);
+
+
+    //MENU AGE PIE CHART #########################################
+     
+     
+      //add parameters for dimensions-------------------PARAMETERS
+      var width = 760,
+          height = 250,
+          radius2 = Math.min(width, height) / 2;
+      //adjust pie chart
+      var xo=240;
+      var yo=40;
+  
+     //name the svg different to separate group---------SVG
+      var svg3 = d3.select("svg")
+                    .append("g")
+                    
+      //pie button background    
+      svg3.append("circle")
+               .attr('fill','black')
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r", 105);
+       //pie button background middle
+       svg3.append("circle")
+                .attr('fill','#3b3939')
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r", 35);
+
+      // append separate groups
+      svg3.append("g")
+        .attr("class", "slices2");
+      svg3.append("g")
+        .attr("class", "labels2");
+
+      //position it on the svg plane
+      svg3.attr("transform", "translate(" + ((width / 2)-xo) + "," + ((height / 2)+yo) + ")");
+      
+      //create pie from values
+      var pie2 = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc2 = d3.arc()
+        .outerRadius(radius2 * 0.8)
+        .innerRadius(radius2 * 0.4);
+      // define outer arc so we coplete the hollow look
+      var outerArc2 = d3.arc()
+        .innerRadius(radius2 * 0.9)
+        .outerRadius(radius2 * 0.9);
+      //order colour and labels together
+      var color = d3.scaleOrdinal()
+        .domain(["19 - 24","25 - 49","50+"])
+        .range([ "url(#svgGradient1)", "url(#svgGradient2)", "url(#svgGradient3)"]);//identify year
+      var time =["2016","2017","2018","2019"] 
+      // container for current data
+      var chart=[];
+      //identify gender
+      var gender=["male","female"]
+      var gender2=["Male","Female"]
+     
+
+
+
+  // EMPLOYMENT AND PROFESSION PLOT ############################################
+     
+      //Parameters 
+      //men,women
+      var gender3=[data6,data5];
+      var width4=310;
+      var height4=200;
+      
+      //name the svg different to separate group---------SVG
+      var svg6 = d3.select("svg")
+                    .append("g")
+     // line to connect work slice to work chart visually
+     svg6.append("line")
+                .attr("id","backg")
+                .style("stroke", "#3b3939")
+                .style("stroke-width", 1)
+                
+                .attr("x1",  880)
+                .attr("y1",390)
+                .attr("x2",  580)
+                .attr("y2",540)               
+      //background circle for plot
+      svg6.append("circle")
+                .attr("id","backg")
+                .attr('fill','#3b3939')
+                .attr("cx",  820)
+                .attr("cy",200)
+                .attr("r", 200)
+      //background circle for plot middle
+      svg6.append("circle")
+                .attr('fill',' #3b3939')
+                .attr("cx",  820)
+                .attr("cy",200)
+                .attr("r", 150) 
+  
+      //############################ FUNCTIONS FOR CHARTS
+     
+      //Employment
+      function workEmp(dat){
+      
+      
+         //create nem group for plot
+         var svg4 = d3.select("svg")
+                          .append("g")
+                          .attr("class", 'chartwork')
+                          //adjust it to the correct place
+        svg4.attr("transform", "translate(" + ((width4 / 2)+520) + "," + ((height4 / 2)-20) + ")");    
+
+        //////////
+        // GENERAL //////////////////////////////////////////////
+        //////////
+
+        // List of groups = header of the csv files
+        const keys = dat.columns.slice(1)
+
+        // color palette
+        const color4 = d3.scaleOrdinal()
+          .domain(keys)
+          .range(d3.quantize(d3.interpolateHcl("#f4e153", "#362142"), 10));
+
+        //stack the data in order to be able to call on each row
+        const stackedData = d3.stack()
+          .keys(keys)
+          (dat)
+
+
+
+        //////////
+        // AXIS ///////////////////////////////////////////////////
+        //////////
+
+        // Add X axis
+        const x = d3.scaleLinear()
+          .domain(d3.extent(dat, function(d) { return d.year; }))
+          .range([ 0, width4 ]);
+        const xAxis = svg4.append("g")
+          .attr("transform", `translate(0, ${height4})`)
+          //bottom ticks
+          .call(d3.axisBottom(x).ticks(4))
+          //colour numbers
+          .style("stroke","white")
+          //colour line
+          .style("fill","grey")
+
+        // X axis label
+        svg4.append("text")
+            .attr("text-anchor", "end")
+            //place it
+            .attr("x", width4+100)
+            .attr("y", height4 )
+            //colour
+            .style("stroke","white")
+            //content
+            .text("Time (year)");
+
+        
+
+        // Add Y axis
+        const y = d3.scaleLinear()
+          .domain([0, 18])
+          .range([ height4, 0 ]);
+        const yAxis =svg4.append("g")
+          //left ticks
+          .call(d3.axisLeft(y).ticks(8))
+          //colour numbers
+          .style("stroke","white")
+          //colour line
+          .style("fill","grey")
+          
+        // Y axis label
+        svg4.append("text")
+            .attr("text-anchor", "end")
+            //place it
+            .attr("x", 0)
+            .attr("y", -20 )
+            //content
+            .text("Million working people")
+            //position
+            .attr("text-anchor", "start")
+            //colour
+            .style("stroke","white")
+
+
+
+        //////////
+        // BRUSHING AND CHART ///////////////////////////////////////
+        //////////
+
+        // Add a clipPath: everything out of this area won't be drawn.
+        const clip = svg4.append("defs").append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("width", width4 )
+            .attr("height", height4 )
+            .attr("x", 0)
+            .attr("y", 0);
+
+        // Add brushing
+        // Add the brush feature using the d3.brush function
+        const brush = d3.brushX()   
+            // initialise the brush area: start at 0,0 and finishes at width,height: it means one selects the whole graph area
+            .extent( [ [0,0], [width4,height4] ] ) 
+            // Each time the brush selection changes, trigger the 'updateChart' function
+            .on("end", updateChart) 
+
+        // Create the scatter variable: where both the circles and the brush take place
+        const areaChart = svg4.append('g')
+          .attr("clip-path", "url(#clip)")
+
+        // Area generator
+        const area = d3.area()
+          .x(function(d) { return x(d.data.year); })
+          .y0(function(d) { 
+          var u=d[0];//cHANGED SO IT GOUES FROM 0 TILL y value
+        //  console.log(d[1]-u)
+          return y(d[1]-u);
+
+
+          })
+          .y1(function(d) { return height4; 
+
+          })
+
+        // Show the areas
+        areaChart
+          .selectAll("mylayers")
+          .data(stackedData)
+          .join("path")
+            .attr("class", function(d) { return "myArea " + d.key })
+            .style("fill", function(d) { return color4(d.key); })
+            .attr("d", area)
+
+        // Add the brushing
+        areaChart
+          .append("g")
+            .attr("class", "brush")
+            .call(brush);
+
+
+        // A function that update the chart for given boundaries
+        function updateChart(event,d) {
+
+          extent = event.selection
+
+          // If no selection, back to initial coordinate. Otherwise, update X axis domain
+          if(!extent){
+
+            x.domain(d3.extent(dat, function(d) { return d.year; }))
+          }else{
+            x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+    
+          }
+
+          // Update axis and area position
+          xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(4))
+          areaChart
+            .selectAll("path")
+            .transition().duration(1000)
+            .attr("d", area)
+          }
+
+         //////////
+         // HIGHLIGHT GROUP /////////////////////////////////////
+         //////////
+
+         // What to do when one group is hovered
+         const highlight = function(event,d){
+
+          
+            // reduce opacity of all groups
+            d3.selectAll(".myArea").transition().duration(1000).style("opacity", .1)
+            // expect the one that is hovered
+            d3.select("."+d).transition().duration(1000).style("opacity", 1)
+           
+           //######certain values are too small make the y axis scale to them to be observable
+           
+           if(d=="Agriculture"||d=="Employers"){
+            y.domain([ 0,0.8])
+           // Update axis and area position
+            yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(8))
+            areaChart
+            .selectAll("path")
+            .transition().duration(1000)
+            .attr("d", area)
+            }
+           if(d=="Industry"||d=="SelfEmployed"){
+                y.domain([ 0,5])
+           // Update axis and area position
+           yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(8))
+           areaChart
+            .selectAll("path")
+            .transition().duration(1000)
+            .attr("d", area)
+           }
+           
+           
+           //######If profession is highlighted highlight it in bubble 
+           //######chart too the studied supbject
+            if(d=="Services"){
+           // console.log('pip')
+            d3.selectAll('#cirservices').style("stroke", "orange")
+            }
+            if(d=="Industry"){
+            // console.log('pip')
+            d3.selectAll('#cirindustry').style("stroke", "orange")
+            }
+            if(d=="Agriculture"){
+           // console.log('pip')
+            d3.selectAll("#cirAgriculture").style("stroke", "orange")
+            }
+
+          }
+         // And when it is not hovered anymore
+         const noHighlight = function(event,d){
+             //make sure all colour visibility is restored once not hovered over
+             d3.selectAll(".myArea").transition().duration(1000).style("opacity", 1)
+             //also adjust the axis if it has been moved
+             if(d=="Agriculture"||d=="Employers"||d=="Industry"||d=="SelfEmployed"){
+               // Update axis and area position
+               y.domain([ 0,18])
+               yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(8))
+               areaChart
+                .selectAll("path")
+                .transition().duration(1000)
+                .attr("d", area)
+                }
+             // upon leaving restore the colour of the circles in the bubble chart
+             d3.selectAll('#cirservices').style("stroke", "grey")
+             d3.selectAll('#cirindustry').style("stroke", "grey")           
+             d3.selectAll("#cirAgriculture").style("stroke", "grey")
+
+          }
+
+          //////////
+          // LEGEND /////////////////////////////////////////////
+          //////////
+
+          // Add one dot in the legend for each name. RECTANGLES
+          const size = 20
+          svg4.selectAll("myrect")
+            .data(keys)
+            .join("rect")
+              //position
+              .attr("x", 400)
+              .attr("y", function(d,i){ return 10 + i*(size+5)}) 
+              .attr("width", size)
+              .attr("height", size)
+              //colour it
+              .style("fill", function(d){ return color4(d)})
+              //do things on hover
+              .on("mouseover", highlight)
+              .on("mouseleave", noHighlight)
+
+          // Add one dot in the legend for each name. TEXT
+          svg4.selectAll("mylabels")
+              .data(keys)
+              .join("text")
+              //position
+              .attr("x", 400 + size*1.2)
+              .attr("y", function(d,i){ return 10 + i*(size+5) + (size/2)})
+              .style("fill", function(d){ return color4(d)})
+              .text(function(d){ return d})
+              .attr("text-anchor", "left")
+              .style("alignment-baseline", "middle")
+              //do something on hover
+              .on("mouseover", highlight)
+              .on("mouseleave", noHighlight)
+      };
+      //Success
+      function colorData2 (val){
+        //define label as the domain of colour
+        var labels = color2.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      };   
+      function change(data) {
+     
+        /* ------- PIE SLICES -------*/////////////////////////////////
+        var slice = svg2.select(".slices").selectAll("path.slice")
+          .data(pie(data), key);
+        //create
+        slice.enter()
+          .insert("path")
+          //colour depending on label value
+          .style("fill", function(d) { 
+        	  return color2(d.data.label); })
+          .attr("class", "slice");
+        //position
+        slice		
+          .transition()
+           <!--add ease style->
+          .ease( d3.easeElastic) 
+          .duration(1000)
+          //update position to current
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc(interpolate(t));
+            };
+          })
+        //remove on change to make space for new position
+        slice.exit()
+          .remove();
+
+        /* ------- TEXT LABELS -------*//////////////////////////////////
+        var text = svg2.select(".labels").selectAll("text")
+          .data(pie(data), key);
+        //create
+        text.enter()
+          .append("text")
+          .attr("dy", ".35em")
+          .attr("font-size","16px")
+          .attr("fill","#b8b5b4")
+          //add data to be printed
+          .text(function(d) {
+            return d.data.label;
+          });
+        //look for the middle angle
+        function midAngle(d){
+          return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+        
+        // adjust text and line positions in order so they do not overlap
+        var u= [0,0.6,1,0,0,0.5,1,1.6,2,0,0];
+        //adjust position to current==================
+        text.transition().duration(1000)
+          .attrTween("transform", function(d,i) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+
+              return "translate("+ pos +")";
+            };
+          })
+          .styleTween("text-anchor", function(d){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              return midAngle(d2) < Math.PI ? "start":"end";
+            };
+          });
+        //remove it in order to update properly
+        text.exit()
+          .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*//////////////////////
+
+        var polyline = svg2.select(".lines").selectAll("polyline")
+          .data(pie(data), key);
+        //create it
+        polyline.enter()
+          .append("polyline")
+          .style("fill","none")
+          .style("stroke","#b8b5b4");
+         //adjust its position to current
+        polyline.transition().duration(1000)
+          .attrTween("points", function(d,i){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+              return [arc.centroid(d2), outerArc.centroid(d2), pos];
+            };			
+          });
+        //remove on change
+        polyline.exit()
+          .remove();
+      }; 
+      function load2(ag,t,gen){
+      
+        // format the data
+        chart=[];
+        graph2.forEach(function(d) {
+
+        if( d.sex==gender[gen] & d.year==time[t]){
+
+
+               chart.push(d.study1,d.study2,d.study3);
+          }
+          
+		  });}; 
+      //initialise graph
+      load2(ag,t,gen);
+      change(colorData2(chart2)); 
+      //Bubbles
+      function furtherStudy(data){
+
+        // organise data
+        var rootNode = d3.hierarchy(data)
+        rootNode.sum(function(d) { return d.value;});
+        packLayout(rootNode);
+
+        //create nodes group and add their position on the svg
+        var nodes4 = d3.select('svg g')
+          .selectAll('g')
+          .data(rootNode.descendants())
+          .join('g')
+          .attr('transform', function(d) {return 'translate(' + [(d.x+315+adjedux), (d.y+60+adjeduy)] + ')'})
+        // create the circles based on the hierarcy 
+        nodes4
+          .append('circle')
+          .attr('class','rem')
+          //give individual id so they attributes can be changed from everywhere
+          .attr('id',function(d,i){ return "cir"+d.data.name})
+          .style("stroke", "grey")
+          .style("stroke-width",2)
+          .style("fill",function(d,i) {return color3(i*0.09)})
+          // do something on hover
+          .on("mouseover", mouseover) 
+          .on("mousemove",  mousemove)
+          .on("mouseleave", mouseleave)
+          //slowly load circles
+          .transition() 
+           <!--time-->
+          .duration(1000)
+          .attr('r', function(d) { return d.r; })
+
+
+
+
+         //===================================TEXT TOOLTIP
+          // create a tooltip to display information
+          var Tooltip = d3.select("#my_dataviz")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip")
+                .attr("id","tool")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "2px")
+                .style("border-radius", "5px")
+                .style("padding", "5px")  
+                .style('width','120px')
+
+
+          // Three function that change the tooltip when user hover / move / leave a cell
+          function  mouseover(d,i) {
+             //do smtg to the attached object which is the circles
+             d3.select(this) 
+               .style("stroke","black")
+               //<!--make it smooth the transition-->
+               .style("stroke-width",6)
+              //update tooltip
+              Tooltip
+                .style("opacity", 1)
+          }
+          function  mousemove(d,i) { 
+              //in order to acces the circle data
+              d3.select(this).attr('width',function(d,i){
+              
+                  // ################controll WORK plot chart values from here if hovered over with the subject with the same name as industry################## Control WORK CHART
+                  if(d.data.name=="services"){
+
+                  // reduce opacity of all groups
+                  d3.selectAll(".myArea").transition().duration(1000).style("opacity", .1)
+                  // expect the one that is in connection
+                  d3.select(".Employees").transition().duration(1000).style("opacity", .8)
+                  // expect the one that is hovered
+                  d3.select(".Services").transition().duration(1000).style("opacity", 1)
+
+                  }
+                  if(d.data.name=="industry"){
+
+                  // reduce opacity of all groups
+                  d3.selectAll(".myArea").transition().duration(1000).style("opacity", .1)
+                 // expect the one that is in connection
+                  d3.select(".SelfEmployed").transition().duration(1000).style("opacity", .8)
+                  // expect the one that is hovered
+                  d3.select(".Industry").transition().duration(1000).style("opacity", 1)
+
+                  }
+                  if(d.data.name=="Agriculture"){
+
+                  // reduce opacity of all groups
+                  d3.selectAll(".myArea").transition().duration(1000).style("opacity", .1)
+                  // expect the one that is in connection
+                  d3.select(".Employers").transition().duration(1000).style("opacity", .8)
+                  // expect the one that is hovered
+                  d3.select(".Agriculture").transition().duration(1000).style("opacity", 1)
+
+                  }
+
+                  //create tooltip value
+                  people= d.value;
+                  Tooltip.html('<u>' + d.data.name + '</u>' + "<br>" + " enrolled - "+ people.toFixed(0) )
+
+                  <!--makes sure that the text follows the mouse cursor-->
+                  var f = document.getElementById('tool');
+                  document.addEventListener('mousemove', function(ev){  
+                       //variable on the top in order to eaily adjust the height 
+                       f.style.transform = 'translateY('+(ev.clientY-tooltipadj)+'px)';
+                       f.style.transform += 'translateX('+ev.clientX+'px)';
+                      },true);
+
+
+          }) }
+          function  mouseleave(d,i) {
+
+            // on leave make sure to reset the circle outlines as they where
+            d3.select(this)
+              .style("stroke","grey")
+              .style("stroke-width",2)
+              
+            // restore opacity of all groups ##################### in WORK CHART
+            d3.selectAll(".myArea").transition().duration(1000).style("opacity", 1)           
+            Tooltip
+                .style("opacity", 0)
+            }
+  
+      };
+      function load3(ag,t,gen){
+     
+      // format the data group fill d.profession  radius d.total_enrolments/ subject
+      var data1=[];
+      var data2=[];
+      var data3=[];
+      var data4=[];
+      //2nd LAYER CHILDREN
+      graph3.forEach(function(d) {
+          if(d.profession==prof[0]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+                        
+                       data1.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+                
+           if(d.profession==prof[1]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+                      
+                       data2.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+                
+              if(d.profession==prof[2]){
+
+            if(d.age_g==age3[ag] & d.sex==gender[gen] & d.time_period==time3[t]){
+
+                       data3.push({"name":d.ssa_t1_desc,"value":(d.tot_enr*d.total_enrolments_percent*0.01)},)  
+
+                       }
+                }
+         })
+        //1th layer CHILDREN
+       data4=[{ "name":prof[0],"children": data1},{ "name":prof[1],"children": data2},{ "name":prof[2],"children": data3}];
+    
+      
+      
+      //PARENT
+      data={"name": "Further Studies","children": data4}
+  ;}; 
+      //initialise graph
+      load3(ag,t,gen);
+      furtherStudy(data); 
+	    //#################################################
+
+
+  //########################## BUTTON FUNCTIONS ######################
+      //MENU Age
+      function colorData (val){
+        //define label as the domain of colour
+        var labels = color.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      }; 
+      function change2(data) {
+        
+            /* ------- PIE SLICES -------*/////////////////////////////
+            var slice = svg3.select(".slices2")
+                             .selectAll("path.slice2")
+                             .data(pie2(data), key)
+            //create slices
+            slice.enter()
+              .insert("path")
+              .attr("class", "slice2")
+              //on hover do something
+              .on("mouseover", mouseover2)
+              .on("mouseout", mouseout2)	
+              //fill it depending on label values
+              .style("fill", function(d) { 
+              return color(d.data.label); })
+              .attr("stroke","black")
+              .attr("stroke-width",6)
+              // do smtg when clicked
+              .on("click", up11);
+            //position update to current
+            slice		
+              .transition()
+               <!--add ease style->
+              .ease( d3.easeElastic) 
+              .duration(1000)
+              .attrTween("d", function(d) {
+                this._current = this._current || d;
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
+                return function(t) {
+                  return arc2(interpolate(t));
+                };
+              })
+
+
+            //on update remove for continous animation
+            slice.exit()
+              .remove();
+
+
+            /* ------- TEXT LABELS -------*//////////////////////////////////
+            var text = svg3.select(".labels2").selectAll("text")
+              .data(pie2(data), key);
+
+             // Add a label to the larger arcs, translated to the arc centroid and rotated.
+            // source: http://bl.ocks.org/1305337#index.html
+            text.enter()
+                .filter(function(d) { return d.endAngle - d.startAngle > .2; })
+                .append("text")
+                .attr("dy", ".35em")
+                .attr('id',function(d,i){return 'tex'+i})
+                .attr("font-size","14px")
+                .attr("text-anchor", "middle")
+                //colour of the text
+                .attr("fill",butCol)
+                .attr('font-weight',600)
+                //adjust position
+                .attr("transform", function(d) { return "translate(" + arc2.centroid(d) + ")rotate(" + angle(d) + ")"; })
+                //display value
+                .text(function(d) { return d.data.label; })
+                ;
+
+             // Computes the label angle of an arc, converting from radians to degrees.
+            function angle(d) {
+                var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+                return a > 90 ? a - 180 : a;
+            }
+
+        // Pie chart title===========================			
+        svg3.append("svg:text")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .text("AGE GROUP")
+            .style('fill','#e7e1ed')
+            .attr("class","title");	
+
+
+
+      //HOVER MOVMENTS=================================	
+      function mouseover2() {
+        //make frame light up and smaler
+        d3.select(this).transition()
+            .duration(750)
+                  .attr("stroke","#ffa514")
+                  .attr("stroke-width","3px");
+          
+      }	
+      function mouseout2() {
+      //make frame black and default size
+        d3.select(this).transition()
+            .duration(750)
+                  .attr("stroke","black")
+                  .attr("stroke-width","6px");
+
+
+      }
+
+
+      // UPDATE ANY FUNCTION===========================
+      function up11(d, i) {
+       //record which slice we are at
+       let a=i.index
+       //update age
+       getAge( a,gen); 
+
+       //give id to given slice and colour it orange
+       d3.select(this).attr("id","cikk"+a).transition()
+            .duration(2000)     
+            .style("fill", 'orange');
+
+
+          //if first slice is clicked
+          if(a==0){
+          //make text black so it contrasts
+           d3.selectAll('#tex0').style('fill','black')
+           //make other two default so it contrasts too
+           d3.selectAll('#tex1').style('fill',butCol)
+           d3.selectAll('#tex2').style('fill',butCol)
+           //make the rest of the slices turn back to default colour
+           d3.selectAll("#cikk1").style("fill", "url(#svgGradient2)")
+           d3.selectAll("#cikk2").style("fill", "url(#svgGradient3)")
+          }
+          //if second slice is clicked
+            if(a==1){
+           //make text black so it contrasts
+           d3.selectAll('#tex1').style('fill','black')
+           //make other two default so it contrasts too
+           d3.selectAll('#tex0').style('fill',butCol)
+           d3.selectAll('#tex2').style('fill',butCol)
+           //make the rest of the slices turn back to default colour
+           d3.selectAll("#cikk0").style("fill", "url(#svgGradient1)")
+           d3.selectAll("#cikk2").style("fill", "url(#svgGradient3)")
+          } 
+          //if third slice is clicked
+            if(a==2){
+           //make text black so it contrasts
+           d3.selectAll('#tex2').style('fill','black')
+           //make other two default so it contrasts too
+           d3.selectAll('#tex0').style('fill',butCol)
+           d3.selectAll('#tex1').style('fill',butCol)
+           //make the rest of the slices turn back to default colour
+           d3.selectAll("#cikk0").style("fill", "url(#svgGradient1)")
+           d3.selectAll("#cikk1").style("fill", "url(#svgGradient2)")
+          }
+
+        }
+  
+  
+   };          
+      function load(ag,t,gen){
+     
+      // format the data
+      chart2=[];
+      graph.forEach(function(d) {
+      if(d.AgeBand==age[ag] & d.Gender==gender2[gen] & d.time_period==time2[t]){
+
+             total=d.NumberOfLearners*0.01;
+             study=total*d.LearnOnlyPercent;
+             work=total*d.EmpOnlyPercent;
+             wostu=total*d.EmpAndLearnPercent;
+             benf=total*d.BenefitPercent;
+             fail=total*d.NotSustainedPercent;
+             und=total*d.NoDestPercent;
+
+             chart2.push(study,work,wostu,benf,fail,und);
+        }
+          
+  });}; 
+      //initialise menu
+      load(ag,t,gen);
+      change2(colorData(chart)); 
+      //MENU Years and Gender
+      function buttons(){   
+          
+      //hide some loading text but make it dissapear on data load at onMouse
+      svg2.append("rect")       
+      <!--give the with and the height keep adjustable parameters-->
+          .attr("transform", "translate(100,0)")
+          .attr("class","sq")
+          .attr('x','-200px')
+          .attr('y', '-75px') 
+          .attr('width', 250)
+          .attr('height', 150)
+          <!--colour it add edge-->
+          .style("fill",  "#3b3939")
+                    
+      //adjust all year button height              
+      var o=-10;            
+      //four buttons for years  parameters            
+      let xcor=[ -247,-202,-185,-200];
+      let ycor=[-266-o,-315-o,-375-o,-438-o];
+      let nameClass=["c1","c2","c3","c4"];
+      let ti=["y16",'y17','y18','y19'];
+      // order update functions to buttons
+      let updateF=[up1,up2,up3,up4];
+      //create the four buttons      
+      for(var p=0;p<4;p++){
+                
+                
+                //button background =======================
+                svg2.append("circle")
+                    .attr('fill','black')
+                    .attr("cx", xcor[p])
+                    .attr("cy", ycor[p])
+                    .attr("r", 20);   
+
+                // YEAR ====================================
+                svg2.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  xcor[p])
+                    .style('cy', ycor[p]) 
+                    .attr("class",nameClass[p])
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "url(#svgGradient)")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                    <!--Add listener for the mouseover event-->
+                    .on("mouseover", onMouseOver)
+                     <!--Add listener for the mouseout event-->
+                    .on("mouseout", onMouseOut)  
+                    //on click change data to wealth
+                    .on("click",updateF[p]);
+              //TEXT =====================================
+              svg2.append("text")  
+                  <!-- text positions-->
+                  .attr("transform", "translate("+xcor[p].toString()+","+ycor[p].toString()+")")             
+                  .attr('id',ti[p])
+                  .attr('x',  35)
+                  .attr('y', 5)  
+                  <!--colour it add edge-->
+                  .style("fill", "White")
+                  .text(time[p]);
+                }; 
+                
+      //==============Animate Buttons==========================
+      <!-------mouseover event handler function for button---->   
+      function onMouseOver(d, i) { 
+       
+       d3.selectAll(".c1")
+        <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+            .style("fill", "#3b3939")
+                     //make the other inactive
+          d3.selectAll(".c2")
+           <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+            .style("fill", "#3b3939")
+          d3.selectAll(".c3")
+           <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+            .style("fill", "#3b3939")
+          d3.selectAll(".c4")
+           <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+            .style("fill", "#3b3939")
+              
+              <!--select buttons-->
+              d3.select(this) 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',15 ) 
+               <!--colour it -->
+              .style("fill", "url(#svgGradient)")
+
+      } 
+      <!----mouseout event handler function for button--------> 
+      function onMouseOut(d, i) { 
+              
+
+              d3.select(this) 
+                 <!--adds animation -->
+                .transition()
+                 <!--time-->
+                .duration(1000) 
+                <!--change size-->
+                .attr('r',10 ) 
+                 <!--colour it -->
+                 .style("fill", "url(#svgGradient)")
+                
+                
+
+      } 
+      function up1(d,i) {
+
+          d3.select(this)
+          // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+          //call on rest of the text buttons and make them inactive in appearance
+          d3.selectAll('#y16').transition().duration(500).style('fill','white').attr('opacity',1)
+          d3.selectAll('#y17').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y18').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y19').transition().duration(500).style('fill','grey').attr('opacity',.4)
+         		 
+    
+            
+            getTime(0,gen);
+            }		   
+      function up2(d,i) {
+   
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a") 
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+          //call on rest of the text buttons and make them inactive in appearance
+          d3.selectAll('#y16').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y17').transition().duration(500).style('fill','white').attr('opacity',1)
+          d3.selectAll('#y18').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y19').transition().duration(500).style('fill','grey').attr('opacity',.4)  
+          
+        
+         
+            getTime(1,gen);
+           }           
+      function up3(d,i) {
+
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+          //call on rest of the text buttons and make them inactive in appearance
+          d3.selectAll('#y16').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y17').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y18').transition().duration(500).style('fill','white').attr('opacity',1)
+          d3.selectAll('#y19').transition().duration(500).style('fill','grey').attr('opacity',.4)
+       
+           
+            getTime(2,gen);
+            
+           }   
+      function up4(d,i) {
+       
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")  
+          //call on rest of the text buttons and make them inactive in appearance
+          d3.selectAll('#y16').transition().duration(500).style('fill','white').attr('opacity',.4)
+          d3.selectAll('#y17').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y18').transition().duration(500).style('fill','grey').attr('opacity',.4)
+          d3.selectAll('#y19').transition().duration(500).style('fill','white').attr('opacity',1)
+     
+       
+            getTime(3,gen);
+            
+            }
+      
+ }               
+      function genderButtons(){
+      //name the svg different to separate group---------SVG
+      var svg0 = d3.select("svg")
+                    .append("g")
+      //position,update function and text
+      let xgen=[110,180];
+      let ygen=[300,295];
+      let upGen=[updateMen,updateWomen];
+      let titleGen=['MEN','WOMEN'];
+      //create buttons
+      for(let k=0;k<2;k++){
+
+
+       //outer rim 
+        svg0.append("circle")
+                  .attr('fill','black')
+                  .attr("cx",  xgen[k])
+                  .attr("cy", ygen[k])
+                  .attr("r", 20)
+
+       //button
+        svg0.append("circle")
+                  .style('fill',"url(#svgGradient3)")
+                  .attr("id",gender[k])
+                  .attr("cx", xgen[k])
+                  .attr("cy", ygen[k])
+                  .attr("r", 10)
+                  //do smtg on click
+                  .on("click",upGen[k])
+                  .on('mouseover',ie)
+                  .on('mouseout',ot);  
+
+       //text
+           svg0.append("text")  
+                    .attr('x',xgen[k]+35)
+                    .attr('y',ygen[k]+40)
+                    .attr('id',titleGen[k])
+                    <!--colour it add edge-->
+                    .style("fill", "White")
+                    .style("font-size", 20)
+                    .text(titleGen[k]);
+
+
+
+       }
+      //animate buttons on click
+      function ie(d,i){
+         d3.select(this).attr('r',15)
+         }
+      function ot(d,i){
+         d3.select(this).attr('r',10)
+         }
+      }
+      //initialise menu
+      buttons(); 
+      genderButtons();
+      
+  //########################## UPDATE FUNCTIONS ####################
+      
+      //update values once men button pressed
+      function updateMen(d,i){
+      
+             // update the button colour it orange and make it smaler
+             d3.select(this).style("fill", "orange").transition().duration(1000).attr('r',5)   
+             
+             //update gender
+              gen=0;
+              getTime(t,gen);
+              getAge(ag,gen);
+              //make other circle normal radious
+              d3.select('#female').style('fill','#423f3e').transition().duration(1000).attr('r',10)   
+              //make other text active     
+              d3.selectAll('#MEN').transition().duration(500).style('fill','white').attr('opacity',1)
+              //make other text inactive 
+              d3.selectAll('#WOMEN').transition().duration(500).style('fill','grey').attr('opacity',.4) 
+             
+
+
+        }                 
+      //update values once women button pressed
+      function updateWomen(d,i){
+      
+             // update the button colour it orange and make it smaler
+             d3.select(this).style("fill", "orange").transition().duration(1000).attr('r',5)
+             
+             //update gender
+             gen=1;
+             getTime(t,gen);
+             getAge(ag,gen);
+             
+             //make other button colour and size default
+             d3.select('#male').style('fill','#423f3e').transition().duration(1000).attr('r',10)   
+             //make other text active     
+             d3.selectAll('#WOMEN').transition().duration(500).style('fill','white').attr('opacity',1)           //make other text inactive      
+             d3.selectAll('#MEN').transition().duration(500).style('fill','grey').attr('opacity',.4)
+
+
+        }              
+      //update values once time buttons pressed
+      function getTime(ti,gen){
+         t=ti;
+
+          //load data with new time
+          load(ag,t,gen);
+          load2(ag,t,gen);
+          load3(ag,t,gen);
+
+
+               //update  cahart title colours 
+               d3.selectAll('#title').style("fill", "#adaaaa")
+               //remove old bubbles
+               d3.selectAll('.rem') .transition().duration(999).attr('r',0).remove()  
+               //make sure you remove cover square
+               d3.selectAll(".sq").remove()	
+               //remove toolbox for update
+               d3.selectAll("#tool").remove()	
+               // remove WORK chart so it can be updated to new data
+               d3.selectAll('.chartwork').transition()<!--add ease style->
+                            .ease( d3.easeElastic) .duration(200).attr('opacity',0).remove();
+              //change colour for background circle and line  working chart
+              d3.selectAll("#backg")
+                  .style("stroke", "grey")
+                  .style("fill",'grey')
+                  .attr('opacity',.4)
+                  .attr('fill-opacity',.4)
+              //call on functions with updated data
+              workEmp(gender3[gen]);
+              furtherStudy(data);
+              // AGE
+              change2(colorData(chart));
+              //SUCCESS
+              change(colorData2(chart2));
+
+
+        }                
+      //update values once age buttons pressed
+      function getAge(it,gen){
+
+         //update current datasets with age value
+         ag=it;
+         load(ag,t,gen);
+         load2(ag,t,gen);
+         load3(ag,t,gen);
+         
+            //update  cahart title colours 
+            d3.selectAll('#title').style("fill", "#adaaaa")
+            //remove old bubbles 
+            d3.selectAll('.rem') .transition().duration(999).attr('r',0).remove() 
+            //make sure you remove cover square
+            d3.selectAll(".sq").remove()	
+            //make sure to update toolbox so fresh one can load
+            d3.selectAll("#tool").remove()	
+            //remove chart so we do not stack one on other when loading it again
+            d3.selectAll('.chartwork').transition()<!--add ease style->
+                            .ease( d3.easeElastic) .duration(200).attr('opacity',0).remove();
+                            
+            //change colour for background circle and line work chart
+            d3.selectAll("#backg")
+                  .style("stroke", "grey")
+                  .style("fill",'grey')
+                  .attr('opacity',.4)
+                  .attr('fill-opacity',.4)               
+                            
+             
+             //call on methods=================================
+              workEmp(gender3[gen]);
+              furtherStudy(data);
+              //AGE
+              change2(colorData(chart));
+              //SUCCESS
+              change(colorData2(chart2));
+
+
+   }                 
+ 
+ 
+  //#################### TITLES FOR THE PAGE AND GRAPHS ###########
+      function title(){
+        //TITLES
+        var svg7 = d3.select("svg")
+                      .append("g")
+
+       svg7.append("text")  
+                    .attr('x',30)
+                    .attr('y',25)
+                    <!--colour it add edge-->
+                    .style("fill", "#adaaaa")
+                    .style('font-weight','bold')
+                    .style("font-size", 25)
+                    .text("FURTHER STUDY/WORK IN ENGLAND(2016-2019)");
+
+         svg7.append("text")  
+                    .attr('x',30)
+                    .attr('y',50)
+                    <!--colour it add edge-->
+                    .style("fill", "#adaaaa")
+                    .style('font-weight','bold')
+                    .style('font-style','italic')
+                    .style("font-size", 20)
+                    .text("MENU");
+
+
+          svg7.append("text")  
+                    .attr('x',550)
+                    .attr('y',640)
+                    <!--colour it add edge-->
+                    .style("fill", "#3b3939")
+                    .attr("id","title")
+                    .style('font-weight','bold')
+                    .style('font-style','italic')
+                    .style("font-size", 20)
+                    .text("FURTHER STUDY BY SUBJECTS AND SUCCESS RATE");
+
+          svg7.append("text")  
+                    .attr('x',830)
+                    .attr('y',340)
+                    .attr("id","title")
+                    <!--colour it add edge-->
+                    .style("fill", "#3b3939")
+                    .style('font-weight','bold')
+                    .style('font-style','italic')
+                    .style("font-size", 20)
+                    .text("WORKING ADULTS IN ENGLAND");
+       }
+      title();
+
+
+}) }) })   }) }).catch(function(err) {
+                  // handle loading error here
+                  console.log("whops")
+              });
+     </script>
+  </body>
+</html> 
