@@ -1,0 +1,851 @@
+<html>
+  <head>
+     <script src='https://d3js.org/d3.v7.min.js'></script>
+     <!-- Create a box where the graph will take place and adjust to screen -->
+     <svg viewBox="0 0 1200 700"><g></g></svg>
+     <!-- Create a div where the text box will take place -->
+     <div id="my_dataviz"></div>
+     <div id="pieChart"></div>
+    <style>
+         /*hover effect parameters*/
+         .node:hover{
+              stroke-width: 7px !important;
+              opacity: 1 !important;}
+
+         /*setup of body*/
+          body {
+              background-color: #3b3939;
+              font-family: "avenir next", Montserrat, sans-serif;
+              }
+    </style>
+  </head>
+  
+  <body>
+    <script>
+     //name the svg different to separate group---------SVG
+     var svg = d3.select("svg")
+                    .append("g")
+     var defs = svg.append('defs');
+     var gradient = defs.append('linearGradient')
+                        .attr('id', 'svgGradient')
+                        .attr('x1', '0%')
+                        .attr('x2', '100%')
+                        .attr('y1', '0%')
+                        .attr('y2', '100%');
+
+                        gradient.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                        .attr('stop-color', 'pink')
+                        .attr('stop-opacity', 1);
+
+                        gradient.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', '#3b3939')
+                        .attr('stop-opacity', 1);
+                        
+     var gradient1 = defs.append('linearGradient')
+                        .attr('id', 'svgGradient1')
+                        .attr('x1', '0%')
+                        .attr('x2', '20%')
+                        .attr('y1', '0%')
+                        .attr('y2', '60%');
+
+                        gradient1.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                        .attr('stop-color', '#7b6888')
+                        .attr('stop-opacity', 1);
+
+                        gradient1.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', "#2a232e")
+                        .attr('stop-opacity', 1);
+   
+     var gradient2 = defs.append('linearGradient')
+                        .attr('id', 'svgGradient2')
+                        .attr('x1', '0%')
+                        .attr('x2', '40%')
+                        .attr('y1', '0%')
+                        .attr('y2', '20%');
+
+                        gradient2.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                        .attr('stop-color', '#cc7cfc')
+                        .attr('stop-opacity', 1);
+
+                        gradient2.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', "#2a232e")
+                        .attr('stop-opacity', 1);
+         var gradient3 = defs.append('linearGradient')
+                        .attr('id', 'svgGradient3')
+                        .attr('x1', '0%')
+                        .attr('x2', '20%')
+                        .attr('y1', '0%')
+                        .attr('y2', '50%');
+
+                        gradient3.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                        .attr('stop-color', "#2a232e")
+                        .attr('stop-opacity', 1);
+
+                        gradient3.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', "#7b6888")
+                        .attr('stop-opacity', 1);
+           
+      
+                        
+       
+         var butCol='#ebb7d1';
+
+          var 	formatAsPercentage = d3.format("%"),
+                formatAsPercentage1Dec = d3.format(".1%"),
+                formatAsInteger = d3.format(","),
+                fsec = d3.timeFormat("%S s"),
+                fmin = d3.timeFormat("%M m"),
+                fhou = d3.timeFormat("%H h"),
+                fwee = d3.timeFormat("%a"),
+                fdat = d3.timeFormat("%d d"),
+                fmon = d3.timeFormat("%b");
+	
+ 
+ /*
+################ FORMATS ##################
+-------------------------------------------
+*/
+
+let url="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/population.csv";
+let url2="https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/data-further-education-outcome-based-success-measures.csv";
+var time =["2016","2017","2018","2019"] 
+var t=1;
+d3.csv(url).then( function(graph2){ d3.csv(url2).then( function(graph){
+// ======================== AGE GROUPS =======================
+var chart=[];
+    
+      //name the svg different to separate group---------SVG
+      var svg2 = d3.select("svg")
+                    .append("g")
+
+      // append separate groups
+      svg2.append("g")
+        .attr("class", "slices");
+      svg2.append("g")
+        .attr("class", "labels");
+      svg2.append("g")
+        .attr("class", "lines");
+       ;
+
+      //add parameters for dimensions-------------------PARAMETERS
+      var width2 = 760,
+          height2 = 250,
+          radius = Math.min(width2, height2) / 2;
+      //create pie from values
+      var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.6);
+      // define outer arc so we coplete the hollow look
+      var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+      //position it on the svg plane
+      svg2.attr("transform", "translate(" + ((width2 / 2)+300) + "," + ((height2 / 2)+400) + ")");
+     // get the labels  
+      var key = function(d){ return d.data.label; };
+      //order to colour countries and their colour
+
+
+
+      //name the svg different to separate group---------SVG
+      var svg3 = d3.select("svg")
+                    .append("g")
+
+      // append separate groups
+      svg3.append("g")
+        .attr("class", "slices2");
+      svg3.append("g")
+        .attr("class", "labels2");
+     
+     
+      //add parameters for dimensions-------------------PARAMETERS
+      var width = 760,
+          height = 250,
+          radius2 = Math.min(width, height) / 2;
+      //create pie from values
+      var pie2 = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc2 = d3.arc()
+        .outerRadius(radius2 * 0.8)
+        .innerRadius(radius2 * 0.4);
+      // define outer arc so we coplete the hollow look
+      var outerArc2 = d3.arc()
+        .innerRadius(radius2 * 0.9)
+        .outerRadius(radius2 * 0.9);
+      //position it on the svg plane
+      svg3.attr("transform", "translate(" + ((width / 2)) + "," + ((height / 2)) + ")");
+      
+      
+      
+      
+      var color2 = d3.scaleOrdinal()
+        .domain(["Carry on Study","Work","Work and Study","Benefit","Fail","Undecided"])
+        .range(["#a0fad3","#f5a2af","#dbaffa","#f77472","#a897b8","#e6f7f6"]);
+      var t=0;
+      var ag=0;
+          
+      var total,study,work,wostu,benf,fail,und;
+      var age=["25 - 49","50 and over","19 - 24"]
+      var time2 =["201516","201617","201718","201819"] 
+      var chart2=[];
+     
+      
+      //AGE
+      var color = d3.scaleOrdinal()
+        .domain(["19 - 24","25 - 49","50+"])
+        .range([ "url(#svgGradient1)", "url(#svgGradient2)", "url(#svgGradient3)"]);
+      var time =["2016","2017","2018","2019"] 
+      var chart=[];
+      var gen = "Female";
+      var gen2 ="female";
+      
+      //initialise chart
+      change(colorData2(chart2));  
+      load2(ag,t,gen2);
+     
+     //AGE
+      //initialise chart
+      change2(colorData(chart));  
+      // dsPieChart(dataset); 
+      load(ag,t,gen);
+        <!----------------------------- datasets---------------------------------->
+              <!--use data depending on this the arc sizes change-->
+
+      function colorData2 (val){
+        //define label as the domain of colour
+        var labels = color2.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      }   
+      function change(data) {
+     
+        /* ------- PIE SLICES -------*/
+        var slice = svg2.select(".slices").selectAll("path.slice")
+          .data(pie(data), key);
+
+        slice.enter()
+          .insert("path")
+          .style("fill", function(d) { 
+
+          return color2(d.data.label); })
+          .attr("class", "slice");
+
+        slice		
+          .transition()
+           <!--add ease style->
+          .ease( d3.easeElastic) 
+          .duration(1000)
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc(interpolate(t));
+            };
+          })
+
+        slice.exit()
+          .remove();
+
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg2.select(".labels").selectAll("text")
+          .data(pie(data), key);
+
+        text.enter()
+          .append("text")
+          .attr("dy", ".35em")
+          .attr("font-size","16px")
+          .attr("fill","#b8b5b4")
+          .text(function(d) {
+            return d.data.label;
+          });
+
+        function midAngle(d){
+          return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+        
+        // adjust text and line positions in order so they do not overlap
+        var u= [0,0.6,1,0,0,0.5,1,1.6,2,0,0];
+
+        text.transition().duration(1000)
+          .attrTween("transform", function(d,i) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+
+              return "translate("+ pos +")";
+            };
+          })
+          .styleTween("text-anchor", function(d){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              return midAngle(d2) < Math.PI ? "start":"end";
+            };
+          });
+
+        text.exit()
+          .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*/
+
+        var polyline = svg2.select(".lines").selectAll("polyline")
+          .data(pie(data), key);
+
+        polyline.enter()
+          .append("polyline")
+          .style("fill","none")
+          .style("stroke","#b8b5b4");
+
+        polyline.transition().duration(1000)
+          .attrTween("points", function(d,i){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+              return [arc.centroid(d2), outerArc.centroid(d2), pos];
+            };			
+          });
+
+        polyline.exit()
+          .remove();
+      }; 
+      function colorData (val){
+        //define label as the domain of colour
+        var labels = color.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      }
+ 
+      function change2(data) {
+        
+        /* ------- PIE SLICES -------*/
+        var slice = svg3.select(".slices2")
+                         .selectAll("path.slice2")
+                         .data(pie2(data), key)
+        
+       
+
+        slice.enter()
+          .insert("path")
+          .attr("class", "slice2")
+          .on("mouseover", mouseover2)
+    			.on("mouseout", mouseout2)	
+          .style("fill", function(d) { 
+
+          return color(d.data.label); })
+          .attr("stroke","black")
+          .on("click", up11);
+
+        slice		
+          .transition()
+           <!--add ease style->
+          .ease( d3.easeElastic) 
+          .duration(1000)
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc2(interpolate(t));
+            };
+          })
+          
+  
+
+        slice.exit()
+          .remove();
+
+    
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg3.select(".labels2").selectAll("text")
+          .data(pie2(data), key);
+
+
+
+                 
+// Add a label to the larger arcs, translated to the arc centroid and rotated.
+	  // source: http://bl.ocks.org/1305337#index.html
+	  text.enter()
+    
+        .filter(function(d) { return d.endAngle - d.startAngle > .2; })
+	  		.append("text")
+	      .attr("dy", ".35em")
+        .attr('id',function(d,i){return 'tex'+i})
+        .attr("font-size","14px")
+	      .attr("text-anchor", "middle")
+        .attr("fill",butCol)
+        .attr('font-weight',600)
+	      .attr("transform", function(d) { return "translate(" + arc2.centroid(d) + ")rotate(" + angle(d) + ")"; })
+	      //.text(function(d) { return formatAsPercentage(d.value); })
+	      .text(function(d) { return d.data.label; })
+	      ;
+	   
+	   // Computes the label angle of an arc, converting from radians to degrees.
+		function angle(d) {
+		    var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+		    return a > 90 ? a - 180 : a;
+		}
+  
+          
+          
+           // Pie chart title===========================			
+		svg3.append("svg:text")
+	     	.attr("dy", ".35em")
+	      .attr("text-anchor", "middle")
+	      .text("AGE GROUP")
+        .style('fill','#e7e1ed')
+	      .attr("class","title");	
+     
+
+  
+     	//HOVER MOVMENTS=================================	
+	function mouseover2() {
+  
+	  d3.select(this).transition()
+	      .duration(750)
+	        		.attr("stroke","#ffa514")
+              .attr("stroke-width","3px");
+	          //  .style("d", outerArc2)
+            //    d3.selectAll(".sq").remove();	
+	}	
+	function mouseout2() {
+	  d3.select(this).transition()
+	      .duration(750)
+	        		.attr("stroke","black")
+              .attr("stroke-width","1px");
+	        	
+	    // 		.style("d", outerArc)
+	        		
+	}
+ 
+  
+	// UPDATE ANY FUNCTION===========================
+	function up11(d, i) {
+  
+   let a=i.index
+   getIt( a); 
+   d3.select(this).attr("id","cikk"+a).transition()
+	      .duration(750)     
+	      .style("fill", 'orange');
+        
+       
+        
+      if(a==0){
+       d3.selectAll('#tex0').style('fill','black')
+       d3.selectAll('#tex1').style('fill',butCol)
+       d3.selectAll('#tex2').style('fill',butCol)
+       d3.selectAll("#cikk1").style("fill", "url(#svgGradient2)")
+       d3.selectAll("#cikk2").style("fill", "url(#svgGradient3)")
+      }        
+        if(a==1){
+       d3.selectAll('#tex1').style('fill','black')
+       d3.selectAll('#tex0').style('fill',butCol)
+       d3.selectAll('#tex2').style('fill',butCol)
+       d3.selectAll("#cikk0").style("fill", "url(#svgGradient1)")
+       d3.selectAll("#cikk2").style("fill", "url(#svgGradient3)")
+      } 
+        if(a==2){
+       d3.selectAll('#tex2').style('fill','black')
+       d3.selectAll('#tex0').style('fill',butCol)
+       d3.selectAll('#tex1').style('fill',butCol)
+       d3.selectAll("#cikk0").style("fill", "url(#svgGradient1)")
+       d3.selectAll("#cikk1").style("fill", "url(#svgGradient2)")
+      }
+   
+        //make sure you remove cover square
+       d3.selectAll(".sq").remove()	
+           
+			 
+  	}
+  
+  
+   };
+  
+      function load(ag,t,gen){
+     
+         // format the data
+      chart2=[];
+      graph.forEach(function(d) {
+      if(d.AgeBand==age[ag] & d.Gender==gen & d.time_period==time2[t]){
+
+             total=d.NumberOfLearners*0.01;
+             study=total*d.LearnOnlyPercent;
+             work=total*d.EmpOnlyPercent;
+             wostu=total*d.EmpAndLearnPercent;
+             benf=total*d.BenefitPercent;
+             fail=total*d.NotSustainedPercent;
+             und=total*d.NoDestPercent;
+
+             chart2.push(study,work,wostu,benf,fail,und);
+        }
+          
+  });}  
+ 
+      function load2(ag,t,gen2){
+      
+         // format the data
+      chart=[];
+      graph2.forEach(function(d) {
+
+      if( d.sex==gen2 & d.year==time[t]){
+
+
+             chart.push(d.study1,d.study2,d.study3);
+        }
+          
+  });}
+
+
+//=================================EXTERNAL FUNCTIONS=================================
+
+      function buttons(){    
+         
+                //hide some loading text but make it dissapear on data load at onMouse
+                svg2.append("rect")       
+                     <!--give the with and the height keep adjustable parameters-->
+                    .attr("transform", "translate(100,0)")
+                    .attr("class","sq")
+                    .attr('x','-100px')
+                    .attr('y', '-15px') 
+                    .attr('width', 120)
+                    .attr('height', 40)
+                    <!--colour it add edge-->
+                    .style("fill",  "#3b3939")
+                    
+                    
+
+                // 2016====================================
+                svg2.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  '0px')
+                    .style('cy', '-190px') 
+                    .attr("class","c1")
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "url(#svgGradient)")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                    <!--Add listener for the mouseover event-->
+                    .on("mouseover", onMouseOver)
+                     <!--Add listener for the mouseout event-->
+                    .on("mouseout", onMouseOut)  
+                    //on click change data to wealth
+                    .on("click",up1);
+
+              svg2.append("text")  
+                  <!-- text positions-->
+                  .attr("transform", "translate(110,-160)")     
+                  .attr('x',  -125)
+                  .attr('y', 14)  
+                  <!--colour it add edge-->
+                  .style("fill", "White")
+                  .text("2016");
+              // 2017===================================
+              svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '100px')
+                  .style('cy', '-190px') 
+                  .attr("class","c2")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up2);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(720,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2017");
+                  
+           // 2018===================================
+              svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '200px')
+                  .style('cy', '-190px') 
+                  .attr("class","c3")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up3);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(820,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2018");
+                  
+                  
+          // 2019===================================
+          svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '300px')
+                  .style('cy', '-190px') 
+                  .attr("class","c4")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up4);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(920,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2019");
+                  
+                 // return upDate();
+
+          
+        
+//==========================Animate Buttons=======================================
+ <!---------------mouseover event handler function for button---------------------->   
+      function onMouseOver(d, i) { 
+              
+              <!--select buttons-->
+              d3.select(this) 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',15 ) 
+               <!--colour it -->
+              .style("fill", "#a0a19c")
+
+      } 
+  <!-----------------mouseout event handler function for button---------------------> 
+      function onMouseOut(d, i) { 
+              
+
+              d3.select(this) 
+                 <!--adds animation -->
+                .transition()
+                 <!--time-->
+                .duration(1000) 
+                <!--change size-->
+                .attr('r',10 ) 
+                 <!--colour it -->
+                 .style("fill", "url(#svgGradient)")
+                
+                
+
+      } 
+      function up1(d,i) {
+
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+           //make sure you remove cover square
+          d3.selectAll(".sq").remove()			 
+        
+            
+            getTime(0);
+            }		   
+      function up2(d,i) {
+   
+          d3.select(this)
+            .style("fill", "#a0a19c")
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a") 
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+           //make sure you remove cover square
+          d3.selectAll(".sq").remove() 
+            
+            getTime(1);
+           }           
+      function up3(d,i) {
+
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+           //make sure you remove cover square
+          d3.selectAll(".sq").remove()
+            
+            getTime(2);
+            
+           }   
+      function up4(d,i) {
+       
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")  
+           //make sure you remove cover square
+          d3.selectAll(".sq").remove()
+            
+            getTime(3);
+            
+            }
+ } 
+      buttons(); 
+     
+ 
+       
+//=================================UPDATE FROM EXTERNAL===============================
+      function getTime(ti){
+       t=ti;
+        load(ag,t,gen);
+        load2(ag,t,gen2);
+          
+
+         //   dsPieChart(dataset)
+             change2(colorData(chart))
+            //initialise chart
+            change(colorData2(chart2));
+     
+      }
+      
+
+      function getIt(it){
+       ag=it;
+       load(ag,t,gen);
+       load2(ag,t,gen2);
+        //    dsPieChart(dataset)
+            change2(colorData(chart))
+            //initialise chart
+            change(colorData2(chart2));
+
+ }
+
+                  //hide some loading text but make it dissapear on data load at onMouse
+                svg3.append("rect")       
+                     <!--give the with and the height keep adjustable parameters-->
+                    .attr("transform", "translate(100,0)")
+                    .attr("class","sq")
+                    .attr('x','-200px')
+                    .attr('y', '-100px') 
+                    .attr('width', 200)
+                    .attr('height', 220)
+                    <!--colour it add edge-->
+                    .style("fill",  "#3b3939")
+  
+
+    }) });
+     </script>
+  </body>
+</html> 
