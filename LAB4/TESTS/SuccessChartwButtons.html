@@ -1,0 +1,515 @@
+<html>
+  <head>
+     <script src='https://d3js.org/d3.v7.min.js'></script>
+     <!-- Create a box where the graph will take place and adjust to screen -->
+     <svg viewBox="0 0 1200 700"><g></g></svg>
+     <!-- Create a div where the text box will take place -->
+     <div id="my_dataviz"></div>
+     
+    <style>
+         /*hover effect parameters*/
+         .node:hover{
+              stroke-width: 7px !important;
+              opacity: 1 !important;}
+
+         /*setup of body*/
+          body {
+              background-color: #3b3939;}
+    </style>
+  </head>
+  
+  <body>
+    <script>
+ 
+
+ 
+ 
+ // ======================== AGE GROUPS =======================
+      wealth();
+      function wealth(){
+      //name the svg different to separate group---------SVG
+      var svg2 = d3.select("svg")
+                    .append("g")
+
+      // append separate groups
+      svg2.append("g")
+        .attr("class", "slices");
+      svg2.append("g")
+        .attr("class", "labels");
+      svg2.append("g")
+        .attr("class", "lines");
+       ;
+      //add parameters for dimensions-------------------PARAMETERS
+      var width = 760,
+          height = 250,
+          radius = Math.min(width, height) / 2;
+      //create pie from values
+      var pie = d3.pie()
+        .sort(null)
+        .value(function(d) {
+          return d.value;
+        });
+      //define arc
+      var arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(radius * 0.6);
+      // define outer arc so we coplete the hollow look
+      var outerArc = d3.arc()
+        .innerRadius(radius * 0.9)
+        .outerRadius(radius * 0.9);
+      //position it on the svg plane
+      svg2.attr("transform", "translate(" + ((width / 2)+300) + "," + ((height / 2)+400) + ")");
+     // get the labels  
+      var key = function(d){ return d.data.label; };
+      //order to colour countries and their colour
+      
+     var defs = svg2.append('defs');
+     var gradient = defs.append('linearGradient')
+                        .attr('id', 'svgGradient')
+                        .attr('x1', '0%')
+                        .attr('x2', '100%')
+                        .attr('y1', '0%')
+                        .attr('y2', '100%');
+
+                        gradient.append('stop')
+                        .attr('class', 'start')
+                        .attr('offset', '0%')
+                        .attr('stop-color', 'pink')
+                        .attr('stop-opacity', 1);
+
+                        gradient.append('stop')
+                        .attr('class', 'end')
+                        .attr('offset', '100%')
+                        .attr('stop-color', '#3b3939')
+                        .attr('stop-opacity', 1);
+      
+      
+      var color = d3.scaleOrdinal()
+        .domain(["Carry on Study","Work","Work and Study","Benefit","Fail","Undecided"])
+        .range(["#a0fad3","#f5a2af","#dbaffa","#f77472","#a897b8","#e6f7f6"]);
+      var t=0;
+      var ag=1;        
+      var total,study,work,wostu,benf,fail,und;
+      var age=["19 - 24","25 - 49","50 and over"]
+      var time =["201516","201617","201718","201819"] 
+      var chart=[];
+      
+    d3.csv("https://raw.githubusercontent.com/Hookay/DataVisualization/main/LAB4/data-further-education-outcome-based-success-measures.csv").then( function(graph){
+    
+     //=================================CREATE BUTTONS=================================
+      buttons();      
+      function buttons(){    
+                 
+                //hide some loading text but make it dissapear on data load at onMouse
+                svg2.append("rect")       
+                     <!--give the with and the height keep adjustable parameters-->
+                    .attr("transform", "translate(100,0)")
+                    .attr("class","sq")
+                    .attr('x','-100px')
+                    .attr('y', '-15px') 
+                    .attr('width', 120)
+                    .attr('height', 40)
+                    <!--colour it add edge-->
+                    .style("fill",  "#3b3939")
+                // 2016====================================
+                svg2.append("circle")  
+                     <!--give the with and the height keep adjustable parameters-->
+                    .style('cx',  '0px')
+                    .style('cy', '-190px') 
+                    .attr("class","c1")
+                    <!--add radious-- >
+                    .attr('r', 10)  
+                    <!--colour it add edge-->
+                    .style("fill", "url(#svgGradient)")
+                    .style("stroke", "grey")
+                    <!--make it smooth the transition-->
+                    .style("stroke-width",1)
+                    <!--Add listener for the mouseover event-->
+                    .on("mouseover", onMouseOver)
+                     <!--Add listener for the mouseout event-->
+                    .on("mouseout", onMouseOut)  
+                    //on click change data to wealth
+                    .on("click",up);
+
+              svg2.append("text")  
+                  <!-- text positions-->
+                  .attr("transform", "translate(110,-160)")     
+                  .attr('x',  -125)
+                  .attr('y', 14)  
+                  <!--colour it add edge-->
+                  .style("fill", "White")
+                  .text("2016");
+              // 2017===================================
+              svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '100px')
+                  .style('cy', '-190px') 
+                  .attr("class","c2")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up2);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(720,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2017");
+                  
+           // 2018===================================
+              svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '200px')
+                  .style('cy', '-190px') 
+                  .attr("class","c3")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up3);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(820,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2018");
+                  
+                  
+          // 2019===================================
+          svg2.append("circle")       
+                   <!--give the with and the height keep adjustable parameters-->
+                  .style('cx',  '300px')
+                  .style('cy', '-190px') 
+                  .attr("class","c4")
+                  <!--add radious-- >
+                  .attr('r', 10)  
+                  <!--colour it add edge-->
+                  .style("fill", "url(#svgGradient)")
+                  <!--outline-->
+                  .style("stroke", "grey")
+                  <!--outline width-->
+                  .style("stroke-width",1)
+                  <!--Add listener for the mouseover event-->
+                  .on("mouseover", onMouseOver)
+                  <!--Add listener for the mouseout event-->
+                  .on("mouseout", onMouseOut)  
+                  //on click change data to population
+                  .on("click",up4);
+
+             d3.selectAll(svg2)
+                   //ceate svg group
+                   .append("g") 
+                   //give its position
+                   .attr("transform", "translate(920,-45)")
+                   .append("text")     
+                  .attr('x', -640)
+                  .attr('y', -100)  
+                  <!--colour it-->
+                  .style("fill", "White")
+                  .text("2019");
+                  
+                  
+
+           } 
+      load(ag,t);
+      //initialise chart
+      change(colorData(chart));    
+
+        <!----------------------------- datasets---------------------------------->
+              <!--use data depending on this the arc sizes change-->
+
+      function colorData (val){
+        //define label as the domain of colour
+        var labels = color.domain();
+        //value to get array index
+        var ind=-1;
+        //mapp the value of the data to the colour label to lock country colour and value to each other
+        return labels.map(function(label){
+          ind++
+          return { label: label, value: val[ind]}
+
+        });
+      }
+      
+      function change(data) {
+        
+        /* ------- PIE SLICES -------*/
+        var slice = svg2.select(".slices").selectAll("path.slice")
+          .data(pie(data), key);
+
+        slice.enter()
+          .insert("path")
+          .style("fill", function(d) { 
+
+          return color(d.data.label); })
+          .attr("class", "slice");
+
+        slice		
+          .transition()
+           <!--add ease style->
+          .ease( d3.easeElastic) 
+          .duration(1000)
+          .attrTween("d", function(d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              return arc(interpolate(t));
+            };
+          })
+
+        slice.exit()
+          .remove();
+
+        /* ------- TEXT LABELS -------*/
+
+        var text = svg2.select(".labels").selectAll("text")
+          .data(pie(data), key);
+
+        text.enter()
+          .append("text")
+          .attr("dy", ".35em")
+          .attr("font-size","16px")
+          .attr("fill","#b8b5b4")
+          .text(function(d) {
+            return d.data.label;
+          });
+
+        function midAngle(d){
+          return d.startAngle + (d.endAngle - d.startAngle)/2;
+        }
+        
+        // adjust text and line positions in order so they do not overlap
+        var u= [0,0.6,1,0,0,0.5,1,1.6,2,0,0];
+
+        text.transition().duration(1000)
+          .attrTween("transform", function(d,i) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+
+              return "translate("+ pos +")";
+            };
+          })
+          .styleTween("text-anchor", function(d){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              return midAngle(d2) < Math.PI ? "start":"end";
+            };
+          });
+
+        text.exit()
+          .remove();
+
+        /* ------- SLICE TO TEXT POLYLINES -------*/
+
+        var polyline = svg2.select(".lines").selectAll("polyline")
+          .data(pie(data), key);
+
+        polyline.enter()
+          .append("polyline")
+          .style("fill","none")
+          .style("stroke","#b8b5b4");
+
+        polyline.transition().duration(1000)
+          .attrTween("points", function(d,i){
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function(t) {
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1+(u[i]) : -1-(u[i]));
+              return [arc.centroid(d2), outerArc.centroid(d2), pos];
+            };			
+          });
+
+        polyline.exit()
+          .remove();
+      };
+
+  
+      // 2016=============
+      function up(d,i) {
+            t=0;
+            load(ag,t);
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+      //activate wealth
+      
+      change(colorData(chart));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }
+      // 2017=============
+      function up2(d,i) {
+           t=1;
+           load(ag,t);
+          <!--select bars-->
+          d3.select(this)
+            .style("fill", "#a0a19c")
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a") 
+      //activate population
+      change(colorData(chart));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }       
+      // 2018=============
+      function up3(d,i) {
+            t=2;
+            load(ag,t);
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c4")
+            .style("fill", "#3d3b3a")
+      //activate wealth
+      
+      change(colorData(chart));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }
+      // 2019=============
+      function up4(d,i) {
+            t=3;
+            load(ag,t);
+            <!--select button-->
+          d3.select(this)
+           // colour it white
+            .style("fill", "#a0a19c")
+          //make the other inactive
+          d3.selectAll(".c1")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c2")
+            .style("fill", "#3d3b3a")
+          d3.selectAll(".c3")
+            .style("fill", "#3d3b3a")
+      //activate wealth
+      
+      change(colorData(chart));
+      //make sure you remove cover square
+      d3.selectAll(".sq").remove();			 
+        }
+   
+      //==========================Animate Buttons=======================================
+      <!---------------mouseover event handler function for button---------------------->     
+      function onMouseOver(d, i) { 
+              
+              <!--select buttons-->
+              d3.select(this) 
+              <!--add animation-->
+              .transition() 
+              <!--time-->
+              .duration(1000) 
+              <!--change size-->
+              .attr('r',15 ) 
+               <!--colour it -->
+              .style("fill", "#a0a19c")
+
+      } 
+      <!-----------------mouseout event handler function for button---------------------> 
+
+      function onMouseOut(d, i) { 
+              
+
+              d3.select(this) 
+                 <!--adds animation -->
+                .transition()
+                 <!--time-->
+                .duration(1000) 
+                <!--change size-->
+                .attr('r',10 ) 
+                 <!--colour it -->
+                 .style("fill", "url(#svgGradient)")
+                
+                
+
+      } 
+      
+      
+      function load(ag,t){
+      
+         // format the data
+      chart=[];
+      graph.forEach(function(d) {
+
+      if(d.AgeBand==age[ag] & d.Gender=="Female" & d.time_period==time[t]){
+
+             total=d.NumberOfLearners*0.01;
+             study=total*d.LearnOnlyPercent;
+             work=total*d.EmpOnlyPercent;
+             wostu=total*d.EmpAndLearnPercent;
+             benf=total*d.BenefitPercent;
+             fail=total*d.NotSustainedPercent;
+             und=total*d.NoDestPercent;
+
+             chart.push(study,work,wostu,benf,fail,und);
+        }
+          
+  });}
+       
+       
+         });
+
+      }
+      
+
+  
+    </script>
+  </body>
+</html>
